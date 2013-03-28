@@ -1,0 +1,644 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href='images/logo.png' rel='shortcut icon' />
+<style>
+* {
+	margin: 0;
+	padding: 0;
+	font-family: arial;
+	-webkit-text-size-adjust: none;
+}
+
+html {
+	min-width: 260px;
+	overflow: hidden;
+}
+
+body {
+	background: url(images/bg.jpg) no-repeat top right #7aba01;
+	-webkit-user-select: none;
+}
+
+select {
+	height: 22px;
+	font-size: 12px;
+	margin-left: 5px;
+	outline: none;
+	float: left;
+	max-width: 80px;
+}
+
+::-webkit-input-placeholder{
+	color: #3D3D3D;
+}
+
+::-webkit-scrollbar-track-piece{
+	-webkit-border-radius: 0;
+}
+::-webkit-scrollbar{
+	width: 10px;
+	height: 10px;
+}
+::-webkit-scrollbar-thumb{
+	height: 50px;
+	background-color: #aaa;
+	-webkit-border-radius: 4px;
+	outline: 1px solid #fff;
+	outline-offset: -1px;
+	border: 1px solid #fff;
+}
+::-webkit-scrollbar-thumb:hover {
+	height: 50px;
+	background-color: #555;
+	-webkit-border-radius: 4px;
+}
+
+#leftFrame {
+	float: left;
+	width: 100%;
+}
+
+#rightFrame {
+	float: left;
+	display: none;
+	background: white;
+	padding: 10px;
+	font-size: 12px;
+	height: 2000px;
+}
+
+#headTop {
+	margin: 5px;
+	min-width: 500px;
+}
+
+#userHead {
+	float: left;
+	height: 46px;
+	line-height: 46px;
+	position: relative;
+}
+
+#userHead img[state=offline] {
+	-webkit-filter: grayscale(1);
+}
+
+#userHead img {
+	border: white 1px solid;
+	border-radius: 3px;
+	box-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
+}
+
+#showState {
+	position: absolute;
+	right: 0;
+	bottom: 0;
+	width: 20px;
+	height: 20px;
+	margin: 0 1px 5px 0;
+}
+
+#showState[state=callme] {
+	background: url(images/callme.png) no-repeat right bottom;
+}
+
+#showState[state=away] {
+	background: url(images/away.png) no-repeat right bottom;
+}
+
+#showState[state=busy] {
+	background: url(images/busy.png) no-repeat right bottom;
+}
+
+#showState[state=silent] {
+	background: url(images/silent.png) no-repeat right bottom;
+}
+
+#showState[state=mobile] {
+	background: url(images/client_mobile.png) no-repeat right bottom;
+}
+
+#showState[state=iphone] {
+	background: url(images/client_iphone.png) no-repeat right bottom;
+}
+
+#userInfo {
+	float: left;
+	margin-left: 10px;
+	max-width: 400px;
+	height: 46px;
+	line-height: 46px;
+	text-shadow: 1px 0 1px rgba(255, 255, 255, 0.35), 0 1px 1px rgba(255, 255, 255, 0.35), 
+    0 -1px 1px rgba(255, 255, 255, 0.35), -1px 0 1px rgba(255, 255, 255, 0.35);
+  cursor: default;
+}
+
+#userName {
+	height: 22px;
+	line-height: 22px;
+	font-size: 20px;
+	margin-bottom: 4px;
+	font-weight: bold;
+}
+
+#userPersonal {
+	height: 14px;
+	line-height: 14px;
+	font-size: 12px;
+	overflow: hidden;
+}
+
+#actionBar {
+	margin: 5px;
+}
+
+.actionButton {
+	border-radius: 3px;
+	border: rgba(0, 0, 0, 0) 1px solid;
+	float: left;
+	position: relative;
+}
+
+.actionButton:hover {
+	border-radius: 3px;
+	box-shadow: inset 0 0 1px rgba(255, 255, 255, 0.5);
+	border: rgba(0, 0, 0, 0.5) 1px solid;
+	background: rgba(255, 255, 255, 0.2);
+}
+
+.actionSendFile {
+	background: url(images/sendfile.png) no-repeat center center;
+	height: 22px;
+	width: 22px;
+}
+
+.actionMore {
+	background: url(images/more.png) no-repeat center center;
+	height: 22px;
+	width: 12px;
+}
+
+.actionButtonBg {
+	float: left;
+}
+
+.actionButtonBg:hover {
+	background: -webkit-linear-gradient(top, rgba(255, 255, 255, 0.5) 0%,rgba(255, 255, 255, 0.3) 100%);
+}
+
+#chatBox {
+	background: -webkit-linear-gradient(top, rgba(255, 255, 255, 0.9) 0%,rgba(255, 255, 255, 1) 100%);
+	height: 260px;
+	padding: 5px;
+	white-space: normal;
+	word-break: break-all;
+	overflow: hidden;
+	overflow-y: scroll;
+	-webkit-user-select: text;
+}
+
+#chatBox img {
+	max-width: 80%;
+}
+
+#toolBar {
+	background: -webkit-linear-gradient(left, #dbedbb 0%,#e3f0cc 100%);
+	height: 22px;
+	padding: 3px 5px;
+	cursor: default;
+	position: relative;
+}
+
+#inputBoxBg {
+	background: -webkit-linear-gradient(left, #FFFFFF 20%,#e3f0cc 100%);
+	font-size: 16pt;
+	color: black;
+	font-family: 宋体;
+	-webkit-user-select: text;
+}
+
+#inputBox {
+	height: 90px;
+	outline: none;
+	overflow-x: hidden;
+	overflow-y: scroll;
+	padding: 5px;
+}
+
+#buttonBar {
+	background: -webkit-linear-gradient(left, #dbedbb 0%,#e3f0cc 100%);
+	height: 20px;
+	padding: 4px 10px;
+	cursor: default;
+}
+
+.toolButton {
+	display: block;
+	border-radius: 2px;
+	border: rgba(0, 0, 0, 0) 1px solid;
+	float: left;
+	margin-right: 5px;
+}
+
+.toolButton:hover {
+	border-radius: 2px;
+	box-shadow: inset 0 0 1px rgba(255, 255, 255, 0.5);
+	border: rgba(0, 0, 0, 0.5) 1px solid;
+	background: rgba(255, 255, 255, 0.2);
+}
+
+.toolButtonActive {
+	display: block;
+	border-radius: 2px;
+	border: rgba(0, 0, 0, 0) 1px solid;
+	float: left;
+	margin-right: 5px;
+	border: rgba(0, 0, 0, 0.5) 1px solid;
+	background: rgba(255, 255, 255, 0.2);
+}
+
+.toolFontStyle {
+	background: url(images/fontstyle.png) no-repeat center center;
+	width: 20px;
+	height: 20px;
+}
+
+.toolFaces {
+	background: url(images/faces.png) no-repeat center center;
+	width: 20px;
+	height: 20px;
+}
+
+.toolShake {
+	background: url(images/shake.png) no-repeat center center;
+	width: 20px;
+	height: 20px;
+}
+
+.toolSendPic {
+	background: url(images/sendpic.png) no-repeat center center;
+	width: 20px;
+	height: 20px;
+	position: relative;
+	overflow: hidden;
+}
+
+.toolMsgRec {
+	background: url(images/msgrec.png) no-repeat left center;
+	padding-left: 24px;
+	padding-right: 2px;
+	height: 20px;
+	line-height: 20px;
+	font-size: 12px;
+}
+
+.buttonBarBtn {
+	height: 18px;
+	line-height: 18px;
+	font-size: 12px;
+	border-radius: 3px;
+	border: rgba(0, 0, 0, 0.5) 1px solid;
+	padding: 0 20px;
+	float: right;
+	margin-left: 10px;
+	background: -webkit-linear-gradient(top, #FCFCFC 0%,#E0E0E0 100%);
+	box-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
+}
+
+.buttonBarBtn:hover {
+	background: #cdece6;
+}
+
+#toolFontStyleTab {
+	position: absolute;
+	left: 0;
+	top: -28px;
+	background: -webkit-linear-gradient(left, #dbedbb 0%,#e3f0cc 100%);
+	height: 22px;
+	width: 100%;
+	padding: 3px 0;
+	display: none;
+}
+
+#facePanel {
+	position: absolute;
+	left: 6px;
+	top: -210px;
+	width: 436px;
+	height: 204px;
+	background: url(images/face.gif);
+	display: none;
+	z-index: 100;
+}
+
+.faceCube {
+	width: 27px;
+	height: 27px;
+	border: 1px solid transparent;
+	float: left;
+}
+
+.faceCube:hover {
+	border: 1px solid #4ca0d9;
+}
+
+#fontBold {
+	margin-left: 5px;
+}
+
+.fontBold {
+	height: 20px;
+	width: 24px;
+	background: url(images/bold.png) no-repeat center center;
+	
+}
+
+.fontItalic {
+	height: 20px;
+	width: 24px;
+	background: url(images/italic.png) no-repeat center center;
+	
+}
+
+.fontUnderline {
+	height: 20px;
+	width: 24px;
+	background: url(images/underline.png) no-repeat center center;
+	
+}
+
+.fontColor {
+	height: 20px;
+	width: 24px;
+	background: url(images/fontcolor.png) no-repeat center center;
+	
+}
+
+.menuList {
+	border-radius: 2px;
+	border: white 1px solid;
+	background: url(images/menulistbg.png) repeat-y left center white;
+	position: absolute;
+	left: 2px;
+	top: 26px;
+	width: 150px;
+	cursor: default;
+	box-shadow: 0 0 3px rgba(0, 0, 0, 0.75);
+	display: none;
+}
+
+.menuItem {
+	font-size: 12px;
+	padding: 5px 5px 5px 30px;
+	position: relative;
+}
+
+.menuItemDisabled {
+	font-size: 12px;
+	color: gray;
+	padding: 5px 5px 5px 30px;
+	position: relative;
+}
+
+.menuItem:hover {
+	background: #378fcf;
+	color: white;
+}
+
+.uof {
+	position: absolute;
+	left: 0;
+	top: 0;
+	z-index: 10;
+	opacity: 0;
+	width: 150px;
+	height: 25px;
+}
+
+.ofp {
+	position: absolute;
+	left: 0;
+	top: 0;
+	z-index: 10;
+	opacity: 0;
+	width: 20px;
+	height: 20px;
+}
+
+#fileIco {
+	float: left;
+	width: 32px;
+	height: 32px;
+	padding: 4px;
+}
+
+#fileInfo {
+	float: left
+	padding-left: 5px;
+	padding-top: 5px;
+}
+
+#fileAction {
+	color: gray;
+}
+
+#fileProcessBarBg {
+	border-radius: 4px;
+	border: #d2d2d2 1px solid;
+	background: -webkit-linear-gradient(top, #ffffff 0%,#eeeeee 100%);
+	padding: 1px;
+	height: 6px;
+	margin: 5px 0;
+}
+
+#fileProcessBar {
+	background: -webkit-linear-gradient(-45deg, #1eabec 0%,#4ed3fb 100%);
+	height: 6px;
+	border-radius: 2px;
+	width: 0;
+}
+
+#fileSended {
+	float: right;
+}
+
+#fileCancel {
+	float: right;
+	cursor: default;
+	color: blue;
+}
+
+#fileCancel:hover {
+	text-decoration: underline;
+}
+
+.msgName {
+	font-size: 12px;
+	color: blue;
+	height: 23px;
+	line-height: 23px;
+}
+
+.msgNameSelf {
+	font-size: 12px;
+	color: #008040;
+	height: 23px;
+	line-height: 23px;
+}
+
+.noticeTime {
+	font-size: 12px;
+	height: 23px;
+	line-height: 23px;
+	color: gray;
+	padding-left: 23px;
+	background: url(images/rightmark.png) no-repeat left center;
+}
+
+.noticeTimeComma {
+	font-size: 12px;
+	height: 23px;
+	line-height: 23px;
+	color: gray;
+	padding-left: 23px;
+	background: url(images/commamark.png) no-repeat left center;
+}
+
+.noticeBody {
+	font-size: 12px;
+	height: 23px;
+	line-height: 23px;
+	color: gray;
+	padding-left: 23px;
+}
+
+.noticeBody a {
+	color: #3399FF;
+	text-decoration: none;
+}
+
+.noticeBody a:hover {
+	text-decoration: underline;
+}
+</style>
+</head>
+<body>
+<audio id="shakeSound" preload="auto"><source src="shake.mp3" type="audio/mpeg" /></audio>
+<div id="headTop">
+		<div id="userHead">
+		</div>
+		<div id="userInfo">
+			<div id="userName"></div>
+			<div id="userPersonal"></div>
+		</div>
+		<div style="clear: both"></div>
+</div>
+<div id="actionBar">
+		<div id="sendFile" class="actionButton">
+			<div title="传送文件" class="actionButtonBg"><div class="actionSendFile"></div></div>
+			<div id="sendFileMore" class="actionButtonBg"><div class="actionMore"></div></div>
+			<div style="clear: both"></div>
+			<div id="sendFileList" class="menuList">
+				<div class="menuItemDisabled">发送文件</div>
+				<form id="uploadOff" action="http://weboffline.ftn.qq.com/ftn_access/upload_offline_file" method="POST" enctype="multipart/form-data">
+					<input name="callback" type="hidden" value="parent.EQQ.Model.ChatMsg.callbackSendOffFile">
+					<input name="locallangid" type="hidden" value="2052" />
+					<input name="clientversion" type="hidden" value="1409" />
+					<input id="uo_uin" name="uin" type="hidden" />
+					<input id="uo_skey" name="skey" type="hidden" />
+					<input name="appid" type="hidden" value="1002101" />
+					<input id="uo_peeruin" name="peeruin" type="hidden" />
+					<input id="uo_vfwebqq" name="vfwebqq" type="hidden" />
+					<div class="menuItem">发送离线文件<input id="offline" class="uof" name="file" title="发送离线文件…" type="file"></div>
+					<input id="uo_fileid" name="fileid" type="hidden" />
+					<input name="senderviplevel" type="hidden" value="0" />
+					<input name="reciverviplevel" type="hidden" value="0" />
+				</form>
+			</div>
+		</div>
+		<div style="clear: both"></div>
+</div>
+<div id="leftFrame">
+	<div id="chatBox"></div>
+	<div id="toolBar">
+		<div id="facePanel"></div>
+		<div id="toolFontStyleTab">
+			<select id="fontFamily"></select>
+			<select id="fontSize"></select>
+			<div id="fontBold" title="加粗" class="toolButton">
+				<div class="fontBold"></div>
+			</div>
+			<div id="fontItalic" title="倾斜" class="toolButton">
+				<div class="fontItalic"></div>
+			</div>
+			<div id="fontUnderline" title="下划线" class="toolButton">
+				<div class="fontUnderline"></div>
+			</div>
+			<div id="fontColor" title="颜色" class="toolButton">
+				<div class="fontColor"></div>
+			</div>
+			<div style="clear: both"></div>
+		</div>
+		<div id="toolFontStyle" title="字体选择工具栏" class="toolButton">
+			<div class="toolFontStyle"></div>
+		</div>
+		<div id="toolFaces" title="选择表情" class="toolButton">
+			<div class="toolFaces"></div>
+		</div>
+		<div title="向好友发送窗口抖动" id="toolShake" class="toolButton">
+			<div class="toolShake"></div>
+		</div>
+		<div title="发送图片" class="toolButton">
+			<form id="offPicUpload" action="http://weboffline.ftn.qq.com/ftn_access/upload_offline_pic" method="POST" enctype="multipart/form-data">
+				<input name="callback" type="hidden" value="parent.EQQ.Model.ChatMsg.callbackSendPic">
+				<input name="locallangid" type="hidden" value="2052" />
+				<input name="clientversion" type="hidden" value="1409" />
+				<input id="op_uin" name="uin" type="hidden" />
+				<input id="op_skey" name="skey" type="hidden" />
+				<input name="appid" type="hidden" value="1002101" />
+				<input id="op_peeruin" name="peeruin" type="hidden" />
+				<input id="op_vfwebqq" name="vfwebqq" type="hidden" />
+				<div class="toolSendPic"><input id="offPic" class="ofp" name="file" title="发送图片" type="file"></div>
+				<input id="op_fileid" name="fileid" type="hidden" />
+				<input name="senderviplevel" type="hidden" value="0" />
+				<input name="reciverviplevel" type="hidden" value="0" />
+			</form>
+		</div>
+		<div id="toolMsgRec" title="显示消息记录" class="toolButton" style="float: right">
+			<div class="toolMsgRec">消息记录</div>
+		</div>
+		<div style="clear: both"></div>
+	</div>
+	<div id="inputBoxBg">
+		<div id="inputBox" contenteditable="true"></div>
+	</div>
+	<div id="buttonBar">
+		<div id="sendMsgBtn" class="buttonBarBtn">发送</div>
+		<div id="closeMsgBtn" class="buttonBarBtn">关闭</div>
+		<div style="clear: both"></div>
+	</div>
+</div>
+<div id="rightFrame">
+	<div id="fileTop">
+		<div id="fileIco"></div>
+		<div id="fileInfo">
+			<div id="fileAction">发送离线文件</div>
+			<div id="fileName"></div>
+		</div>
+		<div style="clear: both"></div>
+	</div>
+	<div id="fileProcessBarBg">
+		<div id="fileProcessBar"></div>
+	</div>
+	<div id="fileProcess">
+		<div id="fileSended"></div>
+		<div id="fileSpeed"></div>
+	</div>
+	<div id="fileCancel">取消</div>
+</div>
+<div style="clear:both"></div>
+<script src="scripts/chat.js"></script>
+</body>
+</html>

@@ -1,0 +1,14 @@
+.friendHead {
+	width: 20px!important;
+	height: 20px!important;
+}
+
+.friendHead img {
+	width: 20px!important;
+	height: 20px!important;
+	border-radius: 3px!important;
+}
+
+.friendPersonal {
+	display: none!important;
+}
