@@ -484,6 +484,7 @@ document.getElementById('facePanel').onmouseout = function(){
 document.getElementById('inputBox').onkeydown = function(){
 	if(event.ctrlKey && event.keyCode==13){
 		sendMsg();
+		return false;
 	}
 }
 

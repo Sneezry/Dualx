@@ -949,6 +949,7 @@ document.getElementById('inputBox').onpaste = function(e){
 document.getElementById('inputBox').onkeydown = function(){
 	if((event.ctrlKey && localStorage.ctrl || !event.ctrlKey && !localStorage.ctrl) && event.keyCode==13){
 		sendMsg();
+		return false;
 	}
 }
 
