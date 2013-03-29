@@ -24,7 +24,11 @@ body {
 	background: url(images/loginbg.png) no-repeat;
 }
 
-input {
+span {
+	clear: both;
+}
+
+.inputbox {
 	height: 24px;
 	line-height: 24px;
 	padding: 0 5px;
@@ -35,10 +39,6 @@ input {
 	cursor: auto;
 	float: left;
 	outline-color: #088cd8;
-}
-
-span {
-	clear: both;
 }
 
 .loginRight {
@@ -55,8 +55,8 @@ span {
 }
 
 #loginBox {
-	height: 68px;
-	padding: 135px 10px 35px 10px;
+	height: 102px;
+	padding: 120px 10px 16px 10px;
 	background: -webkit-linear-gradient(top, rgba(255, 255, 255, 0) 50%,rgba(255, 255, 255, 0.35) 100%);
 }
 
@@ -211,13 +211,20 @@ span {
 	text-align: center;
 	display: none;
 }
+
+.loginBottom {
+	color: #2D2D2D;
+	text-shadow: -1px -1px 1px rgba(200, 200, 200, 0.75), 1px -1px 1px rgba(200, 200, 200, 0.75), -1px 1px 1px rgba(200, 200, 200, 0.75), 1px 1px 1px rgba(200, 200, 200, 0.75);
+	height: 24px;
+	line-height: 24px;
+}
 </style>
 </head>
 <body>
 <div id="loginBox">
 <div id="beforeLogin">
 	<div class="inputOuter">
-		<input id="account" autocomplete="off" type="text" placeholder="账号" />
+		<input class="inputbox" id="account" autocomplete="off" type="text" placeholder="账号" />
 		<div id="stateChg">
 			<div id="state" state="online" class="state"></div>
 			<div id="stateList">
@@ -232,8 +239,14 @@ span {
 		<span class="loginRight">注册账号</span>
 	</div>
 	<div class="inputOuter">
-		<input id="password" type="password" placeholder="密码" />
+		<input class="inputbox" id="password" type="password" placeholder="密码" />
 		<span class="loginRight">找回密码</span>
+	</div>
+	<div class="inputOuter">
+		<input type="checkbox" id="rememberPwd" />
+		<span class="loginBottom" style="margin: 0 20px 0 5px">记住密码</span>
+		<input type="checkbox" id="autoLogin" />
+		<span class="loginBottom" style="margin-left: 5px">自动登录</span>
 	</div>
 </div>
 <div id="afterLogin">正在登录……</div>

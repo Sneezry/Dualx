@@ -19,6 +19,26 @@ if(logining == '101'){
 	document.getElementById('afterLogin').style.display = 'block';
 }
 
+if(localStorage.rememberPwd){
+	document.getElementById('rememberPwd').checked = 'checked';
+}
+
+if(localStorage.autoLogin){
+	document.getElementById('autoLogin').checked = 'checked';
+}
+
+if(localStorage.account){
+	document.getElementById('account').value = localStorage.account;
+}
+
+if(localStorage.password){
+	document.getElementById('password').value = localStorage.password;
+}
+
+if(localStorage.state){
+	document.getElementById('state').setAttribute('state', localStorage.state);
+}
+
 document.getElementById('loginButtonInner').onclick = function(){
 	if(login){
 		chrome.extension.sendMessage('cancel');
@@ -29,6 +49,11 @@ document.getElementById('loginButtonInner').onclick = function(){
 	var password = document.getElementById('password').value;
 	var state = document.getElementById('state').getAttribute('state');
 	if(account && password){
+		if(document.getElementById('rememberPwd').checked){
+			localStorage.account = account;
+			localStorage.password = password;
+			localStorage.state = state;
+		}
 		login = true;
 		document.getElementById('loginButtonInner').innerHTML = '取&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;消';
 		document.getElementById('beforeLogin').style.display = 'none';
@@ -47,6 +72,29 @@ document.getElementById('state').onmouseover = function(){
 
 document.getElementById('state').onmouseout = function(){
 	stateListHover = false;
+}
+
+document.getElementById('rememberPwd').onclick = function(){
+	if(this.checked){
+		localStorage.rememberPwd = 'true';
+	}
+	else{
+		localStorage.rememberPwd = '';
+		localStorage.account = '';
+		localStorage.password = '';
+		localStorage.state = '';
+		localStorage.autoLogin = '';
+		document.getElementById('autoLogin').checked = '';
+	}
+}
+
+document.getElementById('autoLogin').onclick = function(){
+	if(this.checked){
+		localStorage.autoLogin = 'true';
+	}
+	else{
+		localStorage.autoLogin = '';
+	}
 }
 
 window.onclick = function(){

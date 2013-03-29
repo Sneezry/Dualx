@@ -25,6 +25,13 @@ window.onerror = function(err, u, l){
 	errorsId++;
 }
 
+if(!localStorage.logout && localStorage.autoLogin && localStorage.account && localStorage.password){
+	localStorage.autoShow = 'true';
+	chrome.extension.sendMessage('login;'+encodeURIComponent(localStorage.account)+';'+encodeURIComponent(localStorage.password)+';'+encodeURIComponent(localStorage.state));
+}
+
+localStorage.logout = '';
+
 chrome.browserAction.setPopup({
 	popup: ''
 });
@@ -47,13 +54,16 @@ chrome.extension.onMessage.addListener(function(request, sender, callback) {
 			path: 'images/logo.png'
 		});
 		popupCmd = 'showmain';
-		chrome.windows.create({
-			url: 'main.html',
-			width: 300,
-			height: 600,
-			focused: true,
-			type: 'popup'
-		},function(window){mainWindowId=window.id;});
+		if(!localStorage.autoShow){
+			chrome.windows.create({
+				url: 'main.html',
+				width: 300,
+				height: 600,
+				focused: true,
+				type: 'popup'
+			},function(window){mainWindowId=window.id;});
+		}
+		localStorage.autoShow = '';
 	}
 	else if(request == 'xlogin'){
 		if(loginWindowId){
@@ -87,6 +97,7 @@ chrome.extension.onMessage.addListener(function(request, sender, callback) {
 		setTimeout(function(){location.reload()}, 500);
 	}
 	else if(request == 'logout'){
+		localStorage.logout = 'true';
 		setTimeout(function(){location.reload()}, 500);
 	}
 	else if(request == 'showmain'){
