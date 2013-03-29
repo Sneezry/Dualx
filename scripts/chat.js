@@ -339,6 +339,27 @@ function sendMsg(){
 	if(!document.getElementById('inputBox').innerHTML){
 		return;
 	}
+	chrome.storage.local.get('fqcy', function(obj){
+		var fqcy;
+		if(!obj.fqcy){
+			fqcy = new Object;
+		}
+		else{
+			fqcy = obj.fqcy;
+		}
+		if(!fqcy[HTML5QQ.qq]){
+			fqcy[HTML5QQ.qq] = new Object;
+		}
+		if(!fqcy[HTML5QQ.qq]['friend']){
+			fqcy[HTML5QQ.qq]['friend'] = new Object;
+		}
+		if(!fqcy[HTML5QQ.qq]['friend'][uin]){
+			fqcy[HTML5QQ.qq]['friend'][uin] = 0;
+		}
+		fqcy[HTML5QQ.qq]['friend'][uin]++;
+		chrome.storage.local.set({'fqcy': fqcy});
+		console.log(fqcy);
+	});
 	msg_id++;
 	var msg = formatMsg( document.getElementById('inputBox') );
 	document.getElementById('inputBox').innerHTML = '';

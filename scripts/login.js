@@ -9,6 +9,15 @@ chrome.extension.onMessage.addListener(function(request, sender) {
 	if(request == 'finish'){
 		self.close();
 	}
+	else if(request == 'cancel'){
+		if(!localStorage.logout && localStorage.autoLogin && localStorage.account && localStorage.password){
+			localStorage.autoShow = 'true';
+		}
+		login = false;
+		document.getElementById('loginButtonInner').innerHTML = '登&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;录';
+		document.getElementById('beforeLogin').style.display = 'block';
+		document.getElementById('afterLogin').style.display = 'none';
+	}
 });
 
 var logining = location.search.substr(1);
@@ -42,7 +51,6 @@ if(localStorage.state){
 document.getElementById('loginButtonInner').onclick = function(){
 	if(login){
 		chrome.extension.sendMessage('cancel');
-		location.reload();
 		return;
 	}
 	var account = document.getElementById('account').value;
@@ -58,7 +66,7 @@ document.getElementById('loginButtonInner').onclick = function(){
 		document.getElementById('loginButtonInner').innerHTML = '取&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;消';
 		document.getElementById('beforeLogin').style.display = 'none';
 		document.getElementById('afterLogin').style.display = 'block';
-		chrome.extension.sendMessage('login;'+encodeURIComponent(account)+';'+encodeURIComponent(password)+';'+encodeURIComponent(state));
+		chrome.extension.sendMessage('login;'+encodeURIComponent(account)+';'+encodeURIComponent(password.substr(0,16))+';'+encodeURIComponent(state));
 	}
 }
 

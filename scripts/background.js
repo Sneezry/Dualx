@@ -27,7 +27,7 @@ window.onerror = function(err, u, l){
 
 if(!localStorage.logout && localStorage.autoLogin && localStorage.account && localStorage.password){
 	localStorage.autoShow = 'true';
-	chrome.extension.sendMessage('login;'+encodeURIComponent(localStorage.account)+';'+encodeURIComponent(localStorage.password)+';'+encodeURIComponent(localStorage.state));
+	chrome.extension.sendMessage('login;'+encodeURIComponent(localStorage.account)+';'+encodeURIComponent(localStorage.password.substr(0,16))+';'+encodeURIComponent(localStorage.state));
 }
 
 localStorage.logout = '';

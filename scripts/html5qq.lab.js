@@ -188,6 +188,7 @@ var HTML5QQ = {
 	},
 	
 	errorMsg: function(message){
+		localStorage.logout = 'true';
 		alert(message);
 		chrome.extension.sendMessage('cancel');
 	},
