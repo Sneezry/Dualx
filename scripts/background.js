@@ -59,6 +59,8 @@ chrome.extension.onMessage.addListener(function(request, sender, callback) {
 				url: 'main.html',
 				width: 300,
 				height: 600,
+				left: window.screen.width-350,
+				top: 50,
 				focused: true,
 				type: 'popup'
 			},function(window){mainWindowId=window.id;});
@@ -76,6 +78,8 @@ chrome.extension.onMessage.addListener(function(request, sender, callback) {
 				url: 'login.html?'+(logining?'101':'100'),
 				width: 380,
 				height: 288,
+				left: window.screen.width/2-190,
+				top: window.screen.height/2-250,
 				focused: true,
 				type: 'popup'
 			},function(window){loginWindowId=window.id});
@@ -110,6 +114,8 @@ chrome.extension.onMessage.addListener(function(request, sender, callback) {
 						url: 'main.html',
 						width: 300,
 						height: 600,
+						left: window.screen.width-350,
+						top: 50,
 						focused: true,
 						type: 'popup'
 					},function(window){mainWindowId=window.id;});
@@ -121,6 +127,8 @@ chrome.extension.onMessage.addListener(function(request, sender, callback) {
 				url: 'main.html',
 				width: 300,
 				height: 600,
+				left: window.screen.width-350,
+				top: 50,
 				focused: true,
 				type: 'popup'
 			},function(window){mainWindowId=window.id;});
@@ -163,6 +171,8 @@ chrome.extension.onMessage.addListener(function(request, sender, callback) {
 				url: 'chat.html?'+uin,
 				width: 560,
 				height: 510,
+				left: window.screen.width/2-280,
+				top: window.screen.height/2-265,
 				focused: true,
 				type: 'popup'
 			},function(window){
@@ -219,6 +229,8 @@ chrome.extension.onMessage.addListener(function(request, sender, callback) {
 				url: 'qun.html?'+uin,
 				width: 560,
 				height: 510,
+				left: window.screen.width/2-280,
+				top: window.screen.height/2-265,
 				focused: true,
 				type: 'popup'
 			},function(window){
@@ -322,6 +334,8 @@ chrome.extension.onMessage.addListener(function(request, sender, callback) {
 									url: 'chat.html?'+uin,
 									width: 560,
 									height: 510,
+									left: window.screen.width/2-280,
+									top: window.screen.height/2-265,
 									focused: true,
 									type: 'popup'
 								},function(window){
