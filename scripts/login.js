@@ -50,6 +50,15 @@ if(localStorage.state){
 
 document.getElementById('loginButtonInner').onclick = doLogin;
 
+document.getElementById('beforeLogin').onkeydown = function(e) {
+	if (e.which == 13) {
+		// enter pressed
+		var clickEvent = document.createEvent('HTMLEvents');
+		clickEvent.initEvent('click', true, true);
+		document.getElementById('loginButtonInner').dispatchEvent(clickEvent);
+	}
+}
+
 document.getElementById('state').onclick = function(){
 	document.getElementById('stateList').style.display = 'block';
 }
