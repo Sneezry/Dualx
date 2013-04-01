@@ -48,27 +48,7 @@ if(localStorage.state){
 	document.getElementById('state').setAttribute('state', localStorage.state);
 }
 
-document.getElementById('loginButtonInner').onclick = function(){
-	if(login){
-		chrome.extension.sendMessage('cancel');
-		return;
-	}
-	var account = document.getElementById('account').value;
-	var password = document.getElementById('password').value;
-	var state = document.getElementById('state').getAttribute('state');
-	if(account && password){
-		if(document.getElementById('rememberPwd').checked){
-			localStorage.account = account;
-			localStorage.password = password;
-			localStorage.state = state;
-		}
-		login = true;
-		document.getElementById('loginButtonInner').innerHTML = '取&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;消';
-		document.getElementById('beforeLogin').style.display = 'none';
-		document.getElementById('afterLogin').style.display = 'block';
-		chrome.extension.sendMessage('login;'+encodeURIComponent(account)+';'+encodeURIComponent(password.substr(0,16))+';'+encodeURIComponent(state));
-	}
-}
+document.getElementById('loginButtonInner').onclick = doLogin;
 
 document.getElementById('state').onclick = function(){
 	document.getElementById('stateList').style.display = 'block';
@@ -80,6 +60,20 @@ document.getElementById('state').onmouseover = function(){
 
 document.getElementById('state').onmouseout = function(){
 	stateListHover = false;
+}
+
+document.getElementById('account').onkeydown = function(){
+	if(event.keyCode==13){
+		doLogin();
+		return false;
+	}
+}
+
+document.getElementById('password').onkeydown = function(){
+	if(event.keyCode==13){
+		doLogin();
+		return false;
+	}
 }
 
 document.getElementById('rememberPwd').onclick = function(){
@@ -119,5 +113,27 @@ window.onload = function(){
 			document.getElementById('stateList').style.display = 'none';
 			return false;
 		}
+	}
+}
+
+function doLogin(){
+	if(login){
+		chrome.extension.sendMessage('cancel');
+		return;
+	}
+	var account = document.getElementById('account').value;
+	var password = document.getElementById('password').value;
+	var state = document.getElementById('state').getAttribute('state');
+	if(account && password){
+		if(document.getElementById('rememberPwd').checked){
+			localStorage.account = account;
+			localStorage.password = password;
+			localStorage.state = state;
+		}
+		login = true;
+		document.getElementById('loginButtonInner').innerHTML = '取&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;消';
+		document.getElementById('beforeLogin').style.display = 'none';
+		document.getElementById('afterLogin').style.display = 'block';
+		chrome.extension.sendMessage('login;'+encodeURIComponent(account)+';'+encodeURIComponent(password.substr(0,16))+';'+encodeURIComponent(state));
 	}
 }

@@ -605,7 +605,6 @@ sendRequest('hello', function(result){
 					HTML5QQ.friendsInfo.friends[j].status = HTML5QQ.onlineList[k].status;
 					HTML5QQ.friendsInfo.friends[j].client_type = HTML5QQ.onlineList[k].client_type;
 					onlineFriendsTotal[i]++;
-					console.log('cat:'+i+', uin:'+HTML5QQ.friendsInfo.friends[j].uin+', status:'+HTML5QQ.onlineList[k].status+', oft:'+onlineFriendsTotal[i]);
 					break;
 				}
 			}
@@ -887,10 +886,14 @@ sendRequest('hello', function(result){
 	chrome.extension.sendMessage('newmsg', function(newMsg){
 		flashGroup(newMsg);
 		for(var i = 0; i < newMsg.friend.length; i++){
-			document.getElementById('friendHead_'+newMsg.friend[i]).style.WebkitAnimation = 'shake 0.5s infinite cubic-bezier(1,0,0,1)';
+			if(document.getElementById('friendHead_'+newMsg.friend[i])){
+				document.getElementById('friendHead_'+newMsg.friend[i]).style.WebkitAnimation = 'shake 0.5s infinite cubic-bezier(1,0,0,1)';
+			}
 		}
 		for(var i = 0; i < newMsg.qun.length; i++){
-			document.getElementById('friendHead_'+newMsg.qun[i]).style.WebkitAnimation = 'shake 0.5s infinite cubic-bezier(1,0,0,1)';
+			if(document.getElementById('friendHead_'+newMsg.qun[i])){
+				document.getElementById('friendHead_'+newMsg.qun[i]).style.WebkitAnimation = 'shake 0.5s infinite cubic-bezier(1,0,0,1)';
+			}
 		}
 	});
 });
