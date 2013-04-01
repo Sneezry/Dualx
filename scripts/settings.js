@@ -39,17 +39,23 @@ chrome.storage.local.get('history', function(history){
 			var flnum = 0;
 			if(history.history[qq].friend){
 				for(var frmsg in history.history[qq].friend){
-					frnum += history.history[qq].friend[frmsg].length;
+					if(history.history[qq].friend[frmsg]){
+						frnum += history.history[qq].friend[frmsg].length;
+					}
 				}
 			}
 			if(history.history[qq].qun){
 				for(var qnmsg in history.history[qq].qun){
-					qnnum += history.history[qq].qun[qnmsg].length;
+					if(history.history[qq].qun[frmsg]){
+						qnnum += history.history[qq].qun[qnmsg].length;
+					}
 				}
 			}
 			if(history.history[qq].file){
 				for(var flmsg in history.history[qq].file){
-					flnum += history.history[qq].file[flmsg].length;
+					if(history.history[qq].file[flmsg]){
+						flnum += history.history[qq].file[flmsg].length;
+					}
 				}
 			}
 			var totalnum = frnum+qnnum+flnum;
