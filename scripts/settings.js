@@ -46,7 +46,7 @@ chrome.storage.local.get('history', function(history){
 			}
 			if(history.history[qq].qun){
 				for(var qnmsg in history.history[qq].qun){
-					if(history.history[qq].qun[frmsg]){
+					if(history.history[qq].qun[qnmsg]){
 						qnnum += history.history[qq].qun[qnmsg].length;
 					}
 				}
