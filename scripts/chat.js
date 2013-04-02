@@ -262,7 +262,7 @@ function formatMsg(msg){
 				result += sendAllFaces();
 				continue;
 			}
-			result += '\\"'+msg[i].nodeValue.replace('\\', '\\\\\\\\')+'\\",';
+			result += '\\"'+msg[i].nodeValue.replace(/\\/g, '\\\\\\\\')+'\\",';
 		}
 		else if(msg[i].nodeName == 'IMG'){
 			if(msg[i].getAttribute('imgtype') == 'offpic'){
