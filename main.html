@@ -118,7 +118,7 @@ li {
 }
 
 #userInfo {
-	padding: 42px 10px;
+	padding: 42px 10px 22px;
 	text-shadow: 1px 0 1px rgba(255, 255, 255, 0.35), 0 1px 1px rgba(255, 255, 255, 0.35), 
     0 -1px 1px rgba(255, 255, 255, 0.35), -1px 0 1px rgba(255, 255, 255, 0.35);
   cursor: default;
@@ -186,6 +186,33 @@ li {
 	border: rgba(0, 0, 0, 0.5) 1px solid;
 	box-shadow: inset 0 0 2px rgba(255, 255, 255, 0.5);
 	background: -webkit-linear-gradient(top, rgba(255, 255, 255, 0.5) 0%,rgba(255, 255, 255, 0) 100%);
+}
+
+#serviceLink{
+	padding:5px 10px;
+}
+
+#serviceLink a{
+	display: inline-block;
+	width: 16px;
+	height: 16px;
+	overflow: hidden;
+	text-indent: -999px;
+}
+
+#serviceLink a.qzone{
+	background:url(images/qzone.png) no-repeat;
+	background-size:16px 16px;
+}
+
+#serviceLink a.mail{
+	background:url(images/mail.png) no-repeat;
+	background-size:16px 16px;
+}
+
+#serviceLink a.microblog{
+	background:url(images/microblog.png) no-repeat;
+	background-size:16px 16px;
 }
 
 #searchBackground {
@@ -641,6 +668,11 @@ li {
 			<div id="userLnick"></div>
 			<input id="setLnick" type="text" />
 		</div>
+	</div>
+	<div id="serviceLink">
+		<a href="http://qzone.qq.com" class="qzone" target="_blank" title="QQ空间" />QQ空间</a>
+		<a href="http://mail.qq.com" class="mail" target="_blank" title="QQ邮箱" />QQ邮箱</a>
+		<a href="http://t.qq.com" class="microblog" target="_blank" title="腾讯微博" />腾讯微博</a>
 	</div>
 	<div id="searchBackground">
 		<div id="searchLine"><input type="text" id="searchBar" placeholder="输入关键字搜索联系人" /></div>
