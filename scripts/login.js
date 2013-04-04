@@ -5,6 +5,11 @@ window.onunload = function(){
 	chrome.extension.sendMessage('clogin');
 }
 
+// short version of get ID
+function getID(id) {
+	return document.getElementById(id);
+}
+
 chrome.extension.onMessage.addListener(function(request, sender) {
 	if(request == 'finish'){
 		self.close();
@@ -14,69 +19,69 @@ chrome.extension.onMessage.addListener(function(request, sender) {
 			localStorage.autoShow = 'true';
 		}
 		login = false;
-		document.getElementById('loginButtonInner').innerHTML = '登&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;录';
-		document.getElementById('beforeLogin').style.display = 'block';
-		document.getElementById('afterLogin').style.display = 'none';
+		getID('loginButtonInner').innerHTML = '登&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;录';
+		getID('beforeLogin').style.display = 'block';
+		getID('afterLogin').style.display = 'none';
 	}
 });
 
 var logining = location.search.substr(1);
 if(logining == '101'){
 	login = true;
-	document.getElementById('loginButtonInner').innerHTML = '取&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;消';
-	document.getElementById('beforeLogin').style.display = 'none';
-	document.getElementById('afterLogin').style.display = 'block';
+	getID('loginButtonInner').innerHTML = '取&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;消';
+	getID('beforeLogin').style.display = 'none';
+	getID('afterLogin').style.display = 'block';
 }
 
 if(localStorage.rememberPwd){
-	document.getElementById('rememberPwd').checked = 'checked';
+	getID('rememberPwd').checked = 'checked';
 }
 
 if(localStorage.autoLogin){
-	document.getElementById('autoLogin').checked = 'checked';
+	getID('autoLogin').checked = 'checked';
 }
 
 if(localStorage.account){
-	document.getElementById('account').value = localStorage.account;
+	getID('account').value = localStorage.account;
 }
 
 if(localStorage.password){
-	document.getElementById('password').value = localStorage.password;
+	getID('password').value = localStorage.password;
 }
 
 if(localStorage.state){
-	document.getElementById('state').setAttribute('state', localStorage.state);
+	getID('state').setAttribute('state', localStorage.state);
 }
 
-document.getElementById('loginButtonInner').onclick = doLogin;
+getID('loginButtonInner').onclick = doLogin;
 
-document.getElementById('state').onclick = function(){
-	document.getElementById('stateList').style.display = 'block';
+getID('state').onclick = function(){
+	getID('stateList').style.display = 'block';
 }
 
-document.getElementById('state').onmouseover = function(){
+getID('state').onmouseover = function(){
 	stateListHover = true;
 }
 
-document.getElementById('state').onmouseout = function(){
+getID('state').onmouseout = function(){
 	stateListHover = false;
 }
 
-document.getElementById('account').onkeydown = function(){
+getID('account').onkeydown = function(){
 	if(event.keyCode==13){
 		doLogin();
 		return false;
 	}
 }
 
-document.getElementById('password').onkeydown = function(){
+getID('password').onkeydown = function(){
 	if(event.keyCode==13){
 		doLogin();
 		return false;
 	}
 }
 
-document.getElementById('rememberPwd').onclick = function(){
+getID('rememberPwd').onclick = function(){
 	if(this.checked){
 		localStorage.rememberPwd = 'true';
 	}
@@ -86,11 +91,11 @@ document.getElementById('rememberPwd').onclick = function(){
 		localStorage.password = '';
 		localStorage.state = '';
 		localStorage.autoLogin = '';
-		document.getElementById('autoLogin').checked = '';
+		getID('autoLogin').checked = '';
 	}
 }
 
-document.getElementById('autoLogin').onclick = function(){
+getID('autoLogin').onclick = function(){
 	if(this.checked){
 		localStorage.autoLogin = 'true';
 	}
@@ -101,7 +106,7 @@ document.getElementById('autoLogin').onclick = function(){
 
 window.onclick = function(){
 	if(!stateListHover){
-		document.getElementById('stateList').style.display = 'none';
+		getID('stateList').style.display = 'none';
 	}
 }
 
@@ -109,8 +114,8 @@ window.onload = function(){
 	var statelist = document.getElementsByClassName('stateList');
 	for(var i = 0; i < statelist.length; i++){
 		statelist[i].onclick = function(){
-			document.getElementById('state').setAttribute('state', this.getAttribute('state'));
-			document.getElementById('stateList').style.display = 'none';
+			getID('state').setAttribute('state', this.getAttribute('state'));
+			getID('stateList').style.display = 'none';
 			return false;
 		}
 	}
@@ -121,19 +126,19 @@ function doLogin(){
 		chrome.extension.sendMessage('cancel');
 		return;
 	}
-	var account = document.getElementById('account').value;
-	var password = document.getElementById('password').value;
-	var state = document.getElementById('state').getAttribute('state');
+	var account = getID('account').value;
+	var password = getID('password').value;
+	var state = getID('state').getAttribute('state');
 	if(account && password){
-		if(document.getElementById('rememberPwd').checked){
+		if(getID('rememberPwd').checked){
 			localStorage.account = account;
 			localStorage.password = password;
 			localStorage.state = state;
 		}
 		login = true;
-		document.getElementById('loginButtonInner').innerHTML = '取&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;消';
-		document.getElementById('beforeLogin').style.display = 'none';
-		document.getElementById('afterLogin').style.display = 'block';
+		getID('loginButtonInner').innerHTML = '取&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;消';
+		getID('beforeLogin').style.display = 'none';
+		getID('afterLogin').style.display = 'block';
 		chrome.extension.sendMessage('login;'+encodeURIComponent(account)+';'+encodeURIComponent(password.substr(0,16))+';'+encodeURIComponent(state));
 	}
 }

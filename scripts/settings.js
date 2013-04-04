@@ -1,3 +1,8 @@
+// short version of get ID
+function getID(id) {
+	return document.getElementById(id);
+}
+
 window.onerror = function(err, u, l){
 	chrome.extension.sendMessage('error::settings:: <'+l+'> '+err);
 }
@@ -21,14 +26,14 @@ function save(){
 
 chrome.storage.local.get('history', function(history){
 	if(!history || !history.history){
-		document.getElementById('savedData').innerHTML = '<span style="color:gray">暂无数据</span>';
+		getID('savedData').innerHTML = '<span style="color:gray">暂无数据</span>';
 		return;
 	}
 	else{
 		var rec = false;
 		var el = document.createElement('ul');
 		el.id = 'msgHis';
-		document.getElementById('savedData').appendChild(el);
+		getID('savedData').appendChild(el);
 		for(var qq in history.history){
 			if(!history.history[qq]){
 				continue;
@@ -61,8 +66,8 @@ chrome.storage.local.get('history', function(history){
 			var totalnum = frnum+qnnum+flnum;
 			el = document.createElement('li');
 			el.innerHTML = qq+': 共 '+totalnum+' 条信息。[<a href="#" id="del_'+qq+'">删除</a>]';
-			document.getElementById('msgHis').appendChild(el);
-			document.getElementById('del_'+qq).onclick = function(){
+			getID('msgHis').appendChild(el);
+			getID('del_'+qq).onclick = function(){
 				if(confirm('您真的要删除'+this.id.substr(4)+'下的全部聊天记录吗')){
 					delHistory(this.id.substr(4));
 				}
@@ -70,7 +75,7 @@ chrome.storage.local.get('history', function(history){
 		}
 	}
 	if(!rec){
-		document.getElementById('savedData').innerHTML = '<span style="color:gray">暂无数据</span>';
+		getID('savedData').innerHTML = '<span style="color:gray">暂无数据</span>';
 		return;
 	}
 });

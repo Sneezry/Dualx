@@ -1,3 +1,8 @@
+// short version of get ID
+function getID(id) {
+	return document.getElementById(id);
+}
+
 var catTransfer = new Array;
 
 window.onerror = function(err, u, l){
@@ -9,11 +14,11 @@ window.onunload = function(){
 }
 
 window.onresize = function(){
-	document.getElementById('list').style.height = (window.innerHeight-224)+'px';
+	getID('list').style.height = (window.innerHeight-224)+'px';
 }
 
 window.onload = function(){
-	document.getElementById('list').style.height = (window.innerHeight-224)+'px';
+	getID('list').style.height = (window.innerHeight-224)+'px';
 	var stateList = document.getElementsByName('stateList');
 	for(var i = 0; i < stateList.length; i++){
 		stateList[i].onclick = function(){
@@ -23,10 +28,10 @@ window.onload = function(){
 			else{
 				chrome.extension.sendMessage('state'+this.getAttribute('state'));
 			}
-			document.getElementById('stateIco').className = 'state_'+this.getAttribute('state');
-			document.getElementById('stateIco').title = '当前状态 '+this.getAttribute('cnstate');
+			getID('stateIco').className = 'state_'+this.getAttribute('state');
+			getID('stateIco').title = '当前状态 '+this.getAttribute('cnstate');
 			showStateList = false;
-			document.getElementById('stateList').style.display = 'none';
+			getID('stateList').style.display = 'none';
 		}
 	}
 }
@@ -59,10 +64,10 @@ chrome.extension.onMessage.addListener(function(request, sender) {
 	}
 	else if(typeof(request) == 'string' && request.substr(0, 15) == 'shakeFriendHead'){
 		chrome.extension.sendMessage('newmsg', flashGroup);
-		document.getElementById('friendHead_'+request.substr(15)).style.WebkitAnimation = 'shake 0.5s infinite cubic-bezier(1,0,0,1)';
+		getID('friendHead_'+request.substr(15)).style.WebkitAnimation = 'shake 0.5s infinite cubic-bezier(1,0,0,1)';
 	}
 	else if(typeof(request) == 'string' && request.substr(0, 12) == 'shakeQunHead'){
-		document.getElementById('qunHead_'+request.substr(12)).style.WebkitAnimation = 'shake 0.5s infinite cubic-bezier(1,0,0,1)';
+		getID('qunHead_'+request.substr(12)).style.WebkitAnimation = 'shake 0.5s infinite cubic-bezier(1,0,0,1)';
 	}
 	else if(typeof(request) == 'string' && request.substr(0, 4) == 'otab'){
 		clearFlash(request.substr(4));
@@ -81,63 +86,63 @@ var HTML5QQ;
 
 var showStateList = false;
 
-document.getElementById('userState').onmouseover = function(){
+getID('userState').onmouseover = function(){
 	showStateList = true;
 }
 
-document.getElementById('userState').onmouseout = function(){
+getID('userState').onmouseout = function(){
 	showStateList = false;
 }
 
-document.getElementById('userState').onclick = function(){
-	document.getElementById('stateList').style.display = 'block';
+getID('userState').onclick = function(){
+	getID('stateList').style.display = 'block';
 }
 
-document.getElementById('friendsListTab').onclick = function(){
+getID('friendsListTab').onclick = function(){
 	clickTag(this);
 }
-document.getElementById('qunListTab').onclick = function(){
+getID('qunListTab').onclick = function(){
 	clickTag(this);
 }
-document.getElementById('recentListTab').onclick = function(){
+getID('recentListTab').onclick = function(){
 	clickTag(this);
 }
-document.getElementById('searchBar').onkeyup = function(){
+getID('searchBar').onkeyup = function(){
 	searchFriends(this.value);
 }
-document.getElementById('searchBar').onkeydown = function(){
+getID('searchBar').onkeydown = function(){
 	if(event.keyCode==13 && this.value=='debug'){
 		chrome.extension.sendMessage('showlog');
 	}
 }
-document.getElementById('searchBar').onfocus = function(){
+getID('searchBar').onfocus = function(){
 	searchFriends(this.value);
 }
-document.getElementById('searchBar').onblur = function(){
+getID('searchBar').onblur = function(){
 	setTimeout(function(){
-		document.getElementById('searchListBorder').style.display = 'none';
+		getID('searchListBorder').style.display = 'none';
 	}, 300);
 }
 
-document.getElementById('userLnick').onclick = function(){
-	document.getElementById('userLnick').style.display = 'none';
-	document.getElementById('setLnick').style.display = 'block';
-	document.getElementById('setLnick').select();
+getID('userLnick').onclick = function(){
+	getID('userLnick').style.display = 'none';
+	getID('setLnick').style.display = 'block';
+	getID('setLnick').select();
 }
 
-document.getElementById('setLnick').onblur = function(){
+getID('setLnick').onblur = function(){
 	chrome.extension.sendMessage('lnick'+this.value);
-	document.getElementById('userMotto').title = this.value;
-	document.getElementById('userLnick').innerHTML = this.value.length>40?this.value.substr(0, 37)+'...':this.value;
-	document.getElementById('setLnick').style.display = 'none';
-	document.getElementById('userLnick').style.display = 'block';
+	getID('userMotto').title = this.value;
+	getID('userLnick').innerHTML = this.value.length>40?this.value.substr(0, 37)+'...':this.value;
+	getID('setLnick').style.display = 'none';
+	getID('userLnick').style.display = 'block';
 }
 
-document.getElementById('settings').onclick = function(){
+getID('settings').onclick = function(){
 	window.open('settings.html', '_blank');
 }
 
-document.getElementById('logout').onclick = function(){
+getID('logout').onclick = function(){
 	chrome.extension.sendMessage('logout');
 }
 
@@ -148,14 +153,14 @@ function sendRequest(request, callback){
 function chgGroupState(groupId){
 	if(groupstate[groupId] == 'closed'){
 		groupstate[groupId] = 'open';
-		document.getElementById('group_'+groupId).className = 'groupNameOpen';
-		groupOpen(document.getElementById('friendDetail_'+groupId));
-		//document.getElementById('friendDetail_'+groupId).style.display = 'block';
+		getID('group_'+groupId).className = 'groupNameOpen';
+		groupOpen(getID('friendDetail_'+groupId));
+		//getID('friendDetail_'+groupId).style.display = 'block';
 	}
 	else{
 		groupstate[groupId] = 'closed';
-		document.getElementById('group_'+groupId).className = 'groupName';
-		document.getElementById('friendDetail_'+groupId).style.display = 'none';
+		getID('group_'+groupId).className = 'groupName';
+		getID('friendDetail_'+groupId).style.display = 'none';
 	}
 }
 
@@ -181,18 +186,18 @@ function clickTag(el){
 	if(list == selectedList){
 		return;
 	}
-	document.getElementById('friendsListTab').setAttribute('active', 'false');
-	document.getElementById('friendsListTabBg').className = 'tabs';
-	document.getElementById('qunListTab').setAttribute('active', 'false');
-	document.getElementById('qunListTabBg').className = 'tabs';
-	document.getElementById('recentListTab').setAttribute('active', 'false');
-	document.getElementById('recentListTabBg').className = 'tabs';
-	document.getElementById(list+'ListTab').setAttribute('active', 'true');
-	document.getElementById(list+'ListTabBg').className = 'tabactive';
-	slideOut(document.getElementById(selectedList+'List'));
+	getID('friendsListTab').setAttribute('active', 'false');
+	getID('friendsListTabBg').className = 'tabs';
+	getID('qunListTab').setAttribute('active', 'false');
+	getID('qunListTabBg').className = 'tabs';
+	getID('recentListTab').setAttribute('active', 'false');
+	getID('recentListTabBg').className = 'tabs';
+	getID(list+'ListTab').setAttribute('active', 'true');
+	getID(list+'ListTabBg').className = 'tabactive';
+	slideOut(getID(selectedList+'List'));
 	setTimeout(function(){
 		selectedList = list;
-		slideIn(document.getElementById(selectedList+'List'));
+		slideIn(getID(selectedList+'List'));
 	}, 200);
 }
 
@@ -294,9 +299,9 @@ function chg2py(str){
 function searchFriends(kw){
 	var count = 0;
 	var fd;
-	document.getElementById('searchListBorder').innerHTML = '';
+	getID('searchListBorder').innerHTML = '';
 	if(!kw){
-		document.getElementById('searchListBorder').style.display = 'none';
+		getID('searchListBorder').style.display = 'none';
 		return;
 	}
 	for(var i = 0; i < HTML5QQ.friendsInfo.friends.length; i++){
@@ -315,7 +320,7 @@ function searchFriends(kw){
 				}
 				el.style.backgroundImage = 'url(http://face'+(HTML5QQ.friendsInfo.friends[i].uin%10+1)+'.qun.qq.com/cgi/svr/face/getface?cache=0&type=1&fid=0&uin='+HTML5QQ.friendsInfo.friends[i].uin+'&vfwebqq='+HTML5QQ.vfwebqq+')';
 				el.innerHTML = HTML5QQ.friendsInfo.friends[i].markname?(HTML5QQ.friendsInfo.friends[i].markname+'('+HTML5QQ.friendsInfo.friends[i].nick+')'):HTML5QQ.friendsInfo.friends[i].nick;
-				document.getElementById('searchListBorder').appendChild(el);
+				getID('searchListBorder').appendChild(el);
 				fd = 1;
 				break;
 			}
@@ -325,10 +330,10 @@ function searchFriends(kw){
 		}
 	}
 	if(count){
-		document.getElementById('searchListBorder').style.display = 'block';
+		getID('searchListBorder').style.display = 'block';
 	}
 	else{
-		document.getElementById('searchListBorder').style.display = 'none';
+		getID('searchListBorder').style.display = 'none';
 	}
 }
 
@@ -337,13 +342,13 @@ function openChat(uin){
 }
 
 function clearFlash(uin){
-	document.getElementById('friendHead_'+uin).style.WebkitAnimation = '';
-	document.getElementById('searchListBorder').style.display = 'none';
+	getID('friendHead_'+uin).style.WebkitAnimation = '';
+	getID('searchListBorder').style.display = 'none';
 	chrome.extension.sendMessage('newmsg', flashGroup);
 }
 
 function clearQun(uin){
-	document.getElementById('qunHead_'+uin).style.WebkitAnimation = '';
+	getID('qunHead_'+uin).style.WebkitAnimation = '';
 }
 
 function openQun(uin){
@@ -352,12 +357,12 @@ function openQun(uin){
 
 function flashGroup(newMsg){
 	for(var i = 0; i < document.getElementsByClassName('groupName').length+document.getElementsByClassName('groupNameOpen').length-1; i++){
-		document.getElementById('groupName_'+i).style.WebkitAnimation = '';
+		getID('groupName_'+i).style.WebkitAnimation = '';
 	}
 	for(var i = 0; i < newMsg.friend.length; i++){
 		for(var j = 0; j < HTML5QQ.friendsInfo.friends.length; j++){
 			if(HTML5QQ.friendsInfo.friends[j].uin == newMsg.friend[i]){
-				document.getElementById('groupName_'+catTransfer[HTML5QQ.friendsInfo.friends[j].categories]).style.WebkitAnimation = 'flash 0.5s infinite cubic-bezier(1,0,0,1)';
+				getID('groupName_'+catTransfer[HTML5QQ.friendsInfo.friends[j].categories]).style.WebkitAnimation = 'flash 0.5s infinite cubic-bezier(1,0,0,1)';
 			}
 		}
 	}
@@ -375,7 +380,7 @@ function changeStatus(value){
 			}
 			HTML5QQ.friendsInfo.friends[j].status = value.status;
 			HTML5QQ.friendsInfo.friends[j].client_type = value.client_type;
-			document.getElementById('friendDetail_'+catTransfer[i]).removeChild(document.getElementById('friend_'+value.uin));
+			getID('friendDetail_'+catTransfer[i]).removeChild(getID('friend_'+value.uin));
 			var el = document.createElement('li');
 			el.id = 'friend_'+HTML5QQ.friendsInfo.friends[j].uin;
 			el.className = 'friendDetail';
@@ -411,7 +416,7 @@ function changeStatus(value){
 				else{
 					switch(HTML5QQ.friendsInfo.friends[j].status){
 						case 'callme': {
-							document.getElementById('friendDetail_'+catTransfer[i]).insertBefore(el, lists[k]);
+							getID('friendDetail_'+catTransfer[i]).insertBefore(el, lists[k]);
 							fd = 1;
 							break;
 						}
@@ -420,7 +425,7 @@ function changeStatus(value){
 								break;
 							}
 							else{
-								document.getElementById('friendDetail_'+catTransfer[i]).insertBefore(el, lists[k]);
+								getID('friendDetail_'+catTransfer[i]).insertBefore(el, lists[k]);
 								fd = 1;
 								break;
 							}
@@ -430,7 +435,7 @@ function changeStatus(value){
 								break;
 							}
 							else{
-								document.getElementById('friendDetail_'+catTransfer[i]).insertBefore(el, lists[k]);
+								getID('friendDetail_'+catTransfer[i]).insertBefore(el, lists[k]);
 								fd = 1;
 								break;
 							}
@@ -440,7 +445,7 @@ function changeStatus(value){
 								break;
 							}
 							else{
-								document.getElementById('friendDetail_'+catTransfer[i]).insertBefore(el, lists[k]);
+								getID('friendDetail_'+catTransfer[i]).insertBefore(el, lists[k]);
 								fd = 1;
 								break;
 							}
@@ -450,7 +455,7 @@ function changeStatus(value){
 								break;
 							}
 							else{
-								document.getElementById('friendDetail_'+catTransfer[i]).insertBefore(el, lists[k]);
+								getID('friendDetail_'+catTransfer[i]).insertBefore(el, lists[k]);
 								fd = 1;
 								break;
 							}
@@ -460,7 +465,7 @@ function changeStatus(value){
 								break;
 							}
 							else{
-								document.getElementById('friendDetail_'+catTransfer[i]).insertBefore(el, lists[k]);
+								getID('friendDetail_'+catTransfer[i]).insertBefore(el, lists[k]);
 								fd = 1;
 								break;
 							}
@@ -472,9 +477,9 @@ function changeStatus(value){
 				}
 			}
 			if(!fd){
-				document.getElementById('friendDetail_'+catTransfer[i]).appendChild(el);
+				getID('friendDetail_'+catTransfer[i]).appendChild(el);
 			}
-			document.getElementById('ftotal_'+catTransfer[i]).innerHTML = '['+onlineFriendsTotal[catTransfer[i]]+'/'+friendsTotal[catTransfer[i]]+']';
+			getID('ftotal_'+catTransfer[i]).innerHTML = '['+onlineFriendsTotal[catTransfer[i]]+'/'+friendsTotal[catTransfer[i]]+']';
 			break;
 		}
 	}
@@ -482,7 +487,7 @@ function changeStatus(value){
 
 window.onclick = function(){
 	if(!showStateList){
-		document.getElementById('stateList').style.display = 'none';
+		getID('stateList').style.display = 'none';
 	}
 }
 
@@ -513,16 +518,16 @@ sendRequest('hello', function(result){
 	};
 	for(var i = 0; i < statusList.en.length; i++){
 		if(status == statusList.en[i]){
-			document.getElementById('userState').title = '当前状态 '+statusList.cn[i];
-			document.getElementById('stateIco').className = 'state_'+statusList.en[i];
+			getID('userState').title = '当前状态 '+statusList.cn[i];
+			getID('stateIco').className = 'state_'+statusList.en[i];
 		}
 	}
-	document.getElementById('userName').innerHTML = HTML5QQ.info.nick.length>6?HTML5QQ.info.nick.substr(0, 6)+'...':HTML5QQ.info.nick;
-	document.getElementById('userLevel').title = '我的QQ等级 '+HTML5QQ.levelInfo.level+'级'+String.fromCharCode(13)+'剩余升级时间 '+HTML5QQ.levelInfo.remainDays+'天';
-	document.getElementById('userLevel').innerHTML = 'LV'+HTML5QQ.levelInfo.level;
-	document.getElementById('userMotto').title = HTML5QQ.myPersonal;
-	document.getElementById('setLnick').value = HTML5QQ.myPersonal;
-	document.getElementById('userLnick').innerHTML = HTML5QQ.myPersonal.length>40?HTML5QQ.myPersonal.substr(0, 37)+'...':HTML5QQ.myPersonal;
+	getID('userName').innerHTML = HTML5QQ.info.nick.length>6?HTML5QQ.info.nick.substr(0, 6)+'...':HTML5QQ.info.nick;
+	getID('userLevel').title = '我的QQ等级 '+HTML5QQ.levelInfo.level+'级'+String.fromCharCode(13)+'剩余升级时间 '+HTML5QQ.levelInfo.remainDays+'天';
+	getID('userLevel').innerHTML = 'LV'+HTML5QQ.levelInfo.level;
+	getID('userMotto').title = HTML5QQ.myPersonal;
+	getID('setLnick').value = HTML5QQ.myPersonal;
+	getID('userLnick').innerHTML = HTML5QQ.myPersonal.length>40?HTML5QQ.myPersonal.substr(0, 37)+'...':HTML5QQ.myPersonal;
 	if(friendsInfo.categories.length == 0 || friendsInfo.categories[0].index != 0){
 		friendsInfo.categories.unshift({index: 0, name: '我的好友', sort: 0});
 		hideCat = true;
@@ -566,7 +571,7 @@ sendRequest('hello', function(result){
 		groupstate[i] = 'closed';
 		var el = document.createElement('div');
 		el.id = 'categories_'+i;
-		document.getElementById('friendsList').appendChild(el);
+		getID('friendsList').appendChild(el);
 		el = document.createElement('div');
 		el.id = 'group_'+i;
 		el.className = 'groupName';
@@ -578,23 +583,23 @@ sendRequest('hello', function(result){
 				friends[i].setAttribute('selected', 'false');
 			}
 		}
-		document.getElementById('categories_'+i).appendChild(el);
+		getID('categories_'+i).appendChild(el);
 		el = document.createElement('span');
 		el.className = 'groupWords';
 		el.id = 'groupName_'+i;
 		el.innerHTML = categories[i].name;
-		document.getElementById('group_'+i).appendChild(el);
+		getID('group_'+i).appendChild(el);
 		/*
 		//隐身可见分组
 		el = document.createElement('span');
 		el.className = 'groupWords';
 		el.innerHTML = '<img src="images/showhidesmall.png"/>';
-		document.getElementById('group_'+i).appendChild(el);
+		getID('group_'+i).appendChild(el);
 		*/
 		el = document.createElement('ul');
 		el.id = 'friendDetail_'+i;
 		el.style.display = 'none';
-		document.getElementById('categories_'+i).appendChild(el);
+		getID('categories_'+i).appendChild(el);
 		for(var j = 0; j < HTML5QQ.friendsInfo.friends.length; j++){
 			if(HTML5QQ.friendsInfo.friends[j].categories != categories[i].index){
 				continue;
@@ -680,7 +685,7 @@ sendRequest('hello', function(result){
 				else{
 					switch(HTML5QQ.friendsInfo.friends[j].status){
 						case 'callme': {
-							document.getElementById('friendDetail_'+i).insertBefore(el, lists[k]);
+							getID('friendDetail_'+i).insertBefore(el, lists[k]);
 							fd = 1;
 							break;
 						}
@@ -689,7 +694,7 @@ sendRequest('hello', function(result){
 								break;
 							}
 							else{
-								document.getElementById('friendDetail_'+i).insertBefore(el, lists[k]);
+								getID('friendDetail_'+i).insertBefore(el, lists[k]);
 								fd = 1;
 								break;
 							}
@@ -699,7 +704,7 @@ sendRequest('hello', function(result){
 								break;
 							}
 							else{
-								document.getElementById('friendDetail_'+i).insertBefore(el, lists[k]);
+								getID('friendDetail_'+i).insertBefore(el, lists[k]);
 								fd = 1;
 								break;
 							}
@@ -709,7 +714,7 @@ sendRequest('hello', function(result){
 								break;
 							}
 							else{
-								document.getElementById('friendDetail_'+i).insertBefore(el, lists[k]);
+								getID('friendDetail_'+i).insertBefore(el, lists[k]);
 								fd = 1;
 								break;
 							}
@@ -719,7 +724,7 @@ sendRequest('hello', function(result){
 								break;
 							}
 							else{
-								document.getElementById('friendDetail_'+i).insertBefore(el, lists[k]);
+								getID('friendDetail_'+i).insertBefore(el, lists[k]);
 								fd = 1;
 								break;
 							}
@@ -729,7 +734,7 @@ sendRequest('hello', function(result){
 								break;
 							}
 							else{
-								document.getElementById('friendDetail_'+i).insertBefore(el, lists[k]);
+								getID('friendDetail_'+i).insertBefore(el, lists[k]);
 								fd = 1;
 								break;
 							}
@@ -741,20 +746,20 @@ sendRequest('hello', function(result){
 				}
 			}
 			if(!fd){
-				document.getElementById('friendDetail_'+i).appendChild(el);
+				getID('friendDetail_'+i).appendChild(el);
 			}
 		}
 		el = document.createElement('span');
 		el.className = 'groupWords';
 		el.id = 'ftotal_'+i;
 		el.innerHTML = '['+onlineFriendsTotal[i]+'/'+friendsTotal[i]+']';
-		document.getElementById('group_'+i).appendChild(el);
+		getID('group_'+i).appendChild(el);
 	}
 	var qun = HTML5QQ.groupsInfo.gnamelist;
 	groupstate['qun'] = 'open';
 	el = document.createElement('div');
 	el.id = 'qun';
-	document.getElementById('qunList').appendChild(el);
+	getID('qunList').appendChild(el);
 	el = document.createElement('div');
 	el.id = 'group_qun';
 	el.className = 'groupNameOpen';
@@ -762,19 +767,19 @@ sendRequest('hello', function(result){
 	el.onclick = function(){
 		chgGroupState(this.getAttribute('groupId'));
 	}
-	document.getElementById('qun').appendChild(el);
+	getID('qun').appendChild(el);
 	el = document.createElement('span');
 	el.className = 'groupWords';
 	el.innerHTML = '我的QQ群';
-	document.getElementById('group_qun').appendChild(el);
+	getID('group_qun').appendChild(el);
 	el = document.createElement('ul');
 	el.id = 'friendDetail_qun';
 	el.style.display = 'block';
-	document.getElementById('qun').appendChild(el);
+	getID('qun').appendChild(el);
 	el = document.createElement('span');
 	el.className = 'groupWords';
 	el.innerHTML = '['+qun.length+']';
-	document.getElementById('group_qun').appendChild(el);
+	getID('group_qun').appendChild(el);
 	for(var i = 0; i < qun.length; i++){
 		el = document.createElement('li');
 		el.id = 'qun_'+qun[i].code;
@@ -796,16 +801,16 @@ sendRequest('hello', function(result){
 							'<div class="friendPersonal"></div>'+
 						'</div>'+
 						'<div style="clear: both"></div>';
-		document.getElementById('friendDetail_qun').appendChild(el);
+		getID('friendDetail_qun').appendChild(el);
 	}
 	var recent = HTML5QQ.recentList;
 	el = document.createElement('div');
 	el.id = 'recent';
-	document.getElementById('recentList').appendChild(el);
+	getID('recentList').appendChild(el);
 	el = document.createElement('ul');
 	el.id = 'friendDetail_recent';
 	el.style.display = 'block';
-	document.getElementById('recent').appendChild(el);
+	getID('recent').appendChild(el);
 	for(var i = 0; i < recent.length; i++){
 		if(recent[i].type == '0'){
 			for(var j = 0; j < HTML5QQ.onlineList.length; j++){
@@ -881,18 +886,18 @@ sendRequest('hello', function(result){
 							'<div class="friendPersonal">'+recent[i].lnick+'</div>'+
 						'</div>'+
 						'<div style="clear: both"></div>';
-		document.getElementById('friendDetail_recent').appendChild(el);
+		getID('friendDetail_recent').appendChild(el);
 	}
 	chrome.extension.sendMessage('newmsg', function(newMsg){
 		flashGroup(newMsg);
 		for(var i = 0; i < newMsg.friend.length; i++){
-			if(document.getElementById('friendHead_'+newMsg.friend[i])){
-				document.getElementById('friendHead_'+newMsg.friend[i]).style.WebkitAnimation = 'shake 0.5s infinite cubic-bezier(1,0,0,1)';
+			if(getID('friendHead_'+newMsg.friend[i])){
+				getID('friendHead_'+newMsg.friend[i]).style.WebkitAnimation = 'shake 0.5s infinite cubic-bezier(1,0,0,1)';
 			}
 		}
 		for(var i = 0; i < newMsg.qun.length; i++){
-			if(document.getElementById('friendHead_'+newMsg.qun[i])){
-				document.getElementById('friendHead_'+newMsg.qun[i]).style.WebkitAnimation = 'shake 0.5s infinite cubic-bezier(1,0,0,1)';
+			if(getID('friendHead_'+newMsg.qun[i])){
+				getID('friendHead_'+newMsg.qun[i]).style.WebkitAnimation = 'shake 0.5s infinite cubic-bezier(1,0,0,1)';
 			}
 		}
 	});

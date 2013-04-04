@@ -1,3 +1,8 @@
+// short version of get ID
+function getID(id) {
+	return document.getElementById(id);
+}
+
 window.onerror = function(err){
 	chrome.extension.sendMessage('error::colorpanel:: '+err);
 }
@@ -22,10 +27,10 @@ for(var i = 0; i < colorCube.length; i++){
 }
 
 if(!fd){
-	document.getElementById('colorInput').value = fontColor;
-	document.getElementById('customColor').style.background = '#'+fontColor;
-	document.getElementById('customColor').setAttribute('value', fontColor);
-	document.getElementById('customColor').parentElement.parentElement.style.border = '1px dotted black';
+	getID('colorInput').value = fontColor;
+	getID('customColor').style.background = '#'+fontColor;
+	getID('customColor').setAttribute('value', fontColor);
+	getID('customColor').parentElement.parentElement.style.border = '1px dotted black';
 }
 
 document.getElementsByClassName('actionButton')[0].onclick = function(){
@@ -38,14 +43,14 @@ document.getElementsByClassName('actionButton')[1].onclick = function(){
 	self.close();
 }
 
-document.getElementById('colorInput').onkeyup = function(){
+getID('colorInput').onkeyup = function(){
 	if(/^[0-9a-fA-F]{6}$/.test(this.value)){
-		document.getElementById('customColor').setAttribute('value', this.value);
-		document.getElementById('customColor').style.background = '#'+this.value;
+		getID('customColor').setAttribute('value', this.value);
+		getID('customColor').style.background = '#'+this.value;
 	}
 	else{
-		document.getElementById('customColor').setAttribute('value', 'ffffff');
-		document.getElementById('customColor').style.background = '#ffffff';
+		getID('customColor').setAttribute('value', 'ffffff');
+		getID('customColor').style.background = '#ffffff';
 	}
 }
 

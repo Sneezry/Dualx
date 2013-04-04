@@ -15,6 +15,11 @@ var preSender = new Array;
 var preSenderPeeker = new Array;
 var faceTransferTable = [14, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 0, 50, 51, 96, 53, 54, 73, 74, 75, 76, 77, 78, 55, 56, 57, 58, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 32, 113, 114, 115, 63, 64, 59, 33, 34, 116, 36, 37, 38, 91, 92, 93, 29, 117, 72, 45, 42, 39, 62, 46, 47, 71, 95, 118, 119, 120, 121, 122, 123, 124, 27, 21, 23, 25, 26, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 52, 24, 22, 20, 60, 61, 89, 90, 31, 94, 65, 35, 66, 67, 68, 69, 70, 15, 16, 17, 18, 19, 28, 30, 40, 41, 43, 44, 48, 49];
 
+// short version of get ID
+function getID(id) {
+	return document.getElementById(id);
+}
+
 window.onerror = function(err, u, l){
 	chrome.extension.sendMessage('error::qun:: <'+l+'> '+err);
 }
@@ -25,52 +30,52 @@ window.onunload = function(){
 
 window.onresize = function(){
 	leftFrameWidth=window.innerWidth-240;
-	document.getElementById('chatBox').style.height = (window.innerHeight-251)+'px';
+	getID('chatBox').style.height = (window.innerHeight-251)+'px';
 	if(sending){
-		document.getElementById('leftFrame').style.width = leftFrameWidth+'px';
-		document.getElementById('rightFrame').style.width = '204px';
-		document.getElementById('rightFrame').style.display = 'block';
+		getID('leftFrame').style.width = leftFrameWidth+'px';
+		getID('rightFrame').style.width = '204px';
+		getID('rightFrame').style.display = 'block';
 	}
 	scrollBottom();
 }
 
 window.onload = function(){
 	leftFrameWidth=window.innerWidth-240;
-	document.getElementById('chatBox').style.height = (window.innerHeight-251)+'px';
-	document.getElementById('leftFrame').style.width = '100%';
+	getID('chatBox').style.height = (window.innerHeight-251)+'px';
+	getID('leftFrame').style.width = '100%';
 	scrollBottom();
 	
 	localStorage.fontColor=localStorage.fontColor?localStorage.fontColor:'000000';
-	document.getElementById('inputBox').style.color = '#'+localStorage.fontColor;
+	getID('inputBox').style.color = '#'+localStorage.fontColor;
 	for(var i = 8; i <= 22; i++){
 		var el = document.createElement('option');
 		el.value = i;
 		if(!localStorage.fontSize && 16 == i){
 			el.selected = 'selected';
-			document.getElementById('inputBox').style.fontSize = '16pt';
+			getID('inputBox').style.fontSize = '16pt';
 		}
 		else if(localStorage.fontSize && localStorage.fontSize == i){
 			el.selected = 'selected';
-			document.getElementById('inputBox').style.fontSize = (localStorage.fontSize)+'pt';
+			getID('inputBox').style.fontSize = (localStorage.fontSize)+'pt';
 		}
 		el.innerHTML = i;
-		document.getElementById('fontSize').appendChild(el);
+		getID('fontSize').appendChild(el);
 	}
 	
 	if(localStorage.fontBold == 1){
 		fontStyle[0] = 1;
-		document.getElementById('fontBold').className = 'toolButtonActive';
-		document.getElementById('inputBox').style.fontWeight = 'bold';
+		getID('fontBold').className = 'toolButtonActive';
+		getID('inputBox').style.fontWeight = 'bold';
 	}
 	if(localStorage.fontItalic == 1){
 		fontStyle[1] = 1;
-		document.getElementById('fontItalic').className = 'toolButtonActive';
-		document.getElementById('inputBox').style.fontStyle = 'italic';
+		getID('fontItalic').className = 'toolButtonActive';
+		getID('inputBox').style.fontStyle = 'italic';
 	}
 	if(localStorage.fontUnderline == 1){
 		fontStyle[2] = 1;
-		document.getElementById('fontUnderline').className = 'toolButtonActive';
-		document.getElementById('inputBox').style.textDecoration = 'underline';
+		getID('fontUnderline').className = 'toolButtonActive';
+		getID('inputBox').style.textDecoration = 'underline';
 	}
 	
 	for(var i=0; i < 105; i++){
@@ -79,14 +84,14 @@ window.onload = function(){
 		el.setAttribute('mark', i);
 		el.onclick = function(){
 			insertImg('face', {face: faceTransferTable[this.getAttribute('mark')]});
-			document.getElementById('facePanel').style.display = 'none';
-			document.getElementById('toolFaces').className = 'toolButton';
+			getID('facePanel').style.display = 'none';
+			getID('toolFaces').className = 'toolButton';
 		}
-		document.getElementById('facePanel').appendChild(el);
+		getID('facePanel').appendChild(el);
 		if(i%15 == 14){
 			var el = document.createElement('div');
 			el.style.clear = 'both';
-			document.getElementById('facePanel').appendChild(el);
+			getID('facePanel').appendChild(el);
 		}
 	}
 }
@@ -107,7 +112,7 @@ chrome.extension.onMessage.addListener(function(request, sender) {
 		}
 	}
 	else if(request == 'color'){
-		document.getElementById('inputBox').style.color = '#'+localStorage.fontColor;
+		getID('inputBox').style.color = '#'+localStorage.fontColor;
 	}
 	else if(request == 'logout'){
 		self.close();
@@ -121,7 +126,7 @@ function getAccount(){
 	httpRequest('GET', url, null, false, function(result){
 		result = JSON.parse(result);
 		if(result.result){
-			document.getElementById('sendFile').onclick = function(){
+			getID('sendFile').onclick = function(){
 				window.open('http://qun.qq.com/air/#'+result.result.account+'/share');
 			}
 		}
@@ -222,7 +227,7 @@ function decodeMsg(msg, fuin){
 }
 
 function sendMsg(){
-	if(!document.getElementById('inputBox').innerHTML){
+	if(!getID('inputBox').innerHTML){
 		return;
 	}
 	chrome.storage.local.get('fqcy', function(obj){
@@ -246,8 +251,8 @@ function sendMsg(){
 		chrome.storage.local.set({'fqcy': fqcy});
 	});
 	msg_id++;
-	var msg = formatMsg( document.getElementById('inputBox') );
-	document.getElementById('inputBox').innerHTML = '';
+	var msg = formatMsg( getID('inputBox') );
+	getID('inputBox').innerHTML = '';
 	var url = 'http://d.web2.qq.com/channel/send_qun_msg2';
 	var r = '{"group_uin":'+qunInfo.ginfo.gid+',"key":"'+gface_key+'","sig":"'+gface_sig+'","content":"['+msg+'[\\"font\\",{\\"name\\":\\"'+(localStorage.fontFamily?localStorage.fontFamily:'宋体')+'\\",\\"size\\":\\"'+(localStorage.fontSize?localStorage.fontSize:16)+'\\",\\"style\\":['+fontStyle[0]+','+fontStyle[1]+','+fontStyle[2]+'],\\"color\\":\\"'+localStorage.fontColor+'\\"}]]","msg_id":'+msg_id+',"clientid":"'+HTML5QQ.clientid+'","psessionid":"'+HTML5QQ.psessionid+'"}';
 	recieveMsg(JSON.parse(r));
@@ -256,7 +261,7 @@ function sendMsg(){
 	});
 }
 
-document.getElementById('sendMsgBtn').onclick = sendMsg;
+getID('sendMsgBtn').onclick = sendMsg;
 
 chrome.webRequest.onBeforeSendHeaders.addListener(function(details){
 	for(var i = 0; i<details.requestHeaders.length; i++){
@@ -315,10 +320,10 @@ function recieveMsg(msg){
 			var el = document.createElement('div');
 			el.className = 'msgName';
 			el.innerHTML = friendName(msg.send_uin)+'&nbsp;&nbsp;'+hh+':'+mm+':'+ss;
-			document.getElementById('chatBox').appendChild(el);
+			getID('chatBox').appendChild(el);
 		}
 		var el = document.createElement('div');
-		document.getElementById('chatBox').appendChild(decodeMsg(msg.content, msg.send_uin));
+		getID('chatBox').appendChild(decodeMsg(msg.content, msg.send_uin));
 		scrollBottom();
 	}
 	else if(!msg.from_uin){
@@ -348,10 +353,10 @@ function recieveMsg(msg){
 			var el = document.createElement('div');
 			el.className = 'msgNameSelf';
 			el.innerHTML = HTML5QQ.info.nick+'&nbsp;&nbsp;'+hh+':'+mm+':'+ss;
-			document.getElementById('chatBox').appendChild(el);
+			getID('chatBox').appendChild(el);
 		}
 		var el = document.createElement('div');
-		document.getElementById('chatBox').appendChild(decodeMsg(msg.content, HTML5QQ.qq));
+		getID('chatBox').appendChild(decodeMsg(msg.content, HTML5QQ.qq));
 		scrollBottom();
 	}
 }
@@ -399,8 +404,8 @@ sendRequest('hello', function(result){
 		result = JSON.parse(result);
 		qunInfo = result.result;
 		document.title = qunInfo.ginfo.name;
-		document.getElementById('userName').innerHTML = qunInfo.ginfo.name;
-		document.getElementById('toolMsgRec').onclick = function(){
+		getID('userName').innerHTML = qunInfo.ginfo.name;
+		getID('toolMsgRec').onclick = function(){
 			chrome.windows.create({
 				url: 'history.html?qun|'+uin+'|'+qunInfo.ginfo.gid,
 				width: 560,
@@ -428,8 +433,8 @@ sendRequest('hello', function(result){
 	el.src = 'http://face'+(parseInt(uin.substr(-1))+1)+'.qun.qq.com/cgi/svr/face/getface?cache=0&type=4&fid=0&uin='+uin+'&vfwebqq='+HTML5QQ.vfwebqq;
 	el.width = 40;
 	el.height = 40;
-	document.getElementById('userHead').appendChild(el);
-	document.getElementById('op_vfwebqq').value = HTML5QQ.vfwebqq;
+	getID('userHead').appendChild(el);
+	getID('op_vfwebqq').value = HTML5QQ.vfwebqq;
 });
 
 chrome.fontSettings.getFontList(function(fonts){
@@ -442,95 +447,95 @@ chrome.fontSettings.getFontList(function(fonts){
 		if(!localStorage.fontFamily && '宋体' == fonts[i].fontId){
 			el.selected = 'selected';
 			elslc = true;
-			document.getElementById('inputBox').style.fontFamily = '宋体';
+			getID('inputBox').style.fontFamily = '宋体';
 		}
 		else if(localStorage.fontFamily && localStorage.fontFamily == fonts[i].fontId){
 			el.selected = 'selected';
 			elslc = true;
-			document.getElementById('inputBox').style.fontFamily = localStorage.fontFamily;
+			getID('inputBox').style.fontFamily = localStorage.fontFamily;
 		}
-		document.getElementById('fontFamily').appendChild(el);
+		getID('fontFamily').appendChild(el);
 	}
 	if(!elslc){
-		document.getElementById('font_id_0').selected = 'selected';
-		document.getElementById('inputBox').style.fontFamily = fonts[0].fontId;
+		getID('font_id_0').selected = 'selected';
+		getID('inputBox').style.fontFamily = fonts[0].fontId;
 	}
 });
 
-document.getElementById('toolFontStyle').onclick = function(){
-	if(document.getElementById('toolFontStyleTab').style.display != 'block'){
-		document.getElementById('toolFontStyleTab').style.display = 'block';
-		document.getElementById('toolFontStyle').className = 'toolButtonActive';
+getID('toolFontStyle').onclick = function(){
+	if(getID('toolFontStyleTab').style.display != 'block'){
+		getID('toolFontStyleTab').style.display = 'block';
+		getID('toolFontStyle').className = 'toolButtonActive';
 		chrome.windows.getCurrent(function(window){
 			leftFrameWidth=window.width-240;
-			document.getElementById('chatBox').style.height = (window.innerHeight-279)+'px';
-			document.getElementById('chatBox').style.marginBottom = '28px';
+			getID('chatBox').style.height = (window.innerHeight-279)+'px';
+			getID('chatBox').style.marginBottom = '28px';
 			scrollBottom();
 		});
 	}
 	else{
-		document.getElementById('toolFontStyleTab').style.display = 'none';
-		document.getElementById('toolFontStyle').className = 'toolButton';
+		getID('toolFontStyleTab').style.display = 'none';
+		getID('toolFontStyle').className = 'toolButton';
 		chrome.windows.getCurrent(function(window){
 			leftFrameWidth=window.width-240;
-			document.getElementById('chatBox').style.height = (window.innerHeight-251)+'px';
-			document.getElementById('chatBox').style.marginBottom = '0';
+			getID('chatBox').style.height = (window.innerHeight-251)+'px';
+			getID('chatBox').style.marginBottom = '0';
 			scrollBottom();
 		});
 	}
 }
 
-document.getElementById('toolFaces').onclick = function(){
-	document.getElementById('facePanel').style.display = 'block';
-	document.getElementById('toolFaces').className = 'toolButtonActive';
+getID('toolFaces').onclick = function(){
+	getID('facePanel').style.display = 'block';
+	getID('toolFaces').className = 'toolButtonActive';
 }
 
-document.getElementById('toolFaces').onmouseover = function(){
+getID('toolFaces').onmouseover = function(){
 	toolFaceOver = true;
 }
 
-document.getElementById('toolFaces').onmouseout = function(){
+getID('toolFaces').onmouseout = function(){
 	toolFaceOver = false;
 }
 
-document.getElementById('facePanel').onmouseover = function(){
+getID('facePanel').onmouseover = function(){
 	toolFaceOver = true;
 }
 
-document.getElementById('facePanel').onmouseout = function(){
+getID('facePanel').onmouseout = function(){
 	toolFaceOver = false;
 }
 
-document.getElementById('inputBox').onkeydown = function(){
+getID('inputBox').onkeydown = function(){
 	if((event.ctrlKey && localStorage.ctrl || !event.ctrlKey && !localStorage.ctrl) && event.keyCode==13){
 		sendMsg();
 		return false;
 	}
 }
 
-document.getElementById('fontFamily').onchange = function(){
-	document.getElementById('inputBox').style.fontFamily = this.value;
+getID('fontFamily').onchange = function(){
+	getID('inputBox').style.fontFamily = this.value;
 	localStorage.fontFamily = this.value;
 }
 
-document.getElementById('fontSize').onchange = function(){
-	document.getElementById('inputBox').style.fontSize = this.value+'pt';
+getID('fontSize').onchange = function(){
+	getID('inputBox').style.fontSize = this.value+'pt';
 	localStorage.fontSize = this.value;
 }
 
-document.getElementById('fontBold').onclick = function(){
+getID('fontBold').onclick = function(){
 	changeStyle(this.id);
 }
 
-document.getElementById('fontItalic').onclick = function(){
+getID('fontItalic').onclick = function(){
 	changeStyle(this.id);
 }
 
-document.getElementById('fontUnderline').onclick = function(){
+getID('fontUnderline').onclick = function(){
 	changeStyle(this.id);
 }
 
-document.getElementById('fontColor').onclick = function(){
+getID('fontColor').onclick = function(){
 	chrome.windows.create({
 		url: 'colorpanel.html',
 		width: 236,
@@ -540,14 +545,14 @@ document.getElementById('fontColor').onclick = function(){
 	});
 }
 
-document.getElementById('offPic').onmousedown = function(){
+getID('offPic').onmousedown = function(){
 	var t = new Date();
 	this.form.action = 'http://up.web2.qq.com/cgi-bin/cface_upload?time='+t.getTime();
 }
 
-document.getElementById('offPic').onchange = function(){
+getID('offPic').onchange = function(){
 	fileid++;
-	document.getElementById('op_fileid').value = fileid
+	getID('op_fileid').value = fileid
 	var thisLoadingImg = loadingImg;
 	loadingImg++;
 	insertImg('offpic', {
@@ -563,7 +568,7 @@ document.getElementById('offPic').onchange = function(){
 		  result = result.split(' ')[0];
 		  var t = new Date();
 		  var url = 'http://web.qq.com/cgi-bin/webqq_app/?cmd=2&bd='+result+'&vfwebqq='+HTML5QQ.vfwebqq;
-			var el = document.getElementById('offImg_'+thisLoadingImg);
+			var el = getID('offImg_'+thisLoadingImg);
 		  el.src = url;
 		  el.setAttribute('mark', result);
 		}
@@ -586,7 +591,7 @@ function sendImg(img, suffix){
 	var vFD = new FormData();
 	vFD.append('from', 'control');
 	vFD.append('f', 'EQQ.Model.ChatMsg.callbackSendPicGroup');
-	vFD.append('vfwebqq', document.getElementById('op_vfwebqq').value);
+	vFD.append('vfwebqq', getID('op_vfwebqq').value);
 	vFD.append('custom_face', img, 'pasteImg.'+suffix);
 	vFD.append('fileid', fileid);
 	oXHR = new XMLHttpRequest();
@@ -597,7 +602,7 @@ function sendImg(img, suffix){
 		  result = result.split(' ')[0];
 		  var t = new Date();
 		  var url = 'http://web.qq.com/cgi-bin/webqq_app/?cmd=2&bd='+result+'&vfwebqq='+HTML5QQ.vfwebqq;
-			var el = document.getElementById('offImg_'+thisLoadingImg);
+			var el = getID('offImg_'+thisLoadingImg);
 		  el.src = url;
 		  el.setAttribute('mark', result);
 		}
@@ -610,14 +615,14 @@ function changeStyle(n){
 		case 'fontBold':{
 			if(fontStyle[0] == 0){
 				fontStyle[0] = 1;
-				document.getElementById('fontBold').className = 'toolButtonActive';
-				document.getElementById('inputBox').style.fontWeight = 'bold';
+				getID('fontBold').className = 'toolButtonActive';
+				getID('inputBox').style.fontWeight = 'bold';
 				localStorage.fontBold = 1;
 			}
 			else{
 				fontStyle[0] = 0;
-				document.getElementById('fontBold').className = 'toolButton';
-				document.getElementById('inputBox').style.fontWeight = 'normal';
+				getID('fontBold').className = 'toolButton';
+				getID('inputBox').style.fontWeight = 'normal';
 				localStorage.fontBold = 0;
 			}
 			break;
@@ -625,14 +630,14 @@ function changeStyle(n){
 		case 'fontItalic':{
 			if(fontStyle[1] == 0){
 				fontStyle[1] = 1;
-				document.getElementById('fontItalic').className = 'toolButtonActive';
-				document.getElementById('inputBox').style.fontStyle = 'italic';
+				getID('fontItalic').className = 'toolButtonActive';
+				getID('inputBox').style.fontStyle = 'italic';
 				localStorage.fontItalic = 1;
 			}
 			else{
 				fontStyle[1] = 0;
-				document.getElementById('fontItalic').className = 'toolButton';
-				document.getElementById('inputBox').style.fontStyle = 'normal';
+				getID('fontItalic').className = 'toolButton';
+				getID('inputBox').style.fontStyle = 'normal';
 				localStorage.fontItalic = 0;
 			}
 			break;
@@ -640,14 +645,14 @@ function changeStyle(n){
 		case 'fontUnderline':{
 			if(fontStyle[2] == 0){
 				fontStyle[2] = 1;
-				document.getElementById('fontUnderline').className = 'toolButtonActive';
-				document.getElementById('inputBox').style.textDecoration = 'underline';
+				getID('fontUnderline').className = 'toolButtonActive';
+				getID('inputBox').style.textDecoration = 'underline';
 				localStorage.fontUnderline = 1;
 			}
 			else{
 				fontStyle[2] = 0;
-				document.getElementById('fontUnderline').className = 'toolButton';
-				document.getElementById('inputBox').style.textDecoration = 'none';
+				getID('fontUnderline').className = 'toolButton';
+				getID('inputBox').style.textDecoration = 'none';
 				localStorage.fontUnderline = 0;
 			}
 			break;
@@ -656,14 +661,14 @@ function changeStyle(n){
 }
 
 function scrollBottom(){
-	var div = document.getElementById('chatBox');
+	var div = getID('chatBox');
 	div.scrollTop = div.scrollHeight;
 	setTimeout(function(){div.scrollTop = div.scrollHeight}, 200);
 	setTimeout(function(){div.scrollTop = div.scrollHeight}, 500);
 	setTimeout(function(){div.scrollTop = div.scrollHeight}, 1000);
 }
 
-document.getElementById('inputBox').onpaste = function(e){
+getID('inputBox').onpaste = function(e){
 	var items = e.clipboardData&&e.clipboardData.items;
 	for(var i = 0; i < items.length; i++){
 		if(items[i].kind == 'file'){
@@ -674,18 +679,18 @@ document.getElementById('inputBox').onpaste = function(e){
 	}
 }
 
-document.getElementById('inputBox').onkeyup = function(){
+getID('inputBox').onkeyup = function(){
 	savedRange = window.getSelection().getRangeAt(0);
 }
 
-document.getElementById('inputBox').onmouseup = function(){
+getID('inputBox').onmouseup = function(){
 	savedRange = window.getSelection().getRangeAt(0);
 }
 
-document.getElementById('toolBar').onclick = restoreSelection;
+getID('toolBar').onclick = restoreSelection;
 
 function restoreSelection(){
-	document.getElementById('inputBox').focus();
+	getID('inputBox').focus();
 	if(savedRange != null) {
 		var s = window.getSelection();
 		if(s.rangeCount > 0){
@@ -711,7 +716,7 @@ function insertImg(imgtype, imgvalue){
 		savedRange.insertNode(el);
 	}
 	else{
-		document.getElementById('inputBox').appendChild(el);
+		getID('inputBox').appendChild(el);
 	}
 	setTimeout(function(){
 		savedRange = window.getSelection().getRangeAt(0);
@@ -735,12 +740,12 @@ function sendAllFaces(){
 
 window.onclick = function(){
 	if(!toolFaceOver){
-		document.getElementById('facePanel').style.display = 'none';
-		document.getElementById('toolFaces').className = 'toolButton';
+		getID('facePanel').style.display = 'none';
+		getID('toolFaces').className = 'toolButton';
 	}
 }
 
-document.getElementById('closeMsgBtn').onclick = function(){
+getID('closeMsgBtn').onclick = function(){
 	chrome.extension.sendMessage('cqtab'+uin);
 	self.close();
 }
