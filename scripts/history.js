@@ -3,6 +3,11 @@ var info = location.search.substr(1).split('|');
 var type = info[0];
 var uin = info[1];
 
+// short version of get ID
+function getID(id) {
+	return document.getElementById(id);
+}
+
 window.onerror = function(err, u, l){
 	chrome.extension.sendMessage('error::history:: <'+l+'> '+err);
 }
@@ -11,28 +16,28 @@ chrome.extension.sendMessage('hello', function(result){
 	HTML5QQ = result;
 	chrome.storage.local.get('history', function(history){
 		if(!history){
-			document.getElementById('chatBox').innerHTML = '<div class="notice">此会话下暂无任何消息记录。</div>';
+			getID('chatBox').innerHTML = '<div class="notice">此会话下暂无任何消息记录。</div>';
 			return;
 		}
 		if(!history.history){
-			document.getElementById('chatBox').innerHTML = '<div class="notice">此会话下暂无任何消息记录。</div>';
+			getID('chatBox').innerHTML = '<div class="notice">此会话下暂无任何消息记录。</div>';
 			return;
 		}
 		if(!history.history[HTML5QQ.qq]){
-			document.getElementById('chatBox').innerHTML = '<div class="notice">此会话下暂无任何消息记录。</div>';
+			getID('chatBox').innerHTML = '<div class="notice">此会话下暂无任何消息记录。</div>';
 			return;
 		}
 		if(!history.history[HTML5QQ.qq][type]){
-			document.getElementById('chatBox').innerHTML = '<div class="notice">此会话下暂无任何消息记录。</div>';
+			getID('chatBox').innerHTML = '<div class="notice">此会话下暂无任何消息记录。</div>';
 			return;
 		}
 		if(!history.history[HTML5QQ.qq][type][uin]){
-			document.getElementById('chatBox').innerHTML = '<div class="notice">此会话下暂无任何消息记录。</div>';
+			getID('chatBox').innerHTML = '<div class="notice">此会话下暂无任何消息记录。</div>';
 			return;
 		}
 		history = history.history[HTML5QQ.qq][type][uin];
 		if(!history.length){
-			document.getElementById('chatBox').innerHTML = '<div class="notice">此会话下暂无任何消息记录。</div>';
+			getID('chatBox').innerHTML = '<div class="notice">此会话下暂无任何消息记录。</div>';
 		}
 		for(var i = 0; i < history.length; i++){
 			var msg = history[i].msg;
@@ -47,17 +52,17 @@ chrome.extension.sendMessage('hello', function(result){
 				var el = document.createElement('div');
 				el.className = 'msgName';
 				el.innerHTML = history[i]['name']+'&nbsp;&nbsp;'+hh+':'+mm+':'+ss;
-				document.getElementById('chatBox').appendChild(el);
+				getID('chatBox').appendChild(el);
 				 el = document.createElement('div');
-				document.getElementById('chatBox').appendChild(decodeMsg(msg.content, type=='friend'?msg.from_uin:msg.send_uin, type));
+				getID('chatBox').appendChild(decodeMsg(msg.content, type=='friend'?msg.from_uin:msg.send_uin, type));
 			}
 			else if(!msg.from_uin){
 				var el = document.createElement('div');
 				el.className = 'msgNameSelf';
 				el.innerHTML = history[i]['name']+'&nbsp;&nbsp;'+hh+':'+mm+':'+ss;
-				document.getElementById('chatBox').appendChild(el);
+				getID('chatBox').appendChild(el);
 				el = document.createElement('div');
-				document.getElementById('chatBox').appendChild(decodeMsg(msg.content, HTML5QQ.qq, type));
+				getID('chatBox').appendChild(decodeMsg(msg.content, HTML5QQ.qq, type));
 			}
 		}
 		scrollBottom();
@@ -124,7 +129,7 @@ function decodeMsg(msg, fuin){
 }
 
 function scrollBottom(){
-	var div = document.getElementById('chatBox');
+	var div = getID('chatBox');
 	div.scrollTop = div.scrollHeight;
 	setTimeout(function(){div.scrollTop = div.scrollHeight}, 200);
 	setTimeout(function(){div.scrollTop = div.scrollHeight}, 500);
