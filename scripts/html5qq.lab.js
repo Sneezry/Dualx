@@ -1,4 +1,4 @@
-var gAccount;
+﻿var gAccount;
 var gPassword;
 var gState;
 var msgIds = new Array;
@@ -15,7 +15,7 @@ chrome.webRequest.onBeforeSendHeaders.addListener(function(details){
 	details.requestHeaders.push({name: "Origin", value: "https://d.web2.qq.com"});
 	details.requestHeaders.push({name: "Referer", value: "https://d.web2.qq.com/proxy.html?v=20110412001&callback=1&id=3"});
 	return {requestHeaders: details.requestHeaders};
-},{urls: ["https://d.web2.qq.com/channel/*"]},["requestHeaders", "blocking"]);
+},{urls: ["https://d.web2.qq.com/channel/*", "http://web.qq.com/cgi-bin/*"]},["requestHeaders", "blocking"]);
 	
 chrome.webRequest.onBeforeSendHeaders.addListener(function(details){
 	for(var i = 0; i<details.requestHeaders.length; i++){

@@ -299,6 +299,12 @@ function decodeMsg(msg, fuin){
 					message += '<img src="faces/'+msg[i][1]+'.gif" />';
 					break;
 				}
+				case 'cface':{
+					if(typeof(msg[i][1])=='string'){
+						message += '<img lowsrc="images/img_loading.gif" src="http://d.web2.qq.com/channel/get_cface2?lcid=5628&guid='+msg[i][2]+'&to='+uid+'&count=5&time=1&clientid='+HTML5QQ.clientid+'&psessionid='+HTML5QQ.psessionid+'" />';
+					}
+					break;
+				}
 				case 'offpic':{
 					if(typeof(msg[i][1])=='string'){
 						for(var j = 0; j < picPaths.length; j++){
