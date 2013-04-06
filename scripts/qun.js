@@ -152,7 +152,7 @@ function formatMsg(msg){
 				continue;
 			}
 			//result += '\\"'+msg[i].nodeValue+'\\",';
-			result += '\\"'+encodeURIComponent(msg[i].nodeValue.replace(/\\/g, '\\\\\\\\')）+'\\",';
+			result += '\\"'+encodeURIComponent(msg[i].nodeValue.replace(/\\/g, '\\\\\\\\'))+'\\",';
 		}
 		else if(msg[i].nodeName == 'IMG'){
 			if(msg[i].getAttribute('imgtype') == 'offpic'){
