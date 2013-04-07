@@ -15,7 +15,7 @@ chrome.webRequest.onBeforeSendHeaders.addListener(function(details){
 	details.requestHeaders.push({name: "Origin", value: "https://d.web2.qq.com"});
 	details.requestHeaders.push({name: "Referer", value: "https://d.web2.qq.com/proxy.html?v=20110412001&callback=1&id=3"});
 	return {requestHeaders: details.requestHeaders};
-},{urls: ["https://d.web2.qq.com/channel/*", "http://web.qq.com/cgi-bin/*", "http://s.web2.qq.com/api/*"]},["requestHeaders", "blocking"]);
+},{urls: ["https://d.web2.qq.com/channel/*", "http://web.qq.com/cgi-bin/*", "http://s.web2.qq.com/api/*", "http://d.web2.qq.com/channel/*"]},["requestHeaders", "blocking"]);
 
 chrome.extension.onMessage.addListener(function(request, sender, callback) {
 	if(request == 'hello'){
@@ -424,6 +424,20 @@ var HTML5QQ = {
 			}
 			HTML5QQ.poll();
 			HTML5QQ.finish();
+		});
+	},
+	
+	getAccount: function(uin, callback){
+		var url = 'http://s.web2.qq.com/api/get_friend_uin2?tuin='+uin+'&verifysession=&type=1&code=&vfwebqq='+this.vfwebqq+'&t='+this.now();
+		this.httpRequest("GET", url, null, false, function(result){
+			result = JSON.parse(result);
+			result = result.result;
+			if(result && result.account){
+				callback(result.account);
+			}
+			else{
+				callback(null);
+			}
 		});
 	},
 	
