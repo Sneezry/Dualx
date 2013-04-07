@@ -15,30 +15,8 @@ chrome.webRequest.onBeforeSendHeaders.addListener(function(details){
 	details.requestHeaders.push({name: "Origin", value: "https://d.web2.qq.com"});
 	details.requestHeaders.push({name: "Referer", value: "https://d.web2.qq.com/proxy.html?v=20110412001&callback=1&id=3"});
 	return {requestHeaders: details.requestHeaders};
-},{urls: ["https://d.web2.qq.com/channel/*", "http://web.qq.com/cgi-bin/*"]},["requestHeaders", "blocking"]);
-	
-chrome.webRequest.onBeforeSendHeaders.addListener(function(details){
-	for(var i = 0; i<details.requestHeaders.length; i++){
-		if (details.requestHeaders[i].name == "Referer" || details.requestHeaders[i].name == "Origin") {  
-			details.requestHeaders.splice(i, 1);
-		}
-	}
-	details.requestHeaders.push({name: "Origin", value: "http://s.web2.qq.com"});
-	details.requestHeaders.push({name: "Referer", value: "http://s.web2.qq.com/proxy.html?v=20110412001&callback=1&id=3"});
-	return {requestHeaders: details.requestHeaders};
-},{urls: ["http://s.web2.qq.com/api/*"]},["requestHeaders", "blocking"]);
-	
-chrome.webRequest.onBeforeSendHeaders.addListener(function(details){
-	for(var i = 0; i<details.requestHeaders.length; i++){
-		if (details.requestHeaders[i].name == "Referer" || details.requestHeaders[i].name == "Origin") {  
-			details.requestHeaders.splice(i, 1);
-		}
-	}
-	details.requestHeaders.push({name: "Origin", value: "http://s.web2.qq.com"});
-	details.requestHeaders.push({name: "Referer", value: "http://s.web2.qq.com/proxy.html?v=20110412001&callback=1&id=3"});
-	return {requestHeaders: details.requestHeaders};
-},{urls: ["http://d.web2.qq.com/channel/*"]},["requestHeaders", "blocking"]);
-	
+},{urls: ["https://d.web2.qq.com/channel/*", "http://web.qq.com/cgi-bin/*", "http://s.web2.qq.com/api/*"]},["requestHeaders", "blocking"]);
+
 chrome.extension.onMessage.addListener(function(request, sender, callback) {
 	if(request == 'hello'){
 		callback(HTML5QQ);
