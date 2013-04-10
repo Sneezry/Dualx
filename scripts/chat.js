@@ -406,7 +406,12 @@ chrome.webRequest.onBeforeSendHeaders.addListener(function(details){
 },{urls: ["http://weboffline.ftn.qq.com/*"]},["requestHeaders", "blocking"]);
 
 function recieveMsg(msg){
-	var today = new Date();
+	var today;
+	if(msg.time){
+		today = new Date(msg.time*1000);
+	}else{
+		today = new Date();
+	}
 	var hh = today.getHours();
 	if(hh<10) hh = '0' + hh;
 	var mm = today.getMinutes();
