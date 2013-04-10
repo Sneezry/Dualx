@@ -19,6 +19,7 @@ var errors = "Errors:\n\n";
 var errorsId = 0;
 var padding = new Array;
 var paddingSeek = new Array;
+var accounts = new Array;
 
 window.onerror = function(err, u, l){
 	errors += errorsId+"] ::background:: <"+u+"|"+l+">"+err+"\n\n";
@@ -148,6 +149,25 @@ chrome.extension.onMessage.addListener(function(request, sender, callback) {
 		logwin.document.write('<p>请注意，下列日志不会包含您的如下隐私：</p>');
 		logwin.document.write('<ul><li>QQ登录密码明码</li><li>消息历史（聊天记录）</li></ul>');
 		logwin.document.write('<textarea onclick="this.select()" style="width: 80%; height: 400px;">'+errors+'------------------'+debugLog+'</textarea>');
+	}
+	else if(typeof(request) == 'string' && request.substr(0, 5) == 'getqq'){
+		var uin = request.substr(5);
+		if(accounts[uin]){
+			return;
+		}
+		HTML5QQ.getAccount(uin, function(qq){
+			accounts[uin] = qq;
+		});
+	}
+	else if(typeof(request) == 'string' && request.substr(0, 6) == 'uin2qq'){
+		var uin = request.substr(6);
+		if(accounts[uin]){
+			callback(accounts[uin]);
+		}
+		else{
+			chrome.extension.sendMessage('getqq'+uin);
+			callback('waiting');
+		}
 	}
 	else if(typeof(request) == 'string' && request.substr(0, 4) == 'otab'){
 		var uin = request.substr(4);
@@ -379,6 +399,7 @@ var qunInfo = new Object;
 function saveMsg(msg, type){
 	if(type == 'friend'){
 		var uin = msg.from_uin;
+		chrome.extension.sendMessage('getqq'+uin);
 		var fd = 0;
 		for(var i = 0; i < tabStatus.length; i++){
 			if(tabStatus[i][0] == uin){
@@ -427,28 +448,30 @@ function saveMsg(msg, type){
 			setTimeout(function(){notiListSplice()}, 5000);
 			msgId++;
 		}
-		chrome.storage.local.get('history', function(obj){
-			if(!obj.history){
-				history = new Object;
-			}
-			else{
-				history = obj.history;
-			}
-			if(!history[HTML5QQ.qq]){
-				history[HTML5QQ.qq] = new Object;
-			}
-			if(!history[HTML5QQ.qq]['friend']){
-				history[HTML5QQ.qq]['friend'] = new Object;
-			}
-			if(!history[HTML5QQ.qq]['friend'][uin]){
-				history[HTML5QQ.qq]['friend'][uin] = new Array;
-			}
-			history[HTML5QQ.qq]['friend'][uin].push({time: now, uin: uin, name: friendName, msg: msg});
-			if(!fd){
-				newMsg.msg.push({type: 'friend', rec_uin: uin, time: now, uin: uin, name: friendName, msg: msg});
-			}
-			chrome.storage.local.set({'history': history});
-		});
+		setTimeout(function(){
+			chrome.storage.local.get('history', function(obj){
+				if(!obj.history){
+					history = new Object;
+				}
+				else{
+					history = obj.history;
+				}
+				if(!history[HTML5QQ.qq]){
+					history[HTML5QQ.qq] = new Object;
+				}
+				if(!history[HTML5QQ.qq]['friend']){
+					history[HTML5QQ.qq]['friend'] = new Object;
+				}
+				if(!history[HTML5QQ.qq]['friend'][accounts[uin]]){
+					history[HTML5QQ.qq]['friend'][accounts[uin]] = new Array;
+				}
+				history[HTML5QQ.qq]['friend'][accounts[uin]].push({time: now, uin: uin, name: friendName, msg: msg});
+				if(!fd){
+					newMsg.msg.push({type: 'friend', rec_uin: uin, time: now, uin: uin, name: friendName, msg: msg});
+				}
+				chrome.storage.local.set({'history': history});
+			});
+		}, 1000);
 		padding[uin] = true;
 		if(paddingSeek[uin]){
 			clearTimeout(paddingSeek[uin]);

@@ -1,4 +1,4 @@
-var HTML5QQ;
+﻿var HTML5QQ;
 var info = location.search.substr(1).split('|');
 var type = info[0];
 var uin = info[1];
@@ -73,7 +73,7 @@ function decodeMsg(msg, fuin){
 	msgBody.style.marginLeft = '15px';
 	for(var i = 0; i < msg.length; i++){
 		if(typeof(msg[i]) == 'string'){
-			message += msg[i].replace(/\n/g, '<br />');
+			message += decodeURIComponent(msg[i]).replace(/\\\\\\\\/g, '\\').replace(/\n/g, '<br />');
 		}
 		else if(msg[i] && typeof(msg[i]) == 'object'){
 			switch(msg[i][0]){

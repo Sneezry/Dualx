@@ -1,4 +1,4 @@
-var leftFrameWidth;
+﻿var leftFrameWidth;
 var sending = false;
 var oTimer;
 var preloaded = 0;
@@ -151,7 +151,8 @@ function formatMsg(msg){
 				result += sendAllFaces();
 				continue;
 			}
-			result += '\\"'+msg[i].nodeValue+'\\",';
+			//result += '\\"'+msg[i].nodeValue+'\\",';
+			result += '\\"'+encodeURIComponent(msg[i].nodeValue.replace(/\\/g, '\\\\\\\\'))+'\\",';
 		}
 		else if(msg[i].nodeName == 'IMG'){
 			if(msg[i].getAttribute('imgtype') == 'offpic'){
@@ -180,7 +181,7 @@ function decodeMsg(msg, fuin){
 	msgBody.style.marginLeft = '10px';
 	for(var i = 0; i < msg.length; i++){
 		if(typeof(msg[i]) == 'string'){
-			message += msg[i].replace(/\n/g, '<br />');
+			message += decodeURIComponent(msg[i]).replace(/\\\\\\\\/g, '\\').replace(/\n/g, '<br />');
 		}
 		else if(typeof(msg[i]) == 'object'){
 			switch(msg[i][0]){

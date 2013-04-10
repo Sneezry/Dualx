@@ -1,4 +1,4 @@
-var leftFrameWidth;
+﻿var leftFrameWidth;
 var sending = false;
 var oTimer;
 var preloaded = 0;
@@ -16,6 +16,21 @@ var shakable = true;
 var preSender;
 var preSenderPeeker;
 var faceTransferTable = [14, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 0, 50, 51, 96, 53, 54, 73, 74, 75, 76, 77, 78, 55, 56, 57, 58, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 32, 113, 114, 115, 63, 64, 59, 33, 34, 116, 36, 37, 38, 91, 92, 93, 29, 117, 72, 45, 42, 39, 62, 46, 47, 71, 95, 118, 119, 120, 121, 122, 123, 124, 27, 21, 23, 25, 26, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 52, 24, 22, 20, 60, 61, 89, 90, 31, 94, 65, 35, 66, 67, 68, 69, 70, 15, 16, 17, 18, 19, 28, 30, 40, 41, 43, 44, 48, 49];
+
+var uin = location.search.substr(1);
+var qqnum = 0;
+var friendName = '';
+var friendLongnick = '';
+var HTML5QQ;
+var fontStyle = [0, 0, 0];
+
+chrome.extension.sendMessage('getqq'+uin);
+
+setTimeout(function(){
+	chrome.extension.sendMessage('uin2qq'+uin, function(qq){
+		qqnum = qq;
+	});
+}, 1000);
 
 window.onerror = function(err, u, l){
 	chrome.extension.sendMessage('error::chat:: <'+l+'> '+err);
@@ -262,7 +277,7 @@ function formatMsg(msg){
 				result += sendAllFaces();
 				continue;
 			}
-			result += '\\"'+msg[i].nodeValue.replace(/\\/g, '\\\\\\\\')+'\\",';
+			result += '\\"'+encodeURIComponent(msg[i].nodeValue.replace(/\\/g, '\\\\\\\\'))+'\\",';
 		}
 		else if(msg[i].nodeName == 'IMG'){
 			if(msg[i].getAttribute('imgtype') == 'offpic'){
@@ -291,12 +306,18 @@ function decodeMsg(msg, fuin){
 	msgBody.style.marginLeft = '10px';
 	for(var i = 0; i < msg.length; i++){
 		if(typeof(msg[i]) == 'string'){
-			message += msg[i].replace(/\n/g, '<br />');
+			message += decodeURIComponent(msg[i]).replace(/\\\\\\\\/g, '\\').replace(/\n/g, '<br />');
 		}
 		else if(typeof(msg[i]) == 'object'){
 			switch(msg[i][0]){
 				case 'face':{
 					message += '<img src="faces/'+msg[i][1]+'.gif" />';
+					break;
+				}
+				case 'cface':{
+					if(typeof(msg[i][1])=='string'){
+						message += '<img lowsrc="images/img_loading.gif" src="http://d.web2.qq.com/channel/get_cface2?lcid=5628&guid='+msg[i][2]+'&to='+uid+'&count=5&time=1&clientid='+HTML5QQ.clientid+'&psessionid='+HTML5QQ.psessionid+'" />';
+					}
 					break;
 				}
 				case 'offpic':{
@@ -353,10 +374,10 @@ function sendMsg(){
 		if(!fqcy[HTML5QQ.qq]['friend']){
 			fqcy[HTML5QQ.qq]['friend'] = new Object;
 		}
-		if(!fqcy[HTML5QQ.qq]['friend'][uin]){
-			fqcy[HTML5QQ.qq]['friend'][uin] = 0;
+		if(!fqcy[HTML5QQ.qq]['friend'][qqnum]){
+			fqcy[HTML5QQ.qq]['friend'][qqnum] = 0;
 		}
-		fqcy[HTML5QQ.qq]['friend'][uin]++;
+		fqcy[HTML5QQ.qq]['friend'][qqnum]++;
 		chrome.storage.local.set({'fqcy': fqcy});
 		console.log(fqcy);
 	});
@@ -383,12 +404,6 @@ chrome.webRequest.onBeforeSendHeaders.addListener(function(details){
 	details.requestHeaders.push({name: "Origin", value: "http://web.qq.com"});
 	return {requestHeaders: details.requestHeaders};
 },{urls: ["http://weboffline.ftn.qq.com/*"]},["requestHeaders", "blocking"]);
-
-var uin = location.search.substr(1);
-var friendName = '';
-var friendLongnick = '';
-var HTML5QQ;
-var fontStyle = [0, 0, 0];
 
 function recieveMsg(msg){
 	var today = new Date();
@@ -430,10 +445,10 @@ function recieveMsg(msg){
 			if(!history[HTML5QQ.qq]['friend']){
 				history[HTML5QQ.qq]['friend'] = new Object;
 			}
-			if(!history[HTML5QQ.qq]['friend'][uin]){
-				history[HTML5QQ.qq]['friend'][uin] = new Array;
+			if(!history[HTML5QQ.qq]['friend'][qqnum]){
+				history[HTML5QQ.qq]['friend'][qqnum] = new Array;
 			}
-			history[HTML5QQ.qq]['friend'][uin].push({time: now, uin: uin, name: HTML5QQ.info.nick, msg: msg});
+			history[HTML5QQ.qq]['friend'][qqnum].push({time: now, uin: uin, name: HTML5QQ.info.nick, msg: msg});
 			chrome.storage.local.set({history: history});
 		});
 		if(preSenderPeeker){
@@ -649,7 +664,7 @@ document.getElementById('fontColor').onclick = function(){
 
 document.getElementById('toolMsgRec').onclick = function(){
 	chrome.windows.create({
-		url: 'history.html?friend|'+uin,
+		url: 'history.html?friend|'+qqnum,
 		width: 560,
 		height: 510,
 		focused: true,
