@@ -500,6 +500,8 @@ var HTML5QQ = {
 								return;
 							}
 							reloading = true;
+							localStorage.logout = 'true';
+							chrome.extension.sendMessage('cancel');
 							alert("您的账号在另一地点登陆，您被迫下线。\n\n如果这不是您本人的操作，那么您的密码很可\n能已经泄露。建议您修改密码。");
 							location.reload();
 							break;
