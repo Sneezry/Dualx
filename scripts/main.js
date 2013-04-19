@@ -858,13 +858,18 @@ sendRequest('hello', function(result){
 			}
 		}
 		el = document.createElement('li');
-		el.id = 'recent_'+recent[i].uin;
+		el.type = recent[i].type;
+		el.id = 'recent_'+(recent[i].type=='0'?recent[i].uin:recent[i].code);
 		el.className = 'recentDetail';
 		el.onclick = function(){
 			selectRecent(this);
 		}
 		el.ondblclick = function(){
-			openChat(this.id.substr(7));
+			if (this.type=='0') {
+				openChat(this.id.substr(7));
+			} else {
+				openQun(this.id.substr(7));
+			}
 			this.setAttribute('selected', 'false');
 		}
 		el.innerHTML = '<div class="friendHead">'+
