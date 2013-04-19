@@ -20,6 +20,7 @@ var errorsId = 0;
 var padding = new Array;
 var paddingSeek = new Array;
 var accounts = new Array;
+var outOfDate = false;
 
 window.onerror = function(err, u, l){
 	errors += errorsId+"] ::background:: <"+u+"|"+l+">"+err+"\n\n";
@@ -41,6 +42,8 @@ chrome.browserAction.setIcon({
 	path: 'images/logooff.png'
 });
 
+chkVersion();
+
 chrome.browserAction.setBadgeText({text: ''});
 
 chrome.browserAction.onClicked.addListener(function(tab) {
@@ -51,9 +54,16 @@ chrome.browserAction.setBadgeBackgroundColor({color: '#0000ff'});
 
 chrome.extension.onMessage.addListener(function(request, sender, callback) {
 	if(request == 'finish'){
-		chrome.browserAction.setIcon({
-			path: 'images/logo.png'
-		});
+		if(outOfDate){
+			chrome.browserAction.setIcon({
+				path: 'images/logoout.png'
+			});
+		}
+		else{
+			chrome.browserAction.setIcon({
+				path: 'images/logo.png'
+			});
+		}
 		popupCmd = 'showmain';
 		if(!localStorage.autoShow){
 			chrome.windows.create({
@@ -732,4 +742,45 @@ function spliceNewMsg(uin, type){
 			popup: 'popup.html'
 		});
 	}
+}
+
+function getRequest(url, callback){
+	HTML5QQ.httpRequest('GET', url, null, false, callback, 5000);
+}
+
+function getSelfVersion(callback){
+	getRequest('manifest.json', function(manifest){
+		try{
+			manifest = JSON.parse(manifest);
+			callback(manifest.version);
+		}
+		catch(e){}
+	});
+}
+
+function chkVersion(){
+	getRequest('https://raw.github.com/sneezry/Dualx/master/manifest.json', function(manifest){
+		try{
+			manifest = JSON.parse(manifest);
+			getSelfVersion(function(selfVersion){
+				if(selfVersion < manifest.version){
+					outOfDate = true;
+					chrome.browserAction.setTitle({
+						title: 'Dualx - 有新版本'
+					});
+					if(popupCmd == 'showmain'){
+						chrome.browserAction.setIcon({
+							path: 'images/logoout.png'
+						});
+					}
+					else{
+						chrome.browserAction.setIcon({
+							path: 'images/logooffout.png'
+						});
+					}
+				}
+			});
+		}
+		catch(e){}
+	});
 }
