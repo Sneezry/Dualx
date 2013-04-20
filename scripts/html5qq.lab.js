@@ -343,9 +343,34 @@ var HTML5QQ = {
 		});
 	},
 	
+	hash: function(uin, ptwebqq) {
+		var b = uin;
+		var i = ptwebqq;
+		for (var a = i + "password error",
+			s = "",
+			j = [];;) {
+			if (s.length <= a.length) {
+				if (s += b, s.length == a.length) 
+					break;
+			} else {
+				s = s.slice(0, a.length);
+				break;
+			}
+		}
+		for (var d = 0; d < s.length; d++) 
+			j[d] = s.charCodeAt(d) ^ a.charCodeAt(d);
+		a = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F"];
+		s = "";
+		for (d = 0; d < j.length; d++) {
+			s += a[j[d] >> 4 & 15];
+			s += a[j[d] & 15];
+		}
+		return s;
+	},
+
 	getFriendsInfo: function(){
 		var info = 'http://s.web2.qq.com/api/get_user_friends2';
-		var r = '{"h":"hello","vfwebqq":"'+this.vfwebqq+'"}';
+		var r = '{"h":"hello","hash":"'+this.hash(this.qq+'',this.ptwebqq)+'","vfwebqq":"'+this.vfwebqq+'"}';
 		this.httpRequest('POST', info, 'r='+r, true, function(result){
 			if(HTML5QQ.debug){
 		 		HTML5QQ.outputDebug("getFriendsInfo: result("+result+")");
@@ -475,6 +500,8 @@ var HTML5QQ = {
 								return;
 							}
 							reloading = true;
+							localStorage.logout = 'true';
+							chrome.extension.sendMessage('cancel');
 							alert("您的账号在另一地点登陆，您被迫下线。\n\n如果这不是您本人的操作，那么您的密码很可\n能已经泄露。建议您修改密码。");
 							location.reload();
 							break;
