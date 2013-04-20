@@ -299,7 +299,11 @@ function getFaceSig(){
 }
 
 function recieveMsg(msg){
-	var today = new Date();
+	if(msg.time){
+		today = new Date(msg.time*1000);
+	}else{
+		today = new Date();
+	}
 	var hh = today.getHours();
 	if(hh<10) hh = '0' + hh;
 	var mm = today.getMinutes();
