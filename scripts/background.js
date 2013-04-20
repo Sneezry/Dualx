@@ -511,8 +511,10 @@ function saveMsg(msg, type){
 				}
 				soundQun[msg.group_code] = true;
 			}
-			var t = new Date();
-			var now = t.getTime();
+			console.log(msg);
+			// var t = new Date();
+			// var now = t.getTime();
+			var now = msg.time*1000;
 			var url = 'http://s.web2.qq.com/api/get_group_info_ext2?gcode='+msg.group_code+'&vfwebqq='+HTML5QQ.vfwebqq+'&t='+now;
 			HTML5QQ.httpRequest('GET', url, null, false, function(result){
 				result = JSON.parse(result);
