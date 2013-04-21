@@ -220,19 +220,20 @@ function selectRecent(el){
 	el.setAttribute('selected', 'true');
 }
 
-function getSearch(num){
-	HTML5QQ.friendsInfo.friends[num].searchKw.push(HTML5QQ.friendsInfo.friends[num].markname);
-	HTML5QQ.friendsInfo.friends[num].searchKw.push(HTML5QQ.friendsInfo.friends[num].nick);
-	var marknamepy = chg2py(HTML5QQ.friendsInfo.friends[num].markname);
-	var nickpy = chg2py(HTML5QQ.friendsInfo.friends[num].nick);
+function getSearch(uin){
+	var friend = HTML5QQ.friendsInfo.friends[uin];
+	friend.searchKw.push(friend.markname);
+	friend.searchKw.push(friend.nick);
+	var marknamepy = chg2py(friend.markname);
+	var nickpy = chg2py(friend.nick);
 	if(marknamepy){
 		for(var i = 0; i < marknamepy.length; i++){
-			HTML5QQ.friendsInfo.friends[num].searchKw.push(marknamepy[i]);
+			friend.searchKw.push(marknamepy[i]);
 		}
 	}
 	if(nickpy){
 		for(var i = 0; i < nickpy.length; i++){
-			HTML5QQ.friendsInfo.friends[num].searchKw.push(nickpy[i]);
+			friend.searchKw.push(nickpy[i]);
 		}
 	}
 }
@@ -299,22 +300,23 @@ function searchFriends(kw){
 		document.getElementById('searchListBorder').style.display = 'none';
 		return;
 	}
-	for(var i = 0; i < HTML5QQ.friendsInfo.friends.length; i++){
+	for(var uin in HTML5QQ.friendsInfo.friends){
+		var friend = HTML5QQ.friendsInfo.friends[uin];
 		if(count > 9){
 			break;
 		}
 		fd = 1;
-		for(var j = 0; j < HTML5QQ.friendsInfo.friends[i].searchKw.length; j++){
-			if(HTML5QQ.friendsInfo.friends[i].searchKw[j] && HTML5QQ.friendsInfo.friends[i].searchKw[j].toLowerCase().indexOf(kw.toLowerCase()) != -1){
+		for(var j = 0; j < friend.searchKw.length; j++){
+			if(friend.searchKw[j] && friend.searchKw[j].toLowerCase().indexOf(kw.toLowerCase()) != -1){
 				count++;
 				var el = document.createElement('div');
 				el.className = 'searchResult';
-				el.id = 'result_'+HTML5QQ.friendsInfo.friends[i].uin;
+				el.id = 'result_'+uin;
 				el.onclick = function(){
 					openChat(this.id.substr(7));
 				}
-				el.style.backgroundImage = 'url(http://face'+(HTML5QQ.friendsInfo.friends[i].uin%10+1)+'.qun.qq.com/cgi/svr/face/getface?cache=0&type=1&fid=0&uin='+HTML5QQ.friendsInfo.friends[i].uin+'&vfwebqq='+HTML5QQ.vfwebqq+')';
-				el.innerHTML = HTML5QQ.friendsInfo.friends[i].markname?(HTML5QQ.friendsInfo.friends[i].markname+'('+HTML5QQ.friendsInfo.friends[i].nick+')'):HTML5QQ.friendsInfo.friends[i].nick;
+				el.style.backgroundImage = 'url(http://face'+(uin%10+1)+'.qun.qq.com/cgi/svr/face/getface?cache=0&type=1&fid=0&uin='+uin+'&vfwebqq='+HTML5QQ.vfwebqq+')';
+				el.innerHTML = friend.markname?(friend.markname+'('+friend.nick+')'):friend.nick;
 				document.getElementById('searchListBorder').appendChild(el);
 				fd = 1;
 				break;
@@ -355,128 +357,127 @@ function flashGroup(newMsg){
 		document.getElementById('groupName_'+i).style.WebkitAnimation = '';
 	}
 	for(var i = 0; i < newMsg.friend.length; i++){
-		for(var j = 0; j < HTML5QQ.friendsInfo.friends.length; j++){
-			if(HTML5QQ.friendsInfo.friends[j].uin == newMsg.friend[i]){
-				document.getElementById('groupName_'+catTransfer[HTML5QQ.friendsInfo.friends[j].categories]).style.WebkitAnimation = 'flash 0.5s infinite cubic-bezier(1,0,0,1)';
-			}
+		var uin = newMsg.friend[i];
+		if (uin in HTML5QQ.friendsInfo.friends) {
+			document.getElementById('groupName_'+catTransfer[HTML5QQ.friendsInfo.friends[uin].category]).style.WebkitAnimation = 'flash 0.5s infinite cubic-bezier(1,0,0,1)';
 		}
 	}
 }
 
 function changeStatus(value){
-	for(var j = 0; j < HTML5QQ.friendsInfo.friends.length; j++){
-		if(HTML5QQ.friendsInfo.friends[j].uin == value.uin){
-			var i = HTML5QQ.friendsInfo.friends[j].categories;
-			if(HTML5QQ.friendsInfo.friends[j].status == 'offline' && value.status != 'offline'){
-				onlineFriendsTotal[catTransfer[i]]++;
-			}
-			else if(HTML5QQ.friendsInfo.friends[j].status != 'offline' && value.status == 'offline'){
-				onlineFriendsTotal[catTransfer[i]]--;
-			}
-			HTML5QQ.friendsInfo.friends[j].status = value.status;
-			HTML5QQ.friendsInfo.friends[j].client_type = value.client_type;
-			document.getElementById('friendDetail_'+catTransfer[i]).removeChild(document.getElementById('friend_'+value.uin));
-			var el = document.createElement('li');
-			el.id = 'friend_'+HTML5QQ.friendsInfo.friends[j].uin;
-			el.className = 'friendDetail';
-			el.setAttribute('cat', i);
-			el.setAttribute('status', value.status);
-			el.onclick = function(){
-				selectFriend(this);
-			}
-			el.ondblclick = function(){
-				openChat(this.id.substr(7));
-				this.setAttribute('selected', 'false');
-			}
-			el.innerHTML = '<div class="friendHead">'+
-								'<img id="friendHead_'+HTML5QQ.friendsInfo.friends[j].uin+'" state="'+HTML5QQ.friendsInfo.friends[j].status+'" src="'+
-								'http://face'+(HTML5QQ.friendsInfo.friends[j].uin%10+1)+'.qun.qq.com/cgi/svr/face/getface?cache=0&type=1&fid=0&uin='+HTML5QQ.friendsInfo.friends[j].uin+'&vfwebqq='+HTML5QQ.vfwebqq+
-								'" />'+
-								//'<div class="showHideIco"></div>'+
-								'<div class="showState'+(HTML5QQ.friendsInfo.friends[j].client_type==21?'Mobile':(HTML5QQ.friendsInfo.friends[j].client_type==24?'Iphone':HTML5QQ.friendsInfo.friends[j].status.substring(0,1).toUpperCase()+HTML5QQ.friendsInfo.friends[j].status.substring(1)))+'"></div>'+
+	var uin = value.uin;
+	if (uin in HTML5QQ.friendsInfo.friends) {
+		var friend = HTML5QQ.friendsInfo.friends[uin];
+		var i = friend.category;
+		if(friend.status == 'offline' && value.status != 'offline'){
+			onlineFriendsTotal[catTransfer[i]]++;
+		}
+		else if(friend.status != 'offline' && value.status == 'offline'){
+			onlineFriendsTotal[catTransfer[i]]--;
+		}
+		friend.status = value.status;
+		friend.client_type = value.client_type;
+		document.getElementById('friendDetail_'+catTransfer[i]).removeChild(document.getElementById('friend_'+uin));
+		var el = document.createElement('li');
+		el.id = 'friend_'+uin;
+		el.className = 'friendDetail';
+		el.setAttribute('cat', i);
+		el.setAttribute('status', value.status);
+		el.onclick = function(){
+			selectFriend(this);
+		}
+		el.ondblclick = function(){
+			openChat(this.id.substr(7));
+			this.setAttribute('selected', 'false');
+		}
+		el.innerHTML = '<div class="friendHead">'+
+							'<img id="friendHead_'+uin+'" state="'+friend.status+'" src="'+
+							'http://face'+(uin%10+1)+'.qun.qq.com/cgi/svr/face/getface?cache=0&type=1&fid=0&uin='+uin+'&vfwebqq='+HTML5QQ.vfwebqq+
+							'" />'+
+							//'<div class="showHideIco"></div>'+
+							'<div class="showState'+(friend.client_type==21?'Mobile':(friend.client_type==24?'Iphone':friend.status.substring(0,1).toUpperCase()+friend.status.substring(1)))+'"></div>'+
+						'</div>'+
+						'<div class="friendInfo">'+
+							'<div class="friendName">'+
+							((friend.markname)?(friend.markname+'<span class="friendMark">('+friend.nick+')</span>'):(friend.nick))+
 							'</div>'+
-							'<div class="friendInfo">'+
-								'<div class="friendName">'+
-								((HTML5QQ.friendsInfo.friends[j].markname)?(HTML5QQ.friendsInfo.friends[j].markname+'<span class="friendMark">('+HTML5QQ.friendsInfo.friends[j].nick+')</span>'):(HTML5QQ.friendsInfo.friends[j].nick))+
-								'</div>'+
-								'<div class="friendPersonal">'+HTML5QQ.friendsInfo.friends[j].lnick+'</div>'+
-							'</div>'+
-							'<div style="clear: both"></div>';
-			var lists = document.getElementsByClassName('friendDetail');
-			var fd = 0;
-			for(var k = 0; k < lists.length; k++){
-				if(lists[k].getAttribute('cat') != catTransfer[i]){
-					continue;
-				}
-				else{
-					switch(HTML5QQ.friendsInfo.friends[j].status){
-						case 'callme': {
+							'<div class="friendPersonal">'+friend.lnick+'</div>'+
+						'</div>'+
+						'<div style="clear: both"></div>';
+		var lists = document.getElementsByClassName('friendDetail');
+		var fd = 0;
+		for(var k = 0; k < lists.length; k++){
+			if(lists[k].getAttribute('cat') != catTransfer[i]){
+				continue;
+			}
+			else{
+				switch(friend.status){
+					case 'callme': {
+						document.getElementById('friendDetail_'+catTransfer[i]).insertBefore(el, lists[k]);
+						fd = 1;
+						break;
+					}
+					case 'online': {
+						if(lists[k].getAttribute('status') == 'callme' || lists[k].getAttribute('status') == 'online' && (friend.client_type == 21 ||friend.client_type == 24)){
+							break;
+						}
+						else{
 							document.getElementById('friendDetail_'+catTransfer[i]).insertBefore(el, lists[k]);
 							fd = 1;
 							break;
 						}
-						case 'online': {
-							if(lists[k].getAttribute('status') == 'callme' || lists[k].getAttribute('status') == 'online' && (HTML5QQ.friendsInfo.friends[j].client_type == 21 || HTML5QQ.friendsInfo.friends[j].client_type == 24)){
-								break;
-							}
-							else{
-								document.getElementById('friendDetail_'+catTransfer[i]).insertBefore(el, lists[k]);
-								fd = 1;
-								break;
-							}
+					}
+					case 'busy': {
+						if(lists[k].getAttribute('status') == 'callme' || lists[k].getAttribute('status') == 'online'){
+							break;
 						}
-						case 'busy': {
-							if(lists[k].getAttribute('status') == 'callme' || lists[k].getAttribute('status') == 'online'){
-								break;
-							}
-							else{
-								document.getElementById('friendDetail_'+catTransfer[i]).insertBefore(el, lists[k]);
-								fd = 1;
-								break;
-							}
-						}
-						case 'away': {
-							if(lists[k].getAttribute('status') == 'callme' || lists[k].getAttribute('status') == 'online' || lists[k].getAttribute('status') == 'busy'){
-								break;
-							}
-							else{
-								document.getElementById('friendDetail_'+catTransfer[i]).insertBefore(el, lists[k]);
-								fd = 1;
-								break;
-							}
-						}
-						case 'silent': {
-							if(lists[k].getAttribute('status') == 'callme' || lists[k].getAttribute('status') == 'online' || lists[k].getAttribute('status') == 'busy' || lists[k].getAttribute('status') == 'away'){
-								break;
-							}
-							else{
-								document.getElementById('friendDetail_'+catTransfer[i]).insertBefore(el, lists[k]);
-								fd = 1;
-								break;
-							}
-						}
-						case 'offline': {
-							if(lists[k].getAttribute('status') == 'callme' || lists[k].getAttribute('status') == 'online' || lists[k].getAttribute('status') == 'busy' || lists[k].getAttribute('status') == 'away' || lists[k].getAttribute('status') == 'silent'){
-								break;
-							}
-							else{
-								document.getElementById('friendDetail_'+catTransfer[i]).insertBefore(el, lists[k]);
-								fd = 1;
-								break;
-							}
+						else{
+							document.getElementById('friendDetail_'+catTransfer[i]).insertBefore(el, lists[k]);
+							fd = 1;
+							break;
 						}
 					}
-					if(fd){
-						break;
+					case 'away': {
+						if(lists[k].getAttribute('status') == 'callme' || lists[k].getAttribute('status') == 'online' || lists[k].getAttribute('status') == 'busy'){
+							break;
+						}
+						else{
+							document.getElementById('friendDetail_'+catTransfer[i]).insertBefore(el, lists[k]);
+							fd = 1;
+							break;
+						}
+					}
+					case 'silent': {
+						if(lists[k].getAttribute('status') == 'callme' || lists[k].getAttribute('status') == 'online' || lists[k].getAttribute('status') == 'busy' || lists[k].getAttribute('status') == 'away'){
+							break;
+						}
+						else{
+							document.getElementById('friendDetail_'+catTransfer[i]).insertBefore(el, lists[k]);
+							fd = 1;
+							break;
+						}
+					}
+					case 'offline': {
+						if(lists[k].getAttribute('status') == 'callme' || lists[k].getAttribute('status') == 'online' || lists[k].getAttribute('status') == 'busy' || lists[k].getAttribute('status') == 'away' || lists[k].getAttribute('status') == 'silent'){
+							break;
+						}
+						else{
+							document.getElementById('friendDetail_'+catTransfer[i]).insertBefore(el, lists[k]);
+							fd = 1;
+							break;
+						}
 					}
 				}
+				if(fd){
+					break;
+				}
 			}
-			if(!fd){
-				document.getElementById('friendDetail_'+catTransfer[i]).appendChild(el);
-			}
-			document.getElementById('ftotal_'+catTransfer[i]).innerHTML = '['+onlineFriendsTotal[catTransfer[i]]+'/'+friendsTotal[catTransfer[i]]+']';
-			break;
 		}
+		if(!fd){
+			document.getElementById('friendDetail_'+catTransfer[i]).appendChild(el);
+		}
+		document.getElementById('ftotal_'+catTransfer[i]).innerHTML = '['+onlineFriendsTotal[catTransfer[i]]+'/'+friendsTotal[catTransfer[i]]+']';
+		break;
 	}
 }
 
@@ -545,6 +546,20 @@ sendRequest('hello', function(result){
 	for(i=0; i<categories.length; i++){
 		catTransfer[categories[i].index] = i;
 	}
+	for(var k=0; k < HTML5QQ.onlineList.length; k++){
+		var uin = HTML5QQ.onlineList[k].uin;
+		if(uin in HTML5QQ.friendsInfo.friends){
+			var friend = HTML5QQ.friendsInfo.friends[uin];
+			friend.status = HTML5QQ.onlineList[k].status;
+			friend.client_type = HTML5QQ.onlineList[k].client_type;			
+		}
+	}
+	for(var k=0; k < HTML5QQ.personal.length; k++){
+		var uin = HTML5QQ.personal[k].uin;
+		if(uin in HTML5QQ.friendsInfo.friends){
+			HTML5QQ.friendsInfo.friends[uin].lnick = HTML5QQ.personal[k].lnick;
+		}
+	}
 	for(var i = 0; i < categories.length; i++){
 		friendsTotal[i] = 0;
 		onlineFriendsTotal[i] = 0;
@@ -580,61 +595,37 @@ sendRequest('hello', function(result){
 		el.id = 'friendDetail_'+i;
 		el.style.display = 'none';
 		document.getElementById('categories_'+i).appendChild(el);
-		for(var j = 0; j < HTML5QQ.friendsInfo.friends.length; j++){
-			if(HTML5QQ.friendsInfo.friends[j].categories != categories[i].index){
-				continue;
-			}
+		for(var j = 0; j < HTML5QQ.friendsInfo.categories[i].friends.length; j++){
 			friendsTotal[i]++;
-			for(var k=0; k < HTML5QQ.onlineList.length; k++){
-				if(HTML5QQ.onlineList[k].uin == HTML5QQ.friendsInfo.friends[j].uin){
-					HTML5QQ.friendsInfo.friends[j].status = HTML5QQ.onlineList[k].status;
-					HTML5QQ.friendsInfo.friends[j].client_type = HTML5QQ.onlineList[k].client_type;
-					onlineFriendsTotal[i]++;
-					break;
-				}
-			}
-			if(!HTML5QQ.friendsInfo.friends[j].status){
-				HTML5QQ.friendsInfo.friends[j].status = 'offline';
+			var uin = HTML5QQ.friendsInfo.categories[i].friends[j];
+			var friend = HTML5QQ.friendsInfo.friends[uin];
+			
+			if(!friend.status){
+				friend.status = 'offline';
+			} else if(friend.status == 'online'){
+				onlineFriendsTotal[i]++;
 			}
 			
-			for(var k=0; k < HTML5QQ.friendsInfo.marknames.length; k++){
-				if(HTML5QQ.friendsInfo.marknames[k].uin == HTML5QQ.friendsInfo.friends[j].uin){
-					HTML5QQ.friendsInfo.friends[j].markname = HTML5QQ.friendsInfo.marknames[k].markname;
-					break;
-				}
-			}
-			if(!HTML5QQ.friendsInfo.friends[j].markname){
-				HTML5QQ.friendsInfo.friends[j].markname = null;
+			if(!friend.markname){
+				friend.markname = null;
 			}
 			
-			for(var k=0; k < HTML5QQ.friendsInfo.info.length; k++){
-				if(HTML5QQ.friendsInfo.info[k].uin == HTML5QQ.friendsInfo.friends[j].uin){
-					HTML5QQ.friendsInfo.friends[j].nick = HTML5QQ.friendsInfo.info[k].nick;
-					break;
-				}
-			}
-			if(!HTML5QQ.friendsInfo.friends[j].nick){
-				HTML5QQ.friendsInfo.friends[j].nick = '';
+			if(!friend.nick){
+				friend.nick = '';
+			}			
+			
+			if(!friend.lnick){
+				friend.lnick = '';
 			}
 			
-			for(var k=0; k < HTML5QQ.personal.length; k++){
-				if(HTML5QQ.personal[k].uin == HTML5QQ.friendsInfo.friends[j].uin){
-					HTML5QQ.friendsInfo.friends[j].lnick = HTML5QQ.personal[k].lnick;
-					break;
-				}
-			}
-			if(!HTML5QQ.friendsInfo.friends[j].lnick){
-				HTML5QQ.friendsInfo.friends[j].lnick = '';
-			}
-			
-			HTML5QQ.friendsInfo.friends[j].searchKw = new Array;
-			getSearch(j);
+			friend.searchKw = new Array;
+			getSearch(uin);
 			
 			el = document.createElement('li');
-			el.id = 'friend_'+HTML5QQ.friendsInfo.friends[j].uin;
+			el.id = 'friend_'+uin;
 			el.className = 'friendDetail';
 			el.setAttribute('cat', i);
-			el.setAttribute('status', HTML5QQ.friendsInfo.friends[j].status);
+			el.setAttribute('status', friend.status);
 			el.onclick = function(){
 				selectFriend(this);
 			}
@@ -643,17 +634,17 @@ sendRequest('hello', function(result){
 				this.setAttribute('selected', 'false');
 			}
 			el.innerHTML = '<div class="friendHead">'+
-								'<img id="friendHead_'+HTML5QQ.friendsInfo.friends[j].uin+'" state="'+HTML5QQ.friendsInfo.friends[j].status+'" src="'+
-								'http://face'+(HTML5QQ.friendsInfo.friends[j].uin%10+1)+'.qun.qq.com/cgi/svr/face/getface?cache=0&type=1&fid=0&uin='+HTML5QQ.friendsInfo.friends[j].uin+'&vfwebqq='+HTML5QQ.vfwebqq+
+								'<img id="friendHead_'+uin+'" state="'+friend.status+'" src="'+
+								'http://face'+(uin%10+1)+'.qun.qq.com/cgi/svr/face/getface?cache=0&type=1&fid=0&uin='+uin+'&vfwebqq='+HTML5QQ.vfwebqq+
 								'" />'+
 								//'<div class="showHideIco"></div>'+
-								'<div class="showState'+(HTML5QQ.friendsInfo.friends[j].client_type==21?'Mobile':(HTML5QQ.friendsInfo.friends[j].client_type==24?'Iphone':HTML5QQ.friendsInfo.friends[j].status.substring(0,1).toUpperCase()+HTML5QQ.friendsInfo.friends[j].status.substring(1)))+'"></div>'+
+								'<div class="showState'+(friend.client_type==21?'Mobile':(friend.client_type==24?'Iphone':friend.status.substring(0,1).toUpperCase()+friend.status.substring(1)))+'"></div>'+
 							'</div>'+
 							'<div class="friendInfo">'+
 								'<div class="friendName">'+
-								((HTML5QQ.friendsInfo.friends[j].markname)?(HTML5QQ.friendsInfo.friends[j].markname+'<span class="friendMark">('+HTML5QQ.friendsInfo.friends[j].nick+')</span>'):(HTML5QQ.friendsInfo.friends[j].nick))+
+								((friend.markname)?(friend.markname+'<span class="friendMark">('+friend.nick+')</span>'):(friend.nick))+
 								'</div>'+
-								'<div class="friendPersonal">'+HTML5QQ.friendsInfo.friends[j].lnick+'</div>'+
+								'<div class="friendPersonal">'+friend.lnick+'</div>'+
 							'</div>'+
 							'<div style="clear: both"></div>';
 			var lists = document.getElementsByClassName('friendDetail');
@@ -663,14 +654,14 @@ sendRequest('hello', function(result){
 					continue;
 				}
 				else{
-					switch(HTML5QQ.friendsInfo.friends[j].status){
+					switch(friend.status){
 						case 'callme': {
 							document.getElementById('friendDetail_'+i).insertBefore(el, lists[k]);
 							fd = 1;
 							break;
 						}
 						case 'online': {
-							if(lists[k].getAttribute('status') == 'callme' || lists[k].getAttribute('status') == 'online' && (HTML5QQ.friendsInfo.friends[j].client_type == 21 || HTML5QQ.friendsInfo.friends[j].client_type == 24)){
+							if(lists[k].getAttribute('status') == 'callme' || lists[k].getAttribute('status') == 'online' && (friend.client_type == 21 || friend.client_type == 24)){
 								break;
 							}
 							else{
@@ -803,29 +794,17 @@ sendRequest('hello', function(result){
 			if(!recent[i].status){
 				recent[i].status = 'offline';
 			}
-			for(var j=0; j < HTML5QQ.friendsInfo.marknames.length; j++){
-				if(HTML5QQ.friendsInfo.marknames[j].uin == recent[i].uin){
-					recent[i].markname = HTML5QQ.friendsInfo.marknames[j].markname;
-					break;
-				}
+			if(recent[i].uin in HTML5QQ.friendsInfo.friends){
+				var friend = HTML5QQ.friendsInfo.friends[recent[i].uin];
+				recent[i].markname = friend.markname;
+				recent[i].nick = friend.nick;
+				recent[i].lnick = friend.lnick;
 			}
 			if(!recent[i].markname){
 				recent[i].markname = null;
 			}
-			for(var j=0; j < HTML5QQ.friendsInfo.info.length; j++){
-				if(HTML5QQ.friendsInfo.info[j].uin == recent[i].uin){
-					recent[i].nick = HTML5QQ.friendsInfo.info[j].nick;
-					break;
-				}
-			}
 			if(!recent[i].nick){
 				recent[i].nick = '';
-			}
-			for(var j=0; j < HTML5QQ.personal.length; j++){
-				if(HTML5QQ.personal[j].uin == recent[i].uin){
-					recent[i].lnick = HTML5QQ.personal[j].lnick;
-					break;
-				}
 			}
 			if(!recent[i].lnick){
 				recent[i].lnick = '';

@@ -423,20 +423,14 @@ function saveMsg(msg, type){
 		}
 		var t = new Date();
 		var now = t.getTime();
-		for(var i = 0; i < HTML5QQ.friendsInfo.marknames.length; i++){
-			if(HTML5QQ.friendsInfo.marknames[i].uin == uin){
-				var friendName = HTML5QQ.friendsInfo.marknames[i].markname;
-				break;
+		if(uin in HTML5QQ.friendsInfo.friends){
+			var friend = HTML5QQ.friendsInfo.friends[uin];
+			var friendName = friend.markname;
+			if(!friendName){
+				friendName = friend.nick;
 			}
 		}
-		if(!friendName){
-			for(var i = 0; i < HTML5QQ.friendsInfo.info.length; i++){
-				if(HTML5QQ.friendsInfo.info[i].uin == uin){
-					friendName = HTML5QQ.friendsInfo.info[i].nick;
-					break;
-				}
-			}
-		}
+		
 		if(HTML5QQ.status != 'silent'){
 			if(!localStorage.unsound){
 				document.getElementById('msgSound').play();
@@ -610,18 +604,11 @@ function saveMsg(msg, type){
 		}
 		var t = new Date();
 		var now = t.getTime();
-		for(var i = 0; i < HTML5QQ.friendsInfo.marknames.length; i++){
-			if(HTML5QQ.friendsInfo.marknames[i].uin == uin){
-				var friendName = HTML5QQ.friendsInfo.marknames[i].markname;
-				break;
-			}
-		}
-		if(!friendName){
-			for(var i = 0; i < HTML5QQ.friendsInfo.info.length; i++){
-				if(HTML5QQ.friendsInfo.info[i].uin == uin){
-					friendName = HTML5QQ.friendsInfo.info[i].nick;
-					break;
-				}
+		if(uin in HTML5QQ.friendsInfo.friends){
+			var friend = HTML5QQ.friendsInfo.friends[uin];
+			var friendName = friend.markname;
+			if(!friendName){
+				friendName = friend.nick;
 			}
 		}
 		newMsg.msg.push({type: 'file', rec_uin: uin, time: now, uin: uin, name: friendName, msg: msg});

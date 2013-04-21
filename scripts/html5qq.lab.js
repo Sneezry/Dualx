@@ -377,10 +377,56 @@ var HTML5QQ = {
 			}
 			result = JSON.parse(result);
 			result = result.result;
-			HTML5QQ.friendsInfo = result;
+			HTML5QQ.friendsInfo = {};
+			HTML5QQ.friendsInfo.categories = result.categories;
 			if(HTML5QQ.friendsInfo.categories.length == 0 || HTML5QQ.friendsInfo.categories[0].index != 0){
 				HTML5QQ.friendsInfo.categories.unshift({index: 0, name: '我的好友', sort: 0});
 			}
+			
+			categories = {}
+			for (var i = 0; i < HTML5QQ.friendsInfo.categories.length; i++) {
+				index = HTML5QQ.friendsInfo.categories[i].index;
+				HTML5QQ.friendsInfo.categories[i].friends = [];
+				categories[index] = HTML5QQ.friendsInfo.categories[i];
+			}
+			
+			HTML5QQ.friendsInfo.friends = {}
+			for (var i = 0; i < result.friends.length; i++) {
+				category = result.friends[i].categories;
+				uin = result.friends[i].uin;
+				
+				HTML5QQ.friendsInfo.friends[uin] = {};
+				HTML5QQ.friendsInfo.friends[uin].category = category;
+				HTML5QQ.friendsInfo.friends[uin].flag = result.friends[i].flag;
+				categories[category].friends.push(uin);
+			}
+			
+			for (var i = 0; i < result.info.length; i++) {
+				uin = result.info[i].uin;
+				
+				if (uin in HTML5QQ.friendsInfo.friends) {
+					HTML5QQ.friendsInfo.friends[uin].face = result.info[i].face;
+					HTML5QQ.friendsInfo.friends[uin].nick = result.info[i].nick;
+					HTML5QQ.friendsInfo.friends[uin].face_flag = result.info[i].flag;
+				}
+			}
+			
+			for (var i = 0; i < result.marknames.length; i++) {
+				uin = result.marknames[i].uin;
+				if (uin in HTML5QQ.friendsInfo.friends) {
+					HTML5QQ.friendsInfo.friends[uin].markname = result.marknames[i].markname;
+					HTML5QQ.friendsInfo.friends[uin].markname_type = result.marknames[i].type;
+				}
+			}
+			
+			for (var i = 0; i < result.vipinfo.length; i++) {
+				uin = result.vipinfo[i].u;
+				if (uin in HTML5QQ.friendsInfo.friends) {
+					HTML5QQ.friendsInfo.friends[uin].is_vip = result.vipinfo[i].is_vip;
+					HTML5QQ.friendsInfo.friends[uin].vip_level = result.vipinfo[i].vip_level;
+				}
+			}
+			
 			if(HTML5QQ.debug){
 		 		HTML5QQ.outputDebug("getFriendsInfo: friendsInfo("+JSON.stringify(HTML5QQ.friendsInfo)+")");
 			}
