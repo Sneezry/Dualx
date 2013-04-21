@@ -378,6 +378,9 @@ var HTML5QQ = {
 			result = JSON.parse(result);
 			result = result.result;
 			HTML5QQ.friendsInfo = result;
+			if(HTML5QQ.friendsInfo.categories.length == 0 || HTML5QQ.friendsInfo.categories[0].index != 0){
+				HTML5QQ.friendsInfo.categories.unshift({index: 0, name: '我的好友', sort: 0});
+			}
 			if(HTML5QQ.debug){
 		 		HTML5QQ.outputDebug("getFriendsInfo: friendsInfo("+JSON.stringify(HTML5QQ.friendsInfo)+")");
 			}

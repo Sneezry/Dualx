@@ -502,7 +502,6 @@ sendRequest('hello', function(result){
 	var friendsInfo = HTML5QQ.friendsInfo;
 	var groupsInfo = HTML5QQ.groupsInfo;
 	var categories = new Array;
-	var hideCat = false;
 	var statusList = {
 		en: [
 			'callme', 'online', 'busy', 'away', 'offline', 'hidden', 'silent'
@@ -523,10 +522,6 @@ sendRequest('hello', function(result){
 	document.getElementById('userMotto').title = HTML5QQ.myPersonal;
 	document.getElementById('setLnick').value = HTML5QQ.myPersonal;
 	document.getElementById('userLnick').innerHTML = HTML5QQ.myPersonal.length>40?HTML5QQ.myPersonal.substr(0, 37)+'...':HTML5QQ.myPersonal;
-	if(friendsInfo.categories.length == 0 || friendsInfo.categories[0].index != 0){
-		friendsInfo.categories.unshift({index: 0, name: '我的好友', sort: 0});
-		hideCat = true;
-	}
 	/*
 	for(var i = 0; i < friendsInfo.categories.length; i++){
 		if(hideCat){
