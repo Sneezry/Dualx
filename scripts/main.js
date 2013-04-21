@@ -547,7 +547,7 @@ sendRequest('hello', function(result){
 	categories.sort(function orderCategories(a, b) {
 		return a.sort - b.sort;
 	});
-	for(i=0; i<categories.length-1; i++){
+	for(i=0; i<categories.length; i++){
 		catTransfer[categories[i].index] = i;
 	}
 	for(var i = 0; i < categories.length; i++){
