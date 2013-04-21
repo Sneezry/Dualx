@@ -543,20 +543,10 @@ sendRequest('hello', function(result){
 		}
 	}
 	*/
-	var catfinish = false;
-	var tempcat;
 	categories = friendsInfo.categories;
-	while(!catfinish){
-		catfinish = true;
-		for(var i=0; i<categories.length-1; i++){
-			if(categories[i].sort>categories[i+1].sort){
-				tempcat = categories[i];
-				categories[i] = categories[i+1];
-				categories[i+1] = tempcat;
-				catfinish = false
-			}
-		}
-	}
+	categories.sort(function orderCategories(a, b) {
+		return a.sort - b.sort;
+	});
 	for(i=0; i<categories.length-1; i++){
 		catTransfer[categories[i].index] = i;
 	}
