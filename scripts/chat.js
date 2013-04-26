@@ -533,19 +533,12 @@ sendRequest('hello', function(result){
 	el = document.createElement('div');
 	el.id = 'showState';
 	el.setAttribute('state', state);
-	document.getElementById('userHead').appendChild(el);
-	for(var i = 0; i < HTML5QQ.friendsInfo.marknames.length; i++){
-		if(HTML5QQ.friendsInfo.marknames[i].uin == uin){
-			friendName = HTML5QQ.friendsInfo.marknames[i].markname;
-			break;
-		}
-	}
-	if(!friendName){
-		for(var i = 0; i < HTML5QQ.friendsInfo.info.length; i++){
-			if(HTML5QQ.friendsInfo.info[i].uin == uin){
-				friendName = HTML5QQ.friendsInfo.info[i].nick;
-				break;
-			}
+	document.getElementById('userHead').appendChild(el);	
+	if(uin in HTML5QQ.friendsInfo.friends){
+		var friend = HTML5QQ.friendsInfo.friends[uin];
+		friendName = friend.markname;
+		if(!friendName){
+			friendName = friend.nick;
 		}
 	}
 	for(var i = 0; i < HTML5QQ.personal.length; i++){
