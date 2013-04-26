@@ -80,9 +80,15 @@ chrome.extension.onMessage.addListener(function(request, sender, callback) {
 	}
 	else if(request == 'xlogin'){
 		if(loginWindowId){
-			chrome.windows.update(loginWindowId, {
-				focused: true
-			});
+			try{
+				chrome.windows.update(loginWindowId, {
+					focused: true
+				});
+			}
+			catch(e){
+				loginWindowId = null;
+				chrome.extension.sendMessage('xlogin');
+			}
 		}
 		else{
 			chrome.windows.create({
@@ -117,21 +123,15 @@ chrome.extension.onMessage.addListener(function(request, sender, callback) {
 	}
 	else if(request == 'showmain'){
 		if(mainWindowId){
-			chrome.windows.update(mainWindowId, {
-				focused: true
-			}, function(window){
-				if(!window){
-					chrome.windows.create({
-						url: 'main.html',
-						width: 300,
-						height: 600,
-						left: window.screen.width-350,
-						top: 50,
-						focused: true,
-						type: 'popup'
-					},function(window){mainWindowId=window.id;});
-				}
-			});
+			try{
+				chrome.windows.update(mainWindowId, {
+					focused: true
+				});
+			}
+			catch(e){
+				mainWindowId = null;
+				chrome.extension.sendMessage('showmain');
+			}
 		}
 		else{
 			chrome.windows.create({
@@ -185,13 +185,14 @@ chrome.extension.onMessage.addListener(function(request, sender, callback) {
 		for(var i = 0; i < tabStatus.length; i++){
 			if(tabStatus[i][0] == uin){
 				fd = 1;
-				chrome.windows.update(tabStatus[i][1], {
-					focused: true
-				},function(window){
-					if(!window){
-						fd=0;
-					}
-				});
+				try{
+					chrome.windows.update(tabStatus[i][1], {
+						focused: true
+					});
+				}
+				catch(e){
+					fd = 0;
+				}
 				break;
 			}
 		}
@@ -246,9 +247,14 @@ chrome.extension.onMessage.addListener(function(request, sender, callback) {
 		for(var i = 0; i < qtabStatus.length; i++){
 			if(qtabStatus[i][0] == uin){
 				fd = 1;
-				chrome.windows.update(qtabStatus[i][1], {
-					focused: true
-				},function(window){if(!window){fd=0}});
+				try{
+					chrome.windows.update(qtabStatus[i][1], {
+						focused: true
+					});
+				}
+				catch(e){
+					fd = 0;
+				}
 				break;
 			}
 		}
