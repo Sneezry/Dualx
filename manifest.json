@@ -30,8 +30,8 @@
 		"webRequest",
 		"webRequestBlocking",
 		"fontSettings",
-    "http://*/*",
-    "https://*/*"
+		"http://*/*",
+		"https://*/*"
 	],
 	"web_accessible_resources": [
 		"images/logo.png"
