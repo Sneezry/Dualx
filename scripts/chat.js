@@ -478,7 +478,7 @@ function sendRequest(request, callback){
 }
 
 function httpRequest(method, action, query, urlencoded, callback, timeout){
-	var url = "GET" == method ? (query ? action+"?"+querry : action) : action;
+	var url = "GET" == method ? (query ? action+"?"+query : action) : action;
 	
 	var xhr = new XMLHttpRequest();
 	xhr.open(method, url, true);

@@ -81,7 +81,7 @@ var HTML5QQ = {
 	recentList: null,
 	
 	httpRequest: function(method, action, query, urlencoded, callback, timeout){
-		var url = "GET" == method ? (query ? action+"?"+querry : action) : action;
+		var url = "GET" == method ? (query ? action+"?"+query : action) : action;
 		var timecounter;
 		
 		if(this.debug){
