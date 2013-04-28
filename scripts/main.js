@@ -503,6 +503,7 @@ sendRequest('hello', function(result){
 	var friendsInfo = HTML5QQ.friendsInfo;
 	var groupsInfo = HTML5QQ.groupsInfo;
 	var categories = new Array;
+	/*
 	var statusList = {
 		en: [
 			'callme', 'online', 'busy', 'away', 'offline', 'hidden', 'silent'
@@ -516,7 +517,18 @@ sendRequest('hello', function(result){
 			document.getElementById('userState').title = '当前状态 '+statusList.cn[i];
 			document.getElementById('stateIco').className = 'state_'+statusList.en[i];
 		}
+	}*/
+	var statusList = {
+		'callme':  'Q我',
+		'online':  '在线',
+		'busy':    '忙碌',
+		'away':    '离开',
+		'offline': '离线',
+		'hidden':  '隐身',
+		'silent':  '静音'
 	}
+	document.getElementById('userState').title = '当前状态 '+statusList[status];
+	document.getElementById('stateIco').className = 'state_'+status;
 	document.getElementById('userName').innerHTML = HTML5QQ.info.nick.length>6?HTML5QQ.info.nick.substr(0, 6)+'...':HTML5QQ.info.nick;
 	document.getElementById('userLevel').title = '我的QQ等级 '+HTML5QQ.levelInfo.level+'级'+String.fromCharCode(13)+'剩余升级时间 '+HTML5QQ.levelInfo.remainDays+'天';
 	document.getElementById('userLevel').innerHTML = 'LV'+HTML5QQ.levelInfo.level;
