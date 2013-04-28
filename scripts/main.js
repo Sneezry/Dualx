@@ -503,21 +503,6 @@ sendRequest('hello', function(result){
 	var friendsInfo = HTML5QQ.friendsInfo;
 	var groupsInfo = HTML5QQ.groupsInfo;
 	var categories = new Array;
-	/*
-	var statusList = {
-		en: [
-			'callme', 'online', 'busy', 'away', 'offline', 'hidden', 'silent'
-		],
-		cn: [
-			'Q我', '在线', '忙碌', '离开', '离线', '隐身', '静音'
-		]
-	};
-	for(var i = 0; i < statusList.en.length; i++){
-		if(status == statusList.en[i]){
-			document.getElementById('userState').title = '当前状态 '+statusList.cn[i];
-			document.getElementById('stateIco').className = 'state_'+statusList.en[i];
-		}
-	}*/
 	var statusList = {
 		'callme':  'Q我',
 		'online':  '在线',
