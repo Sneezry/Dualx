@@ -8,3 +8,10 @@ document.getElementById('ok').onclick = function(){
 	chrome.extension.sendMessage('verify;'+document.getElementById('verifyCode').value);
 	self.close();
 }
+
+document.getElementById('verifyCode').onkeydown = function(){
+	if(event.keyCode==13){
+		chrome.extension.sendMessage('verify;'+document.getElementById('verifyCode').value);
+		self.close();
+	}
+}
