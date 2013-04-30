@@ -203,8 +203,18 @@ var HTML5QQ = {
 	},
 	
 	encodePassord: function(password){
-		this.password = this.md5(password);
-		this.encodedPassword = this.md5(this.md5(this.hexChar2Bin(this.password)+this.uin)+this.verifyCode.toUpperCase());
+		password = decodeURIComponent(password);
+		if(password.substr(0, 1) != String.fromCharCode(16)){
+			password = password.substr(0,16);
+			this.password = this.md5(password);
+			this.encodedPassword = this.md5(this.md5(this.hexChar2Bin(this.password)+this.uin)+this.verifyCode.toUpperCase());
+			if(localStorage.password){
+				localStorage.password = String.fromCharCode(16) + this.md5(this.hexChar2Bin(this.password)+this.uin);
+			}
+		}
+		else{
+			this.encodedPassword = this.md5(password.substr(1)+this.verifyCode.toUpperCase());
+		}
 		if(this.debug){
 		  //this.outputDebug("encodePassord: password("+this.password+") encodedPassword("+this.encodedPassword+"[md5(md5("+this.hexChar2Bin(this.password)+"+"+this.uin2Hex(this.qq)+")+"+this.verifyCode.toUpperCase()+")])");
 		  this.outputDebug("encodePassord: encodedPassword("+this.encodedPassword+")");
@@ -259,6 +269,12 @@ var HTML5QQ = {
 					HTML5QQ.getPsessionid(cookie.value, status);
 					if(HTML5QQ.debug){
 		 				HTML5QQ.outputDebug("login: ptwebqq("+HTML5QQ.ptwebqq+")");
+					}
+				});
+				HTML5QQ.getCookie("http://qq.com", "uin", function(cookie){
+					HTML5QQ.qq = parseInt(cookie.value.substr(1));
+					if(HTML5QQ.debug){
+		 				HTML5QQ.outputDebug("login: uin("+cookie.value+")");
 					}
 				});
 			}

@@ -477,7 +477,6 @@ function changeStatus(value){
 			document.getElementById('friendDetail_'+catTransfer[i]).appendChild(el);
 		}
 		document.getElementById('ftotal_'+catTransfer[i]).innerHTML = '['+onlineFriendsTotal[catTransfer[i]]+'/'+friendsTotal[catTransfer[i]]+']';
-		break;
 	}
 }
 
