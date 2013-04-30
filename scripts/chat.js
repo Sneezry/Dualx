@@ -306,7 +306,7 @@ function decodeMsg(msg, fuin){
 	msgBody.style.marginLeft = '10px';
 	for(var i = 0; i < msg.length; i++){
 		if(typeof(msg[i]) == 'string'){
-			message += decodeURIComponent(msg[i]).replace(/\\\\\\\\/g, '\\').replace(/\n/g, '<br />');
+			message += decodeURIComponent(msg[i]).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\\\\\\\\/g, '\\').replace(/\n/g, '<br />');
 		}
 		else if(typeof(msg[i]) == 'object'){
 			switch(msg[i][0]){
