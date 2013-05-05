@@ -10,6 +10,42 @@ for(var i=0; i<boxs.length; i++){
 	}
 }
 
+document.getElementById('mainstyle').onclick = function(){
+	this.select();
+}
+
+document.getElementById('mainstyle').onblur = function(){
+	localStorage['mainstyle'] = this.value;
+}
+
+if(localStorage['mainstyle']){
+	document.getElementById('mainstyle').value = localStorage['mainstyle'];
+}
+
+document.getElementById('chatstyle').onclick = function(){
+	this.select();
+}
+
+document.getElementById('chatstyle').onblur = function(){
+	localStorage['chatstyle'] = this.value;
+}
+
+if(localStorage['chatstyle']){
+	document.getElementById('chatstyle').value = localStorage['chatstyle'];
+}
+
+document.getElementById('qunstyle').onclick = function(){
+	this.select();
+}
+
+document.getElementById('qunstyle').onblur = function(){
+	localStorage['qunstyle'] = this.value;
+}
+
+if(localStorage['qunstyle']){
+	document.getElementById('qunstyle').value = localStorage['qunstyle'];
+}
+
 function save(){
 	if(this.checked){
 		localStorage[this.id] = 'true';

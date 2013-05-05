@@ -29,6 +29,7 @@ chrome.extension.sendMessage('getqq'+uin);
 setTimeout(function(){
 	chrome.extension.sendMessage('uin2qq'+uin, function(qq){
 		qqnum = qq;
+		document.getElementById('userName').innerHTML += '('+qq+')';
 	});
 }, 1000);
 
@@ -119,6 +120,15 @@ window.onload = function(){
 		}
 	}
 }
+
+((function(){
+	if(localStorage.chatstyle){
+		var el = document.createElement('style');
+		el.type = 'text/css';
+		el.innerHTML = localStorage.chatstyle;
+		document.getElementsByTagName('head')[0].appendChild(el);
+	}
+})())
 
 function changeStatus(value){
 	if(uin == value.uin){
@@ -551,8 +561,9 @@ sendRequest('hello', function(result){
 		friendName = '陌生人('+uin+')';
 	}
 	document.title = friendName;
-	document.getElementById('userName').innerHTML = friendName;
+	document.getElementById('userName').innerHTML = friendName + document.getElementById('userName').innerHTML;
 	document.getElementById('userPersonal').innerHTML = friendLongnick;
+	document.getElementById('userPersonal').title = friendLongnick;
 	document.getElementById('uo_uin').value = HTML5QQ.info.uin;
 	document.getElementById('uo_skey').value = HTML5QQ.skey;
 	document.getElementById('uo_peeruin').value = uin;

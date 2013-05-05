@@ -91,6 +91,15 @@ window.onload = function(){
 	}
 }
 
+((function(){
+	if(localStorage.qunstyle){
+		var el = document.createElement('style');
+		el.type = 'text/css';
+		el.innerHTML = localStorage.qunstyle;
+		document.getElementsByTagName('head')[0].appendChild(el);
+	}
+})())
+
 chrome.extension.onMessage.addListener(function(request, sender) {
 	if(typeof(request) == 'object'){
 		switch(request.retcode){
@@ -121,6 +130,7 @@ function getAccount(){
 	httpRequest('GET', url, null, false, function(result){
 		result = JSON.parse(result);
 		if(result.result){
+			document.getElementById('userName').innerHTML += '('+result.result.account+')';
 			document.getElementById('sendFile').onclick = function(){
 				window.open('http://qun.qq.com/air/#'+result.result.account+'/share');
 			}
@@ -404,7 +414,7 @@ sendRequest('hello', function(result){
 		result = JSON.parse(result);
 		qunInfo = result.result;
 		document.title = qunInfo.ginfo.name;
-		document.getElementById('userName').innerHTML = qunInfo.ginfo.name;
+		document.getElementById('userName').innerHTML = qunInfo.ginfo.name + document.getElementById('userName').innerHTML;
 		document.getElementById('toolMsgRec').onclick = function(){
 			chrome.windows.create({
 				url: 'history.html?qun|'+uin+'|'+qunInfo.ginfo.gid,

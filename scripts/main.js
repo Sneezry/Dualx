@@ -31,6 +31,15 @@ window.onload = function(){
 	}
 }
 
+((function(){
+	if(localStorage.mainstyle){
+		var el = document.createElement('style');
+		el.type = 'text/css';
+		el.innerHTML = localStorage.mainstyle;
+		document.getElementsByTagName('head')[0].appendChild(el);
+	}
+})())
+
 chrome.webRequest.onBeforeSendHeaders.addListener(function(details){
 	for(var i = 0; i<details.requestHeaders.length; i++){
 		if (details.requestHeaders[i].name == "Referer" || details.requestHeaders[i].name == "Origin") {  
