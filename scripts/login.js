@@ -5,6 +5,14 @@ window.onunload = function(){
 	chrome.extension.sendMessage('clogin');
 }
 
+document.getElementById('regacc').onclick = function(){
+	window.open('http://ptlogin2.qq.com/qq_signup', '_blank');
+}
+
+document.getElementById('fgtpwd').onclick = function(){
+	window.open('http://ptlogin2.qq.com/forget_pwd', '_blank');
+}
+
 chrome.extension.onMessage.addListener(function(request, sender) {
 	if(request == 'finish'){
 		self.close();

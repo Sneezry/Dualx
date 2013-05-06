@@ -65,7 +65,12 @@ chrome.extension.onMessage.addListener(function(request, sender, callback) {
 			});
 		}
 		popupCmd = 'showmain';
-		if(!localStorage.autoShow){
+		if(localStorage.popupmain){
+			chrome.browserAction.setPopup({
+				popup: 'main.html'
+			});
+		}
+		if(!localStorage.autoShow && !localStorage.popupmain){
 			chrome.windows.create({
 				url: 'main.html',
 				width: 300,
@@ -727,9 +732,16 @@ function spliceNewMsg(uin, type){
 	var msgNum = newMsg.friend.length + newMsg.qun.length;
 	if(msgNum == 0){
 		chrome.browserAction.setBadgeText({text: ''});
-		chrome.browserAction.setPopup({
-			popup: ''
-		});
+		if(localStorage.popupmain){
+			chrome.browserAction.setPopup({
+				popup: 'main.html'
+			});
+		}
+		else{
+			chrome.browserAction.setPopup({
+				popup: ''
+			});
+		}
 	}
 	else{
 		chrome.browserAction.setBadgeText({text: String(msgNum)});
@@ -758,24 +770,35 @@ function chkVersion(){
 		try{
 			manifest = JSON.parse(manifest);
 			getSelfVersion(function(selfVersion){
-				if(selfVersion < manifest.version){
-					outOfDate = true;
-					chrome.browserAction.setTitle({
-						title: 'Dualx - 有新版本'
+				if(selfVersion.substr('.')[0] < manifest.version.substr('.')[0] || manifest.version.substr('.')[1] - selfVersion.substr('.')[1] >= 2){
+					versionMention();
+				}
+				else{
+					getRequest('https://raw.github.com/sneezry/Dualx/master/VERSION_MENTION', function(mention){
+						if(mention == 'YES'){
+							versionMention();
+						}
 					});
-					if(popupCmd == 'showmain'){
-						chrome.browserAction.setIcon({
-							path: 'images/logoout.png'
-						});
-					}
-					else{
-						chrome.browserAction.setIcon({
-							path: 'images/logooffout.png'
-						});
-					}
 				}
 			});
 		}
 		catch(e){}
 	});
+}
+
+function versionMention(){
+	outOfDate = true;
+	chrome.browserAction.setTitle({
+		title: 'Dualx - 有新版本'
+	});
+	if(popupCmd == 'showmain'){
+		chrome.browserAction.setIcon({
+			path: 'images/logoout.png'
+		});
+	}
+	else{
+		chrome.browserAction.setIcon({
+			path: 'images/logooffout.png'
+			});
+	}
 }
