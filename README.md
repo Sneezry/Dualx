@@ -12,6 +12,7 @@ Dualx是开源的项目，遵循[**GPL协议**](https://zh.wikipedia.org/wiki/GN
 * http://www.script-tutorials.com/pure-html5-file-upload/
 * http://stackoverflow.com/questions/1181700/set-cursor-position-on-contenteditable-div
 * http://stackoverflow.com/questions/9248441/insert-image-in-contenteditable-div-using-popup
+* https://github.com/cyio/UserStyles/
 
 
 

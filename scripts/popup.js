@@ -1,3 +1,7 @@
+if(localStorage.popupmain){
+	document.getElementById('showMain').style.display = 'none';
+}
+
 document.getElementById('showMain').onclick = function(){
 	chrome.extension.sendMessage('showmain');
 }
