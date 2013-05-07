@@ -16,6 +16,14 @@ Dualx皮肤，酷黑
 边框线 #242a37
 */
 
+::-webkit-scrollbar-thumb{
+	background-color: #1c212a!important;
+}
+
+::-webkit-scrollbar-thumb:hover {
+	background-color: #4c515a!important;
+}
+
 * {
 	font-family: "Microsoft Yahei Mono", "Microsoft Yahei","WenQuanYi Micro Hei Mono", "WenQuanYi Micro Hei", arial,sans-serif!important;
 }
