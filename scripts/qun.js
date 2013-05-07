@@ -296,11 +296,21 @@ var gface_key;
 var gface_sig;
 
 function friendName(uin){
-	for(var i = 0; i < qunInfo.minfo.length; i++){
-		if(qunInfo.minfo[i].uin == uin){
-			return qunInfo.minfo[i].nick;
+    var cards = {};
+
+	for (var i = 0; i < qunInfo.cards.length; i++) {
+		if (qunInfo.cards[i].muin == uin) { 
+		    cards[uin] = qunInfo.cards[i].card;
 		}
 	}
+    for (var i = 0; i < qunInfo.minfo.length; i++) {
+        if (qunInfo.minfo[i].uin == uin) {
+            var nick = qunInfo.minfo[i].nick;
+            var card = cards[uin];
+            return card ? nick + '(' + card + ')' : nick;
+        }
+    }
+
 }
 
 function getFaceSig(){
