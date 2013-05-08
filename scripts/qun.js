@@ -92,7 +92,7 @@ window.onload = function(){
 }
 
 ((function(){
-	if(localStorage.qunstyle){
+	if(localStorage.qunstyle && !localStorage.popupmain){
 		var el = document.createElement('style');
 		el.type = 'text/css';
 		el.innerHTML = localStorage.qunstyle;

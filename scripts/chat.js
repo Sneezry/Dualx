@@ -122,7 +122,7 @@ window.onload = function(){
 }
 
 ((function(){
-	if(localStorage.chatstyle){
+	if(localStorage.chatstyle && !localStorage.popupmain){
 		var el = document.createElement('style');
 		el.type = 'text/css';
 		el.innerHTML = localStorage.chatstyle;

@@ -32,7 +32,7 @@ window.onload = function(){
 }
 
 ((function(){
-	if(localStorage.mainstyle){
+	if(localStorage.mainstyle && !localStorage.popupmain){
 		var el = document.createElement('style');
 		el.type = 'text/css';
 		el.innerHTML = localStorage.mainstyle;
