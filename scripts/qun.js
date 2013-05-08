@@ -98,13 +98,6 @@ window.onload = function(){
 		el.innerHTML = localStorage.qunstyle;
 		document.getElementsByTagName('head')[0].appendChild(el);
 	}
-	else if(localStorage.popupmain){
-		var el = document.createElement('link');
-		el.type = 'text/css';
-		el.rel = 'stylesheet';
-		el.href = 'popupmain.css';
-		document.getElementsByTagName('head')[0].appendChild(el);
-	}
 })())
 
 chrome.extension.onMessage.addListener(function(request, sender) {

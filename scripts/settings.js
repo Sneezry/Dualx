@@ -2,6 +2,12 @@ window.onerror = function(err, u, l){
 	chrome.extension.sendMessage('error::settings:: <'+l+'> '+err);
 }
 
+chrome.extension.sendMessage('lgstatus', function(loginstatus){
+	if(loginstatus == 'off'){
+		document.getElementById('popupmain').disabled = '';
+	}
+});
+
 var boxs = document.getElementsByTagName('input');
 for(var i=0; i<boxs.length; i++){
 	boxs[i].onclick = save;

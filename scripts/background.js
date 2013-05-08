@@ -107,6 +107,9 @@ chrome.extension.onMessage.addListener(function(request, sender, callback) {
 			},function(window){loginWindowId=window.id});
 		}
 	}
+	else if(request == 'lgstatus'){
+		callback(popupCmd == 'showmain' ? 'on' : 'off');
+	}
 	else if(request == 'clogin'){
 		if(loginWindowId){
 			try{

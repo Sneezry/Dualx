@@ -81,7 +81,7 @@ body{
 }
 
 .groupName:hover {
-	background:#1c212a url(images/groupsliststyle.png) no-repeat center left;!important;
+	background:#1c212a url(images/groupsliststyle.png) no-repeat center left!important;
 }
 
 .searchResult:hover {

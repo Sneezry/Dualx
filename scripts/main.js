@@ -38,13 +38,6 @@ window.onload = function(){
 		el.innerHTML = localStorage.mainstyle;
 		document.getElementsByTagName('head')[0].appendChild(el);
 	}
-	else if(localStorage.popupmain){
-		var el = document.createElement('link');
-		el.type = 'text/css';
-		el.rel = 'stylesheet';
-		el.href = 'popupmain.css';
-		document.getElementsByTagName('head')[0].appendChild(el);
-	}
 })())
 
 chrome.webRequest.onBeforeSendHeaders.addListener(function(details){
