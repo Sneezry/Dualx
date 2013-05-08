@@ -208,10 +208,10 @@ chrome.extension.onMessage.addListener(function(request, sender, callback) {
 			spliceNewMsg(uin, 'friend')
 			chrome.windows.create({
 				url: 'chat.html?'+uin,
-				width: 560,
-				height: 510,
-				left: window.screen.width/2-280,
-				top: window.screen.height/2-265,
+				width: 500,
+				height: 440,
+				left: window.screen.width/2-250,
+				top: window.screen.height/2-230,
 				focused: true,
 				type: 'popup'
 			},function(window){
@@ -271,10 +271,10 @@ chrome.extension.onMessage.addListener(function(request, sender, callback) {
 			spliceNewMsg(uin, 'qun');
 			chrome.windows.create({
 				url: 'qun.html?'+uin,
-				width: 560,
-				height: 510,
-				left: window.screen.width/2-280,
-				top: window.screen.height/2-265,
+				width: 500,
+				height: 460,
+				left: window.screen.width/2-250,
+				top: window.screen.height/2-230,
 				focused: true,
 				type: 'popup'
 			},function(window){
@@ -376,10 +376,10 @@ chrome.extension.onMessage.addListener(function(request, sender, callback) {
 								spliceNewMsg(uin, 'friend')
 								chrome.windows.create({
 									url: 'chat.html?'+uin,
-									width: 560,
-									height: 510,
-									left: window.screen.width/2-280,
-									top: window.screen.height/2-265,
+									width: 500,
+									height: 440,
+									left: window.screen.width/2-250,
+									top: window.screen.height/2-230,
 									focused: true,
 									type: 'popup'
 								},function(window){

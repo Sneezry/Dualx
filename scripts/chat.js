@@ -211,6 +211,7 @@ function recieveFile(msg){
 		return;
 	}
 	if(uin == msg.from_uin){
+		updateTitle();
 		var today = new Date();
 		var hh = today.getHours();
 		if(hh<10) hh = '0' + hh;
@@ -431,6 +432,7 @@ function recieveMsg(msg){
 	var now = today.getTime();
 	
 	if(msg.from_uin == uin){
+		updateTitle();
 		if(preSenderPeeker){
 			clearTimeout(preSenderPeeker);
 		}
@@ -1057,7 +1059,23 @@ function sendAllFaces(){
 	return msg;
 }
 
+function updateTitle(){
+	chrome.windows.getCurrent(function(window){
+		if(window.focused){
+			document.title = friendName;
+		}
+		else{
+			document.title = '有新消息 - ' + friendName;
+		}
+	});
+}
+
+chrome.windows.onFocusChanged.addListener(function(wid) {
+	updateTitle();
+});
+
 window.onclick = function(){
+	updateTitle();
 	if(!sendFileList){
 		document.getElementById('sendFileList').style.display = 'none';
 	}

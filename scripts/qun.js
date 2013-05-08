@@ -333,6 +333,7 @@ function recieveMsg(msg){
 	var now = today.getTime();
 	
 	if(msg.from_uin == qunInfo.ginfo.gid){
+		updateTitle();
 		clearTimeout(preSenderPeeker);
 		preSenderPeeker = setTimeout(function(){preSender = null},10000);
 		if(preSender != msg.send_uin){
@@ -758,7 +759,23 @@ function sendAllFaces(){
 	return msg;
 }
 
+function updateTitle(){
+	chrome.windows.getCurrent(function(window){
+		if(window.focused){
+			document.title = qunInfo.ginfo.name;
+		}
+		else{
+			document.title = '有新消息 - ' + qunInfo.ginfo.name;
+		}
+	});
+}
+
+chrome.windows.onFocusChanged.addListener(function(wid) {
+	updateTitle();
+});
+
 window.onclick = function(){
+	updateTitle();
 	if(!toolFaceOver){
 		document.getElementById('facePanel').style.display = 'none';
 		document.getElementById('toolFaces').className = 'toolButton';
