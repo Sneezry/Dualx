@@ -291,7 +291,7 @@ var gface_sig;
 function friendName(uin){
     var card;
 
-	for (var i = 0; i < qunInfo.cards.length; i++) {
+	for (var i = 0; qunInfo.cards && (i < qunInfo.cards.length); i++) {
 		if (qunInfo.cards[i].muin == uin) { 
 		    card = qunInfo.cards[i].card;
             break;
