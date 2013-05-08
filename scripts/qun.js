@@ -307,7 +307,7 @@ function friendName(uin){
     for (var i = 0; i < qunInfo.minfo.length; i++) {
         if (qunInfo.minfo[i].uin == uin) {
             var nick = qunInfo.minfo[i].nick;
-            return card ? card : nick;
+            return card ? card+'('+nick+')' : nick;
         }
     }
 
