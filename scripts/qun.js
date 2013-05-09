@@ -15,6 +15,7 @@ var preSender = new Array;
 var preSenderPeeker = new Array;
 var faceTransferTable = [14, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 0, 50, 51, 96, 53, 54, 73, 74, 75, 76, 77, 78, 55, 56, 57, 58, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 32, 113, 114, 115, 63, 64, 59, 33, 34, 116, 36, 37, 38, 91, 92, 93, 29, 117, 72, 45, 42, 39, 62, 46, 47, 71, 95, 118, 119, 120, 121, 122, 123, 124, 27, 21, 23, 25, 26, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 52, 24, 22, 20, 60, 61, 89, 90, 31, 94, 65, 35, 66, 67, 68, 69, 70, 15, 16, 17, 18, 19, 28, 30, 40, 41, 43, 44, 48, 49];
 var newnotice = false;
+var qunnum;
 
 window.onerror = function(err, u, l){
 	chrome.extension.sendMessage('error::qun:: <'+l+'> '+err);
@@ -131,6 +132,15 @@ function getAccount(){
 	httpRequest('GET', url, null, false, function(result){
 		result = JSON.parse(result);
 		if(result.result){
+			qunnum = result.result.account;
+			getStatus(function(silent){
+				if(silent){
+					document.getElementById('showState').style.display = 'block';
+				}
+				else{
+					document.getElementById('showState').style.display = 'none';
+				}
+			});
 			document.getElementById('userName').innerHTML += '('+result.result.account+')';
 			document.getElementById('sendFile').onclick = function(){
 				window.open('http://qun.qq.com/air/#'+result.result.account+'/share');
@@ -445,6 +455,8 @@ sendRequest('hello', function(result){
 	el.src = 'http://face'+(parseInt(uin.substr(-1))+1)+'.qun.qq.com/cgi/svr/face/getface?cache=0&type=4&fid=0&uin='+uin+'&vfwebqq='+HTML5QQ.vfwebqq;
 	el.width = 40;
 	el.height = 40;
+	el.onclick = chgStatus;
+	el.title = '点击以更改屏蔽设置';
 	document.getElementById('userHead').appendChild(el);
 	document.getElementById('op_vfwebqq').value = HTML5QQ.vfwebqq;
 });
@@ -759,6 +771,55 @@ function updateTitle(){
 		else if(newnotice){
 			document.title = '有新消息 - ' + qunInfo.ginfo.name;
 		}
+	});
+}
+
+function getStatus(callback){
+	chrome.storage.local.get('qunstatus', function(obj){
+		var qunstatus;
+		if(!obj.qunstatus){
+			qunstatus = new Object;
+		}
+		else{
+			qunstatus = obj.qunstatus;
+		}
+		if(!qunstatus[HTML5QQ.qq]){
+			qunstatus[HTML5QQ.qq] = new Array;
+		}
+		for(var i=0; i<qunstatus[HTML5QQ.qq].length; i++){
+			if(qunstatus[HTML5QQ.qq][i] == qunnum){
+				callback(true);
+				return;
+			}
+		}
+		callback(false);
+		return;
+	});
+}
+
+function chgStatus(){
+	chrome.storage.local.get('qunstatus', function(obj){
+		var qunstatus;
+		if(!obj.qunstatus){
+			qunstatus = new Object;
+		}
+		else{
+			qunstatus = obj.qunstatus;
+		}
+		if(!qunstatus[HTML5QQ.qq]){
+			qunstatus[HTML5QQ.qq] = new Array;
+		}
+		for(var i=0; i<qunstatus[HTML5QQ.qq].length; i++){
+			if(qunstatus[HTML5QQ.qq][i] == qunnum){
+				qunstatus[HTML5QQ.qq].splice(i,1);
+				chrome.storage.local.set({'qunstatus': qunstatus});
+				document.getElementById('showState').style.display = 'none';
+				return;
+			}
+		}
+		qunstatus[HTML5QQ.qq].push(qunnum);
+		chrome.storage.local.set({'qunstatus': qunstatus});
+		document.getElementById('showState').style.display = 'block';
 	});
 }
 

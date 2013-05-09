@@ -21,6 +21,7 @@ var padding = new Array;
 var paddingSeek = new Array;
 var accounts = new Array;
 var outOfDate = false;
+var qunnums = new Array;
 
 window.onerror = function(err, u, l){
 	errors += errorsId+"] ::background:: <"+u+"|"+l+">"+err+"\n\n";
@@ -508,14 +509,22 @@ function saveMsg(msg, type){
 				break;
 			}
 		}
-		if(!fd){
-			pushNewMsg(msg.group_code, 'qun');
-			chrome.extension.sendMessage('shakeQunHead'+msg.group_code);
+		if(!fd  && !localStorage.qunsilent){
+			isQunSilent(msg.group_code, function(silent){
+				if(!silent){
+					pushNewMsg(msg.group_code, 'qun');
+					chrome.extension.sendMessage('shakeQunHead'+msg.group_code);
+				}
+			});
 		}
 		if(!qunInfo[msg.group_code]){
 			if(!soundQun[msg.group_code]){
 				if(HTML5QQ.status != 'silent' && !localStorage.unsound && !localStorage.qunsilent){
-					document.getElementById('msgSound').play();
+					isQunSilent(msg.group_code, function(silent){
+						if(!silent){
+							document.getElementById('msgSound').play();
+						}
+					});
 				}
 				soundQun[msg.group_code] = true;
 			}
@@ -561,7 +570,11 @@ function saveMsg(msg, type){
 		else{
 			if(!soundQun[msg.group_code]){
 				if(HTML5QQ.status != 'silent' && !localStorage.unsound && !localStorage.qunsilent){
-					document.getElementById('msgSound').play();
+					isQunSilent(msg.group_code, function(silent){
+						if(!silent){
+							document.getElementById('msgSound').play();
+						}
+					});
 				}
 				soundQun[msg.group_code] = true;
 			}
@@ -804,4 +817,48 @@ function versionMention(){
 			path: 'images/logooffout.png'
 			});
 	}
+}
+
+function isQunSilent(code, callback){
+	if(qunnums[code]){
+		getQunStatus(qunnums[code], function(silent){
+			callback(silent);
+		});
+		return;
+	}
+	var t = new Date;
+	var now = t.getTime();
+	var url = 'http://s.web2.qq.com/api/get_friend_uin2?tuin='+code+'&verifysession=&type=4&code=&vfwebqq='+HTML5QQ.vfwebqq+'&t='+now;
+	HTML5QQ.httpRequest('GET', url, null, false, function(result){
+		result = JSON.parse(result);
+		if(result.result){
+			qunnums[code] = result.result.account;
+			getQunStatus(qunnums[code], function(silent){
+				callback(silent);
+			});
+		}
+	});
+}
+
+function getQunStatus(qunnum, callback){
+	chrome.storage.local.get('qunstatus', function(obj){
+		var qunstatus;
+		if(!obj.qunstatus){
+			qunstatus = new Object;
+		}
+		else{
+			qunstatus = obj.qunstatus;
+		}
+		if(!qunstatus[HTML5QQ.qq]){
+			qunstatus[HTML5QQ.qq] = new Array;
+		}
+		for(var i=0; i<qunstatus[HTML5QQ.qq].length; i++){
+			if(qunstatus[HTML5QQ.qq][i] == qunnum){
+				callback(true);
+				return;
+			}
+		}
+		callback(false);
+		return;
+	});
 }
