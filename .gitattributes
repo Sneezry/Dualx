@@ -20,3 +20,9 @@
 *.PDF	 diff=astextplain
 *.rtf	 diff=astextplain
 *.RTF	 diff=astextplain
+
+# Texts
+*.txt text eol=crlf
+*.css text eol=crlf
+*.js text eol=crlf
+*.md text eol=crlf
