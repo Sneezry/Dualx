@@ -14,6 +14,7 @@ var shakable = true;
 var preSender = new Array;
 var preSenderPeeker = new Array;
 var faceTransferTable = [14, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 0, 50, 51, 96, 53, 54, 73, 74, 75, 76, 77, 78, 55, 56, 57, 58, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 32, 113, 114, 115, 63, 64, 59, 33, 34, 116, 36, 37, 38, 91, 92, 93, 29, 117, 72, 45, 42, 39, 62, 46, 47, 71, 95, 118, 119, 120, 121, 122, 123, 124, 27, 21, 23, 25, 26, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 52, 24, 22, 20, 60, 61, 89, 90, 31, 94, 65, 35, 66, 67, 68, 69, 70, 15, 16, 17, 18, 19, 28, 30, 40, 41, 43, 44, 48, 49];
+var newnotice = false;
 
 window.onerror = function(err, u, l){
 	chrome.extension.sendMessage('error::qun:: <'+l+'> '+err);
@@ -333,6 +334,7 @@ function recieveMsg(msg){
 	var now = today.getTime();
 	
 	if(msg.from_uin == qunInfo.ginfo.gid){
+		newnotice = true;
 		updateTitle();
 		clearTimeout(preSenderPeeker);
 		preSenderPeeker = setTimeout(function(){preSender = null},10000);
@@ -762,9 +764,10 @@ function sendAllFaces(){
 function updateTitle(){
 	chrome.windows.getCurrent(function(window){
 		if(window.focused){
+			newnotice = false;
 			document.title = qunInfo.ginfo.name;
 		}
-		else{
+		else if(newnotice){
 			document.title = '有新消息 - ' + qunInfo.ginfo.name;
 		}
 	});
