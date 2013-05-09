@@ -270,17 +270,6 @@ function sendMsg(){
 
 document.getElementById('sendMsgBtn').onclick = sendMsg;
 
-chrome.webRequest.onBeforeSendHeaders.addListener(function(details){
-	for(var i = 0; i<details.requestHeaders.length; i++){
-		if (details.requestHeaders[i].name == "Referer" || details.requestHeaders[i].name == "Origin") {  
-			details.requestHeaders.splice(i, 1);
-		}
-	}
-	details.requestHeaders.push({name: "Referer", value: "http://web.qq.com/"});
-	details.requestHeaders.push({name: "Origin", value: "http://web.qq.com"});
-	return {requestHeaders: details.requestHeaders};
-},{urls: ["http://up.web2.qq.com/*", "http://web.qq.com/*"]},["requestHeaders", "blocking"]);
-
 var uin = location.search.substr(1);
 var friendLongnick = '';
 var HTML5QQ;
