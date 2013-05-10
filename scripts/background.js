@@ -789,7 +789,7 @@ function chkVersion(){
 				if(selfVersion.substr('.')[0] < manifest.version.substr('.')[0] || manifest.version.substr('.')[1] - selfVersion.substr('.')[1] >= 2){
 					versionMention();
 				}
-				else{
+				else if(manifest.version.substr('.')[1] > selfVersion.substr('.')[1]){
 					getRequest('https://raw.github.com/sneezry/Dualx/master/VERSION_MENTION', function(mention){
 						if(mention == 'YES'){
 							versionMention();

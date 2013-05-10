@@ -1,6 +1,6 @@
 ﻿{
 	"name": "Dualx(Beta)",
-	"version": "3.39",
+	"version": "3.40",
 	"manifest_version": 2,
 	"description": "Chrome OS QQ客户端",
 	"minimum_chrome_version": "25.0.1364.97",
