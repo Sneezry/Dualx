@@ -102,6 +102,8 @@ window.onload = function(){
 	}
 })())
 
+document.getElementById('inputBox').focus();
+
 chrome.extension.onMessage.addListener(function(request, sender) {
 	if(typeof(request) == 'object'){
 		switch(request.retcode){

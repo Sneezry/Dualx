@@ -131,6 +131,8 @@ window.onload = function(){
 	}
 })())
 
+document.getElementById('inputBox').focus();
+
 function changeStatus(value){
 	if(uin == value.uin){
 		if(value.client_type==21){
