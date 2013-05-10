@@ -667,7 +667,7 @@ function decodeMsg(msg){
 	message = '';
 	for(var i = 0; i < msg.length; i++){
 		if(typeof(msg[i]) == 'string'){
-			message += msg[i].replace(/\n/g, ' ');
+			message += msg[i].replace(/\n/g, ' ').replace(/\r/g, ' ');
 		}
 		else if(typeof(msg[i]) == 'object'){
 			switch(msg[i][0]){

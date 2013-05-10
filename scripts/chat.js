@@ -290,7 +290,7 @@ function formatMsg(msg){
 				result += sendAllFaces();
 				continue;
 			}
-			result += '\\"'+encodeURIComponent(msg[i].nodeValue.replace(/\\/g, '\\\\\\\\'))+'\\",';
+			result += '\\"'+msg[i].nodeValue.replace(/\\/g, '\\\\\\\\')+'\\",';
 		}
 		else if(msg[i].nodeName == 'IMG'){
 			if(msg[i].getAttribute('imgtype') == 'offpic'){
@@ -301,7 +301,7 @@ function formatMsg(msg){
 			}
 		}
 		else{
-			if(msg[i].nodeName == 'DIV'){
+			if(msg[i].nodeName == 'DIV' && i){
 				result += '\\"\\\\n\\",';
 			}
 			result += formatMsg(msg[i]);
@@ -319,7 +319,7 @@ function decodeMsg(msg, fuin){
 	msgBody.style.marginLeft = '10px';
 	for(var i = 0; i < msg.length; i++){
 		if(typeof(msg[i]) == 'string'){
-			message += decodeURIComponent(msg[i]).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\\\\\\\\/g, '\\').replace(/\n/g, '<br />');
+			message += msg[i].replace(/&/g, '&amp;').replace(/\n/g, '<br />').replace(/\r/g, '<br />');
 		}
 		else if(typeof(msg[i]) == 'object'){
 			switch(msg[i][0]){
@@ -400,6 +400,7 @@ function sendMsg(){
 	var url = 'http://d.web2.qq.com/channel/send_buddy_msg2';
 	var r = '{"to":'+uin+',"face":0,"content":"['+msg+'[\\"font\\",{\\"name\\":\\"'+(localStorage.fontFamily?localStorage.fontFamily:'宋体')+'\\",\\"size\\":\\"'+(localStorage.fontSize?localStorage.fontSize:16)+'\\",\\"style\\":['+fontStyle[0]+','+fontStyle[1]+','+fontStyle[2]+'],\\"color\\":\\"'+localStorage.fontColor+'\\"}]]","msg_id":'+msg_id+',"clientid":"'+HTML5QQ.clientid+'","psessionid":"'+HTML5QQ.psessionid+'"}';
 	recieveMsg(JSON.parse(r));
+	r = encodeURIComponent(r);
 	httpRequest('POST', url, 'r='+r+'&clientid='+HTML5QQ.clientid+'&psessionid='+HTML5QQ.psessionid, true, function(result){
 		
 	});

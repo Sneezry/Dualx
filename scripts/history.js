@@ -73,7 +73,7 @@ function decodeMsg(msg, fuin){
 	msgBody.style.marginLeft = '15px';
 	for(var i = 0; i < msg.length; i++){
 		if(typeof(msg[i]) == 'string'){
-			message += decodeURIComponent(msg[i]).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\\\\\\\\/g, '\\').replace(/\n/g, '<br />');
+			message += msg[i].replace(/&/g, '&amp;').replace(/\n/g, '<br />').replace(/\r/g, '<br />');
 		}
 		else if(msg[i] && typeof(msg[i]) == 'object'){
 			switch(msg[i][0]){
