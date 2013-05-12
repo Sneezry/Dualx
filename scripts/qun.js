@@ -167,29 +167,33 @@ function formatMsg(msg){
 	if(!msg){
 		return;
 	}
-	var result = '';
+	var result = [];
 	for(var i = 0; i < msg.length; i++){
 		if(msg[i].nodeType == 3){
 			if(msg[i].nodeValue == '==allfaces=='){
-				result += sendAllFaces();
+				result = result.concat(sendAllFaces());
 				continue;
 			}
 			//result += '\\"'+msg[i].nodeValue+'\\",';
-			result += '\\"'+msg[i].nodeValue.replace(/\\/g, '\\\\\\\\')+'\\",';
+			result.push(msg[i].nodeValue.replace(/\\/g, '\\\\\\\\'));
 		}
 		else if(msg[i].nodeName == 'IMG'){
 			if(msg[i].getAttribute('imgtype') == 'offpic'){
-				result += '[\\"cface\\",\\"group\\",\\"'+msg[i].getAttribute('mark')+'\\"],';
+				result.push([
+					'cface',
+					'group',
+					msg[i].getAttribute('mark')
+				]);
 			}
 			else{
-				result += '[\\"face\\",'+msg[i].getAttribute('face')+'],';
+				result.push(['face', parseInt(msg[i].getAttribute('face'))]);
 			}
 		}
 		else{
 			if(msg[i].nodeName == 'DIV' && i){
-				result += '\\"\\\\n\\",';
+				result.push('\n');
 			}
-			result += formatMsg(msg[i]);
+			result = result.concat(formatMsg(msg[i]));
 		}
 	}
 	return result;
@@ -273,9 +277,26 @@ function sendMsg(){
 	var msg = formatMsg( document.getElementById('inputBox') );
 	document.getElementById('inputBox').innerHTML = '';
 	var url = 'http://d.web2.qq.com/channel/send_qun_msg2';
-	var r = '{"group_uin":'+qunInfo.ginfo.gid+',"key":"'+gface_key+'","sig":"'+gface_sig+'","content":"['+msg+'[\\"font\\",{\\"name\\":\\"'+(localStorage.fontFamily?localStorage.fontFamily:'宋体')+'\\",\\"size\\":\\"'+(localStorage.fontSize?localStorage.fontSize:16)+'\\",\\"style\\":['+fontStyle[0]+','+fontStyle[1]+','+fontStyle[2]+'],\\"color\\":\\"'+localStorage.fontColor+'\\"}]]","msg_id":'+msg_id+',"clientid":"'+HTML5QQ.clientid+'","psessionid":"'+HTML5QQ.psessionid+'"}';
-	recieveMsg(JSON.parse(r));
-	r = encodeURIComponent(r);
+	var r = {
+		'group_uin': qunInfo.ginfo.gid,
+		'key': gface_key,
+		'sig': gface_sig,
+		'content': JSON.stringify(
+			msg.concat([
+				//msg will be added here
+				['font', {
+					'name': localStorage.fontFamily?localStorage.fontFamily:'宋体',
+					'size': localStorage.fontSize?localStorage.fontSize:16,
+					'style': [fontStyle[0], fontStyle[1], fontStyle[2]],
+					'color': localStorage.fontColor
+				}]
+			])),
+		'msg_id': msg_id,
+		'clientid': HTML5QQ.clientid,
+		'psessionid': HTML5QQ.psessionid
+	};
+	recieveMsg(r);
+	r = encodeURIComponent(JSON.stringify(r));
 	httpRequest('POST', url, 'r='+r+'&clientid='+HTML5QQ.clientid+'&psessionid='+HTML5QQ.psessionid, true, function(result){
 		
 	});
@@ -756,10 +777,10 @@ function insertImg(imgtype, imgvalue){
 }
 
 function sendAllFaces(){
-	var msg = '';
+	var msg = [];
 	for(var i = 0; i < 134; i++){
 		//msg += '\\"'+i+']\\",';
-		msg += '[\\"face\\", '+i+'],';
+		msg.push(['face', i]);
 		//msg += '\\"\\\\n\\",';
 	}
 	return msg;
