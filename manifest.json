@@ -33,6 +33,7 @@
 		"http://*/*",
 		"https://*/*"
 	],
+	"plugins": [{"path": "plugins/npimapplugin.so"}],
 	"web_accessible_resources": [
 		"images/logo.png"
 	]
