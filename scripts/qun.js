@@ -199,7 +199,7 @@ function formatMsg(msg){
 	return result;
 }
 
-function decodeMsg(msg, fuin){
+function decodeMsg(msg, fuin, group_code){
 	if(typeof(msg) == 'string'){
 		msg = JSON.parse(msg);
 	}
@@ -223,7 +223,7 @@ function decodeMsg(msg, fuin){
 					else{
 						var t = new Date;
 						var now = t.getTime();
-						message += '<img lowsrc="images/img_loading.gif" src="http://web.qq.com/cgi-bin/get_group_pic?type=0&gid='+qunInfo.ginfo.gid+'&uin='+fuin+'&rip='+(msg[i][1].rip?msg[i][1].rip:msg[i][1].server.split(':')[0])+'&rport='+(msg[i][1].rport?msg[i][1].rport:msg[i][1].server.split(':')[1])+'&fid='+(msg[i][1].fid?msg[i][1].fid:msg[i][1].file_id)+'&pic='+(msg[i][1].pic?msg[i][1].pic:msg[i][1].name)+'&vfwebqq='+HTML5QQ.vfwebqq+'&t='+now+'" />';
+						message += '<img lowsrc="images/img_loading.gif" src="http://web.qq.com/cgi-bin/get_group_pic?type=0&gid='+group_code+'&uin='+fuin+'&rip='+(msg[i][1].rip?msg[i][1].rip:msg[i][1].server.split(':')[0])+'&rport='+(msg[i][1].rport?msg[i][1].rport:msg[i][1].server.split(':')[1])+'&fid='+(msg[i][1].fid?msg[i][1].fid:msg[i][1].file_id)+'&pic='+(msg[i][1].pic?msg[i][1].pic:msg[i][1].name)+'&vfwebqq='+HTML5QQ.vfwebqq+'&t='+now+'" />';
 					}
 					break;
 				}
@@ -369,7 +369,7 @@ function recieveMsg(msg){
 			document.getElementById('chatBox').appendChild(el);
 		}
 		var el = document.createElement('div');
-		document.getElementById('chatBox').appendChild(decodeMsg(msg.content, msg.send_uin));
+		document.getElementById('chatBox').appendChild(decodeMsg(msg.content, msg.send_uin, msg.group_code));
 		scrollBottom();
 	}
 	else if(!msg.from_uin){
@@ -402,7 +402,7 @@ function recieveMsg(msg){
 			document.getElementById('chatBox').appendChild(el);
 		}
 		var el = document.createElement('div');
-		document.getElementById('chatBox').appendChild(decodeMsg(msg.content, HTML5QQ.qq));
+		document.getElementById('chatBox').appendChild(decodeMsg(msg.content, HTML5QQ.qq, msg.group_code));
 		scrollBottom();
 	}
 }
