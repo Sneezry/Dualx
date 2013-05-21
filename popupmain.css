@@ -67,6 +67,7 @@ body{
 	border:none!important;
 	color:gray!important;
 	clear: none!important;
+	max-width: 190px;
 }
 
 #userInfo {
