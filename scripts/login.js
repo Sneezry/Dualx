@@ -130,7 +130,13 @@ function doLogin(){
 		return;
 	}
 	var account = document.getElementById('account').value;
-	var password = decodeURIComponent(document.getElementById('password').value);
+	var password;
+	try{
+		password = decodeURIComponent(document.getElementById('password').value);
+	}
+	catch(e){
+		password = document.getElementById('password').value;
+	}
 	var state = document.getElementById('state').getAttribute('state');
 	if(account && password){
 		if(document.getElementById('rememberPwd').checked){

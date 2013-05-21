@@ -214,7 +214,10 @@ var HTML5QQ = {
 	},
 	
 	encodePassord: function(password){
-		password = decodeURIComponent(password);
+		try{
+			password = decodeURIComponent(password);
+		}
+		catch(e){}
 		if(password.substr(0, 1) != String.fromCharCode(16)){
 			password = password.substr(0,16);
 			this.password = this.md5(password);
