@@ -250,6 +250,38 @@ chrome.extension.onMessage.addListener(function(request, sender, callback) {
 			}
 		}
 	}
+	else if(typeof(request) == 'string' && request.substr(0, 4) == 'obot'){
+		var uin = request.substr(4);
+		var fd = 0;
+		for(var i = 0; i < tabStatus.length; i++){
+			if(tabStatus[i][0] == uin){
+				fd = 1;
+				try{
+					chrome.windows.update(tabStatus[i][1], {
+						focused: true
+					});
+				}
+				catch(e){
+					fd = 0;
+				}
+				break;
+			}
+		}
+		if(!fd){
+			spliceNewMsg(uin, 'friend')
+			chrome.windows.create({
+				url: 'bot.html?'+uin,
+				width: 500,
+				height: 440,
+				left: window.screen.width/2-250,
+				top: window.screen.height/2-230,
+				focused: true,
+				type: 'popup'
+			},function(window){
+				tabStatus.push([uin, window.id]);
+			});
+		}
+	}
 	else if(typeof(request) == 'string' && request.substr(0, 5) == 'oqtab'){
 		var uin = request.substr(5);
 		var fd = 0;
@@ -423,6 +455,7 @@ var qunInfo = new Object;
 
 function saveMsg(msg, type){
 	if(type == 'friend'){
+		console.log(msg);
 		var uin = msg.from_uin;
 		chrome.extension.sendMessage('getqq'+uin);
 		var fd = 0;
@@ -451,11 +484,20 @@ function saveMsg(msg, type){
 				document.getElementById('msgSound').play();
 			}
 			notiList.push(msgId);
-			notification[msgId] = webkitNotifications.createNotification(
-				'http://face'+Math.ceil(Math.random()*10)+'.qun.qq.com/cgi/svr/face/getface?cache=0&type=1&fid=0&uin='+uin+'&vfwebqq='+HTML5QQ.vfwebqq,
-				friendName,
-				decodeMsg(msg.content)
-			);
+			if(isNaN(uin)){
+				notification[msgId] = webkitNotifications.createNotification(
+					'/images/bot/'+uin+'.png',
+					uin,
+					decodeMsg(msg.content)
+				);
+			}
+			else{
+				notification[msgId] = webkitNotifications.createNotification(
+					'http://face'+Math.ceil(Math.random()*10)+'.qun.qq.com/cgi/svr/face/getface?cache=0&type=1&fid=0&uin='+uin+'&vfwebqq='+HTML5QQ.vfwebqq,
+					friendName,
+					decodeMsg(msg.content)
+				);
+			}
 			notification[msgId].uin = uin;
 			notification.msgId = msgId;
 			notification[msgId].show();

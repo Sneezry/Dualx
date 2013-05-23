@@ -309,6 +309,19 @@ function searchFriends(kw){
 		document.getElementById('searchListBorder').style.display = 'none';
 		return;
 	}
+	if(kw == 'youdaodic'){
+		count++;
+		uin = 'youdaodic'
+		var el = document.createElement('div');
+		el.className = 'searchResult';
+		el.id = 'result_'+uin;
+		el.onclick = function(){
+			openBot(this.id.substr(7));
+		}
+		el.style.backgroundImage = 'url(/images/bot/'+uin+'.png)';
+		el.innerHTML = uin;
+		document.getElementById('searchListBorder').appendChild(el);
+	}
 	for(var uin in HTML5QQ.friendsInfo.friends){
 		var friend = HTML5QQ.friendsInfo.friends[uin];
 		if(count > 9){
@@ -345,6 +358,10 @@ function searchFriends(kw){
 
 function openChat(uin){
 	chrome.extension.sendMessage('otab'+uin);
+}
+
+function openBot(uin){
+	chrome.extension.sendMessage('obot'+uin);
 }
 
 function clearFlash(uin){
