@@ -15,3 +15,5 @@ document.getElementById('verifyCode').onkeydown = function(){
 		self.close();
 	}
 }
+
+document.getElementById('verifyCode').select();

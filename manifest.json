@@ -34,6 +34,7 @@
 		"https://*/*"
 	],
 	"web_accessible_resources": [
-		"images/logo.png"
+		"images/logo.png",
+		"images/bot/*"
 	]
 }

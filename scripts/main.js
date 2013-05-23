@@ -1,4 +1,5 @@
 var catTransfer = new Array;
+var botList = new Array('youdaodic', 'weather', 'xiami');
 
 window.onerror = function(err, u, l){
 	chrome.extension.sendMessage('error::main:: <'+l+'> '+err);
@@ -309,9 +310,9 @@ function searchFriends(kw){
 		document.getElementById('searchListBorder').style.display = 'none';
 		return;
 	}
-	if(kw == 'youdaodic'){
+	if(botList.indexOf(kw.toLowerCase()) != -1){
 		count++;
-		uin = 'youdaodic'
+		uin = kw;
 		var el = document.createElement('div');
 		el.className = 'searchResult';
 		el.id = 'result_'+uin;

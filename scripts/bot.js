@@ -595,6 +595,57 @@ function getBotResponse(request){
 			});
 			break;
 		}
+		case 'weather': {
+			httpRequest('GET', 'http://sou.qq.com/online/get_weather.php?city='+request, null, false, function(response){
+				response = JSON.parse(response);
+				var result = {
+					retcode: 0,
+					result:
+					[
+						{
+							poll_type: "message",
+							value:
+							{
+								from_uin: uin,
+								content:
+								[
+									response.future.name+'：'+response.future.wea_0+'，'+response.real.temperature+'℃'
+								]
+							}
+						}
+					]
+				};
+				chrome.extension.sendMessage(result);
+			});
+			break;
+		}
+		case 'xiami': {
+			httpRequest('GET', 'http://www.xiami.com/app/iphone/search/key/'+request, null, false, function(response){
+				response = JSON.parse(response);
+				var list = new Array();
+				for(var i=0; i<response.songs.length; i++){
+					list.push(response.songs[i].name+' - '+response.songs[i].artist_name+' - '+response.songs[i].location);
+					list.push('\n\n');
+				}
+				console.log(list);
+				var result = {
+					retcode: 0,
+					result:
+					[
+						{
+							poll_type: "message",
+							value:
+							{
+								from_uin: uin,
+								content: (response.songs.length?list:['未找到。'])
+							}
+						}
+					]
+				};
+				chrome.extension.sendMessage(result);
+			});
+			break;
+		}
 	}
 }
 
