@@ -74,8 +74,8 @@ chrome.extension.onMessage.addListener(function(request, sender, callback) {
 		if(!localStorage.autoShow && !localStorage.popupmain){
 			chrome.windows.create({
 				url: 'main.html',
-				width: 300,
-				height: 600,
+				width: 310,
+				height: 620,
 				left: window.screen.width-350,
 				top: 50,
 				focused: true,
@@ -100,7 +100,7 @@ chrome.extension.onMessage.addListener(function(request, sender, callback) {
 			chrome.windows.create({
 				url: 'login.html?'+(logining?'101':'100'),
 				width: 380,
-				height: 288,
+				height: 310,
 				left: window.screen.width/2-190,
 				top: window.screen.height/2-250,
 				focused: true,
@@ -145,8 +145,8 @@ chrome.extension.onMessage.addListener(function(request, sender, callback) {
 		else{
 			chrome.windows.create({
 				url: 'main.html',
-				width: 300,
-				height: 600,
+				width: 310,
+				height: 620,
 				left: window.screen.width-350,
 				top: 50,
 				focused: true,
