@@ -101,6 +101,7 @@ document.getElementById('rememberPwd').onclick = function(){
 document.getElementById('autoLogin').onclick = function(){
 	if(this.checked){
 		localStorage.autoLogin = 'true';
+		document.getElementById('rememberPwd').checked = 'checked';
 	}
 	else{
 		localStorage.autoLogin = '';
