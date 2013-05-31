@@ -52,6 +52,10 @@ if(localStorage['qunstyle']){
 	document.getElementById('qunstyle').value = localStorage['qunstyle'];
 }
 
+document.getElementById('showdebug').onclick = function(){
+	chrome.extension.sendMessage('showlog');
+}
+
 function save(){
 	if(this.checked){
 		localStorage[this.id] = 'true';
