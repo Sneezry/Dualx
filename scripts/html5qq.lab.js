@@ -206,8 +206,8 @@ var HTML5QQ = {
 	getVerifyCodeImg: function(verifyCode){
 		chrome.windows.create({
 			url: 'verify.html?'+this.qq+'&'+verifyCode,
-			width: 150,
-			height: 140,
+			width: 140+parseInt(localStorage.widthoffset),
+			height: 110+parseInt(localStorage.heightoffset),
 			focused: true,
 			type: 'popup'
 		});

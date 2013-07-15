@@ -28,6 +28,15 @@ window.onerror = function(err, u, l){
 	errorsId++;
 }
 
+chrome.windows.create({
+	url: 'checkwindowsize.html',
+	top: 0,
+	left: 0,
+	height: 150,
+	width: 150,
+	type: 'popup'
+});
+
 if(!localStorage.logout && localStorage.autoLogin && localStorage.account && localStorage.password){
 	localStorage.autoShow = 'true';
 	chrome.extension.sendMessage('login;'+encodeURIComponent(localStorage.account)+';'+encodeURIComponent(localStorage.password.substr(0,16))+';'+encodeURIComponent(localStorage.state));
@@ -43,7 +52,7 @@ chrome.browserAction.setIcon({
 	path: 'images/logooff.png'
 });
 
-chkVersion();
+//chkVersion();
 
 chrome.browserAction.setBadgeText({text: ''});
 
@@ -74,8 +83,8 @@ chrome.extension.onMessage.addListener(function(request, sender, callback) {
 		if(!localStorage.autoShow && !localStorage.popupmain){
 			chrome.windows.create({
 				url: 'main.html',
-				width: 315,
-				height: 620,
+				width: 300+parseInt(localStorage.widthoffset),
+				height: 600+parseInt(localStorage.heightoffset),
 				left: window.screen.width-350,
 				top: 50,
 				focused: true,
@@ -99,8 +108,8 @@ chrome.extension.onMessage.addListener(function(request, sender, callback) {
 		else{
 			chrome.windows.create({
 				url: 'login.html?'+(logining?'101':'100'),
-				width: 380,
-				height: 310,
+				width: 360+parseInt(localStorage.widthoffset),
+				height: 290+parseInt(localStorage.heightoffset),
 				left: window.screen.width/2-190,
 				top: window.screen.height/2-250,
 				focused: true,
@@ -145,8 +154,8 @@ chrome.extension.onMessage.addListener(function(request, sender, callback) {
 		else{
 			chrome.windows.create({
 				url: 'main.html',
-				width: 315,
-				height: 620,
+				width: 300+parseInt(localStorage.widthoffset),
+				height: 600+parseInt(localStorage.heightoffset),
 				left: window.screen.width-350,
 				top: 50,
 				focused: true,
@@ -209,8 +218,8 @@ chrome.extension.onMessage.addListener(function(request, sender, callback) {
 			spliceNewMsg(uin, 'friend')
 			chrome.windows.create({
 				url: 'chat.html?'+uin,
-				width: 500,
-				height: 440,
+				width: 500+parseInt(localStorage.widthoffset),
+				height: 420+parseInt(localStorage.heightoffset),
 				left: window.screen.width/2-250,
 				top: window.screen.height/2-230,
 				focused: true,
@@ -271,8 +280,8 @@ chrome.extension.onMessage.addListener(function(request, sender, callback) {
 			spliceNewMsg(uin, 'friend')
 			chrome.windows.create({
 				url: 'bot.html?'+uin,
-				width: 500,
-				height: 440,
+				width: 500+parseInt(localStorage.widthoffset),
+				height: 420+parseInt(localStorage.heightoffset),
 				left: window.screen.width/2-250,
 				top: window.screen.height/2-230,
 				focused: true,
@@ -304,8 +313,8 @@ chrome.extension.onMessage.addListener(function(request, sender, callback) {
 			spliceNewMsg(uin, 'qun');
 			chrome.windows.create({
 				url: 'qun.html?'+uin,
-				width: 500,
-				height: 460,
+				width: 500+parseInt(localStorage.widthoffset),
+				height: 420+parseInt(localStorage.heightoffset),
 				left: window.screen.width/2-250,
 				top: window.screen.height/2-230,
 				focused: true,
@@ -398,7 +407,7 @@ chrome.extension.onMessage.addListener(function(request, sender, callback) {
 										windowShakeCount = 0;
 										clearInterval(windowShake);
 										windowShake = setInterval(function(){
-											shakeWindow(windowShakeCount, window.id, window.left, window.top);
+											shakeWindow(windowShakeCount, window);
 											windowShakeCount += 60;
 										},30);
 									});
@@ -409,8 +418,8 @@ chrome.extension.onMessage.addListener(function(request, sender, callback) {
 								spliceNewMsg(uin, 'friend')
 								chrome.windows.create({
 									url: 'chat.html?'+uin,
-									width: 500,
-									height: 440,
+									width: 500+parseInt(localStorage.widthoffset),
+									height: 420+parseInt(localStorage.heightoffset),
 									left: window.screen.width/2-250,
 									top: window.screen.height/2-230,
 									focused: true,
@@ -420,7 +429,7 @@ chrome.extension.onMessage.addListener(function(request, sender, callback) {
 									windowShakeCount = 0;
 									clearInterval(windowShake);
 									windowShake = setInterval(function(){
-										shakeWindow(windowShakeCount, window.id, window.left, window.top);
+										shakeWindow(windowShakeCount, window);
 										windowShakeCount += 60;
 									},30);
 								});
@@ -437,13 +446,15 @@ chrome.extension.onMessage.addListener(function(request, sender, callback) {
 	}
 });
 
-function shakeWindow(o, wid, wleft, wtop){
+function shakeWindow(o, w){
 	var rad = Math.PI/180*(o%360);
 	var xp = 3*Math.cos(-rad);
 	var yp = 3*Math.sin(-rad);
-	chrome.windows.update(wid, {
-		left: Math.floor(wleft+xp),
-		top: Math.floor(wtop+yp),
+	chrome.windows.update(w.id, {
+		width: w.width,
+		height: w.height,
+		left: Math.floor(w.left+xp),
+		top: Math.floor(w.top+yp),
 		focused: true
 	});
 	if(windowShakeCount >= 360*5){

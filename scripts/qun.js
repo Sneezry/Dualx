@@ -94,7 +94,8 @@ window.onload = function(){
 }
 
 ((function(){
-	if(localStorage.qunstyle && !localStorage.popupmain){
+	//if(localStorage.qunstyle && !localStorage.popupmain){
+	if(localStorage.qunstyle){
 		var el = document.createElement('style');
 		el.type = 'text/css';
 		el.innerHTML = localStorage.qunstyle;
