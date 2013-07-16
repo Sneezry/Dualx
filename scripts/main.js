@@ -152,6 +152,18 @@ document.getElementById('logout').onclick = function(){
 	chrome.extension.sendMessage('logout');
 }
 
+document.getElementById('backup').onclick = function(){
+	chrome.windows.create({
+		url: 'backup.html',
+		width: 380,
+		height:288,
+		left: window.screen.width/2-190,
+		top: window.screen.height/2-250,
+		focused: true,
+		type: 'popup'
+	});
+}
+
 function sendRequest(request, callback){
 	chrome.extension.sendMessage(request, callback);
 }
