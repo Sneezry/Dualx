@@ -376,26 +376,19 @@ var HTML5QQ = {
 	hash: function(uin, ptwebqq) {
 		var b = uin;
 		var i = ptwebqq;
-		for (var a = i + "password error",
-			s = "",
-			j = [];;) {
-			if (s.length <= a.length) {
-				if (s += b, s.length == a.length) 
-					break;
-			} else {
-				s = s.slice(0, a.length);
-				break;
-			}
-		}
-		for (var d = 0; d < s.length; d++) 
-			j[d] = s.charCodeAt(d) ^ a.charCodeAt(d);
-		a = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F"];
-		s = "";
-		for (d = 0; d < j.length; d++) {
-			s += a[j[d] >> 4 & 15];
-			s += a[j[d] & 15];
-		}
-		return s;
+		for (var a = [], s = 0; s < i.length; s++) a[s % 4] ^= i.charCodeAt(s);
+        var j = ["EC", "OK"],
+            d = [];
+        d[0] = b >> 24 & 255 ^ j[0].charCodeAt(0);
+        d[1] = b >> 16 & 255 ^ j[0].charCodeAt(1);
+        d[2] = b >> 8 & 255 ^ j[1].charCodeAt(0);
+        d[3] = b & 255 ^ j[1].charCodeAt(1);
+        j = [];
+        for (s = 0; s < 8; s++) j[s] = s % 2 == 0 ? a[s >> 1] : d[s >> 1];
+        a = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F"];
+        d = "";
+        for (s = 0; s < j.length; s++) d += a[j[s] >> 4 & 15], d += a[j[s] & 15];
+        return d;
 	},
 
 	getFriendsInfo: function(){
