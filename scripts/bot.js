@@ -76,7 +76,8 @@ window.onload = function(){
 }
 
 ((function(){
-	if(localStorage.chatstyle && !localStorage.popupmain){
+	//if(localStorage.chatstyle && !localStorage.popupmain){
+	if(localStorage.chatstyle){
 		var el = document.createElement('style');
 		el.type = 'text/css';
 		el.innerHTML = localStorage.chatstyle;

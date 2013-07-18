@@ -1,5 +1,3 @@
-##WebQQ更新了协议，我们已经发现多数用户无法正常登录，并且我们正在工作于此，请不必继续反映此问题。2013/7/2 17:07##
-
 ##Dualx是一款基于[Chrome](https://chrome.google.com/)的QQ客户端
 
 您可以在使用基于版本为 **25.0.1364.97** 及以上的chromium内核的[Chrome浏览器](https://chrome.google.com/)、[Chrome OS操作系统](http://www.chromium.org/chromium-os)及[其他平台](http://www.howtogeek.com/108384/6-alternative-browsers-based-on-google-chrome/)中使用。

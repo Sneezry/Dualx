@@ -33,7 +33,8 @@ window.onload = function(){
 }
 
 ((function(){
-	if(localStorage.mainstyle && !localStorage.popupmain){
+	//if(localStorage.mainstyle && !localStorage.popupmain){
+	if(localStorage.mainstyle){
 		var el = document.createElement('style');
 		el.type = 'text/css';
 		el.innerHTML = localStorage.mainstyle;
