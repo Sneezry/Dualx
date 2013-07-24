@@ -133,11 +133,11 @@ chrome.extension.onMessage.addListener(function(request, sender, callback) {
 		callback(tabStatus);
 	}
 	else if(request == 'cancel'){
-		setTimeout(function(){location.reload()}, 500);
+		setTimeout(function(){HTML5QQ.logout();}, 500);
 	}
 	else if(request == 'logout'){
 		localStorage.logout = 'true';
-		setTimeout(function(){location.reload()}, 500);
+		setTimeout(function(){HTML5QQ.logout();}, 500);
 	}
 	else if(request == 'showmain'){
 		if(mainWindowId){

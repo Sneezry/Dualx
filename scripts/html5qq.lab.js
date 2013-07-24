@@ -398,8 +398,7 @@ var HTML5QQ = {
 	    d = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F"];
 	    s = "";
 	    for (j = 0; j < a.length; j++)
-	        s += d[a[j] >> 4 & 15],
-	    s += d[a[j] & 15];
+	        s += d[a[j] >> 4 & 15], s += d[a[j] & 15];
 	    return s
 	},
 
@@ -644,5 +643,12 @@ var HTML5QQ = {
 		var url = 'http://s.web2.qq.com/api/set_long_nick2';
 		var r = '{"nlk":"'+lnick+'","vfwebqq":"'+HTML5QQ.vfwebqq+'"}'
 		this.httpRequest('POST', url, 'r='+r, true);
+	},
+
+	logout: function(){
+		var url = 'http://d.web2.qq.com/channel/logout2?ids=&clientid='+this.clientid+'&psessionid='+this.psessionid+'&t='+this.now();
+		this.httpRequest('GET', url, null, false, function(r){
+			location.reload();
+		});
 	}
 }
