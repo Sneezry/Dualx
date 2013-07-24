@@ -376,19 +376,31 @@ var HTML5QQ = {
 	hash: function(uin, ptwebqq) {
 		var b = uin;
 		var i = ptwebqq;
-		for (var a = [], s = 0; s < i.length; s++) a[s % 4] ^= i.charCodeAt(s);
-        var j = ["EC", "OK"],
-            d = [];
-        d[0] = b >> 24 & 255 ^ j[0].charCodeAt(0);
-        d[1] = b >> 16 & 255 ^ j[0].charCodeAt(1);
-        d[2] = b >> 8 & 255 ^ j[1].charCodeAt(0);
-        d[3] = b & 255 ^ j[1].charCodeAt(1);
-        j = [];
-        for (s = 0; s < 8; s++) j[s] = s % 2 == 0 ? a[s >> 1] : d[s >> 1];
-        a = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F"];
-        d = "";
-        for (s = 0; s < j.length; s++) d += a[j[s] >> 4 & 15], d += a[j[s] & 15];
-        return d;
+        for (var a = [], s = 0; s < b.length; s++)
+	        a[s] = b.charAt(s) - 0;
+	    for (var j = 0, d = -1, s = 0; s < a.length; s++) {
+	        j += a[s];
+	        j %= i.length;
+	        var c = 0;
+	        if (j + 4 > i.length)
+	            for (var l = 4 + j - i.length, x = 0; x < 4; x++)
+	                c |= x < l ? (i.charCodeAt(j + x) & 255) << (3 - x) * 8 : (i.charCodeAt(x - l) & 255) << (3 - x) * 8;
+	        else
+	            for (x = 0; x < 4; x++)
+	                c |= (i.charCodeAt(j + x) & 255) << (3 - x) * 8;
+	        d ^= c
+	    }
+	    a = [];
+	    a[0] = d >> 24 & 255;
+	    a[1] = d >> 16 & 255;
+	    a[2] = d >> 8 & 255;
+	    a[3] = d & 255;
+	    d = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F"];
+	    s = "";
+	    for (j = 0; j < a.length; j++)
+	        s += d[a[j] >> 4 & 15],
+	    s += d[a[j] & 15];
+	    return s
 	},
 
 	getFriendsInfo: function(){
