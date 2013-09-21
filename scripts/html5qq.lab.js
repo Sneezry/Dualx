@@ -374,37 +374,68 @@ var HTML5QQ = {
 	},
 	
 	hash: function(uin, ptwebqq) {
-		var b = uin;
-		var i = ptwebqq;
-        for (var a = [], s = 0; s < b.length; s++)
-	        a[s] = b.charAt(s) - 0;
-	    for (var j = 0, d = -1, s = 0; s < a.length; s++) {
-	        j += a[s];
-	        j %= i.length;
-	        var c = 0;
-	        if (j + 4 > i.length)
-	            for (var l = 4 + j - i.length, x = 0; x < 4; x++)
-	                c |= x < l ? (i.charCodeAt(j + x) & 255) << (3 - x) * 8 : (i.charCodeAt(x - l) & 255) << (3 - x) * 8;
-	        else
-	            for (x = 0; x < 4; x++)
-	                c |= (i.charCodeAt(j + x) & 255) << (3 - x) * 8;
-	        d ^= c
-	    }
-	    a = [];
-	    a[0] = d >> 24 & 255;
-	    a[1] = d >> 16 & 255;
-	    a[2] = d >> 8 & 255;
-	    a[3] = d & 255;
-	    d = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F"];
-	    s = "";
-	    for (j = 0; j < a.length; j++)
-	        s += d[a[j] >> 4 & 15], s += d[a[j] & 15];
-	    return s
-	},
+		t = uin;
+		E = ptwebqq;
+        t += "";
+        D = function(t, E) {
+            this.s = t || 0;
+            this.e = E || 0
+        };
+        var I = [];
+        I[0] = t >> 24 & 255;
+        I[1] = t >> 16 & 255;
+        I[2] = t >> 8 & 255;
+        I[3] = t & 255;
+        for (var O = [], S = 0; S < E.length; ++S) O.push(E.charCodeAt(S));
+        S = [];
+        for (S.push(new D(0, O.length - 1)); S.length > 0;) {
+            var N = S.pop();
+            if (! (N.s >= N.e || N.s < 0 || N.e >= O.length)) if (N.s + 1 == N.e) {
+                if (O[N.s] > O[N.e]) {
+                    var U = O[N.s];
+                    O[N.s] = O[N.e];
+                    O[N.e] = U
+                }
+            } else {
+                U = N.s;
+                for (var T = N.e,
+                V = O[N.s]; N.s < N.e;) {
+                    for (; N.s < N.e && O[N.e] >= V;) {
+                        N.e--;
+                        I[0] = I[0] + 3 & 255
+                    }
+                    if (N.s < N.e) {
+                        O[N.s] = O[N.e];
+                        N.s++;
+                        I[1] = I[1] * 13 + 43 & 255
+                    }
+                    for (; N.s < N.e && O[N.s] <= V;) {
+                        N.s++;
+                        I[2] = I[2] - 3 & 255
+                    }
+                    if (N.s < N.e) {
+                        O[N.e] = O[N.s];
+                        N.e--;
+                        I[3] = (I[0] ^ I[1] ^ I[2] ^ I[3] + 1) & 255
+                    }
+                }
+                O[N.s] = V;
+                S.push(new D(U, N.s - 1));
+                S.push(new D(N.s + 1, T))
+            }
+        }
+        O = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F"];
+        S = "";
+        for (N = 0; N < I.length; N++) {
+            S += O[I[N] >> 4 & 15];
+            S += O[I[N] & 15]
+        }
+        return S
+    },
 
 	getFriendsInfo: function(){
 		var info = 'http://s.web2.qq.com/api/get_user_friends2';
-		var r = '{"h":"hello","hash":"'+this.hash(this.qq+'',this.ptwebqq)+'","vfwebqq":"'+this.vfwebqq+'"}';
+		var r = '{"hash":"'+this.hash(this.qq+'',this.ptwebqq)+'","vfwebqq":"'+this.vfwebqq+'"}';
 		this.httpRequest('POST', info, 'r='+r, true, function(result){
 			if(HTML5QQ.debug){
 		 		HTML5QQ.outputDebug("getFriendsInfo: result("+result+")");
