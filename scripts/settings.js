@@ -1,3 +1,9 @@
+/*********************************************************
+*  Copyright (c) 2013-2014 Donkil. All rights reserved.  *
+*                                                        *
+*           Publish under GPL License.                   *
+*********************************************************/
+
 window.onerror = function(err, u, l){
 	chrome.extension.sendMessage('error::settings:: <'+l+'> '+err);
 }
@@ -55,6 +61,8 @@ if(localStorage['qunstyle']){
 document.getElementById('showdebug').onclick = function(){
 	chrome.extension.sendMessage('showlog');
 }
+
+document.getElementById('updatewindowborder').onclick = updateWindowBorder;
 
 function save(){
 	if(this.checked){
@@ -134,4 +142,9 @@ function delHistory(qq){
 		location.reload();
 		return;
 	});
+}
+
+function updateWindowBorder(){
+	chrome.extension.sendMessage('updatewindowborder');
+	alert('窗口尺寸校验完成。');
 }

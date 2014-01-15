@@ -1,4 +1,10 @@
-﻿var leftFrameWidth;
+﻿/*********************************************************
+*  Copyright (c) 2013-2014 Donkil. All rights reserved.  *
+*                                                        *
+*           Publish under GPL License.                   *
+*********************************************************/
+
+var leftFrameWidth;
 var sending = false;
 var oTimer;
 var preloaded = 0;
@@ -455,8 +461,8 @@ sendRequest('hello', function(result){
 		document.getElementById('toolMsgRec').onclick = function(){
 			chrome.windows.create({
 				url: 'history.html?qun|'+uin+'|'+qunInfo.ginfo.gid,
-				width: 560,
-				height: 510,
+				width: 560+parseInt(localStorage.widthoffset),
+				height: 510+parseInt(localStorage.heightoffset),
 				focused: true,
 				type: 'popup'
 			});
@@ -587,8 +593,8 @@ document.getElementById('fontUnderline').onclick = function(){
 document.getElementById('fontColor').onclick = function(){
 	chrome.windows.create({
 		url: 'colorpanel.html',
-		width: 236,
-		height: 260,
+		width: 236+parseInt(localStorage.heightoffset),
+		height: 260+parseInt(localStorage.heightoffset),
 		focused: true,
 		type: 'popup'
 	});

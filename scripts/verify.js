@@ -1,3 +1,9 @@
+/*********************************************************
+*  Copyright (c) 2013-2014 Donkil. All rights reserved.  *
+*                                                        *
+*           Publish under GPL License.                   *
+*********************************************************/
+
 window.onerror = function(err){
 	chrome.extension.sendMessage('error::verify:: '+err);
 }

@@ -1,6 +1,4 @@
-Dualx不再保证及时跟进最新官方协议，但仍然接受pull request。腾讯频繁更改协议让我感觉很疲惫，同时心里压力也很大，我想用同样的精力可以为开源事业做出更有意义的贡献。如果Dualx在web store中消失，说明Dualx没有跟进协议，自Dualx发布起，我没有收到包括腾讯和Google在内的任何公司或组织发出的警告或请求，Dualx几次下架与任何其他个人和团体无关。2013.7.25
-
-
+A Donkil Project.
 
 ##Dualx是一款基于[Chrome](https://chrome.google.com/)的QQ客户端
 

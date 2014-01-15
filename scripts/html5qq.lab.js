@@ -1,4 +1,10 @@
-﻿var gAccount;
+﻿/*********************************************************
+*  Copyright (c) 2013-2014 Donkil. All rights reserved.  *
+*                                                        *
+*           Publish under GPL License.                   *
+*********************************************************/
+
+var gAccount;
 var gPassword;
 var gState;
 var msgIds = new Array;
@@ -12,10 +18,32 @@ chrome.webRequest.onBeforeSendHeaders.addListener(function(details){
 			details.requestHeaders.splice(i, 1);
 		}
 	}
-	details.requestHeaders.push({name: "Origin", value: "https://d.web2.qq.com"});
-	details.requestHeaders.push({name: "Referer", value: "https://d.web2.qq.com/proxy.html?v=20110412001&callback=1&id=3"});
+	details.requestHeaders.push({name: "Origin", value: "http://d.web2.qq.com"});
+	details.requestHeaders.push({name: "Referer", value: "http://d.web2.qq.com/proxy.html?v=20110412001&callback=1&id=1"});
 	return {requestHeaders: details.requestHeaders};
-},{urls: ["https://d.web2.qq.com/channel/*", "http://web.qq.com/cgi-bin/*", "http://s.web2.qq.com/api/*", "http://d.web2.qq.com/channel/*"]},["requestHeaders", "blocking"]);
+},{urls: ["http://s.web2.qq.com/api/*"]},["requestHeaders", "blocking"]);
+
+chrome.webRequest.onBeforeSendHeaders.addListener(function(details){
+	for(var i = 0; i<details.requestHeaders.length; i++){
+		if (details.requestHeaders[i].name == "Referer" || details.requestHeaders[i].name == "Origin") {  
+			details.requestHeaders.splice(i, 1);
+		}
+	}
+	details.requestHeaders.push({name: "Origin", value: "http://d.web2.qq.com"});
+	details.requestHeaders.push({name: "Referer", value: "http://d.web2.qq.com/proxy.html?v=20130916001&callback=1&id=2"});
+	return {requestHeaders: details.requestHeaders};
+},{urls: ["https://d.web2.qq.com/channel/*", "http://d.web2.qq.com/channel/*"]},["requestHeaders", "blocking"]);
+
+chrome.webRequest.onBeforeSendHeaders.addListener(function(details){
+	for(var i = 0; i<details.requestHeaders.length; i++){
+		if (details.requestHeaders[i].name == "Referer" || details.requestHeaders[i].name == "Origin") {  
+			details.requestHeaders.splice(i, 1);
+		}
+	}
+	details.requestHeaders.push({name: "Origin", value: "http://d.web2.qq.com"});
+	details.requestHeaders.push({name: "Referer", value: "http://d.web2.qq.com/proxy.html?v=20110412001&callback=1&id=3"});
+	return {requestHeaders: details.requestHeaders};
+},{urls: ["http://web.qq.com/cgi-bin/*"]},["requestHeaders", "blocking"]);
 
 chrome.webRequest.onBeforeSendHeaders.addListener(function(details){
 	for(var i = 0; i<details.requestHeaders.length; i++){
@@ -37,7 +65,7 @@ chrome.extension.onMessage.addListener(function(request, sender, callback) {
 		gAccount = decodeURIComponent(loginInfo[1]);
 		gPassword = decodeURIComponent(loginInfo[2]);
 		gState = decodeURIComponent(loginInfo[3]);
-		HTML5QQ.getVerifyCode(gAccount);
+		HTML5QQ.getsig(gAccount);
 	}
 	else if(typeof(request) == 'string' && request.substr(0,6) == 'verify'){
 		var verifyInfo = request.split(';');
@@ -90,6 +118,8 @@ var HTML5QQ = {
 	myPersonal: null,
 	
 	recentList: null,
+
+	sig: null,
 	
 	httpRequest: function(method, action, query, urlencoded, callback, timeout){
 		var url = "GET" == method ? (query ? action+"?"+query : action) : action;
@@ -170,7 +200,7 @@ var HTML5QQ = {
 		  this.outputDebug("getVerifyCode: qq("+qq+")");
 		}
 		this.qq = qq;
-		this.createJs("http://check.ptlogin2.qq.com/check?uin="+qq+"&appid=1003903&r="+Math.random(),function(code){
+		this.createJs("https://ssl.ptlogin2.qq.com/check?uin="+qq+"&appid=501004106&r="+Math.random(),function(code){
 			var query = code.split("('")[1].split("')")[0].split("','");
 			HTML5QQ.checkVerifyCode(query[0], query[1], query[2]);
 		});
@@ -261,6 +291,17 @@ var HTML5QQ = {
 		}
 		return arr;
 	},
+
+	getsig: function(gAccount){
+		var url = 'https://ui.ptlogin2.qq.com/cgi-bin/login?daid=164&target=self&style=16&mibao_css=m_webqq&appid=501004106&enable_qlogin=0&no_verifyimg=1&s_url=http%3A%2F%2Fw.qq.com%2Fproxy.html&f_url=loginerroralert&strong_login=1&login_state=10&t=20131024001&r='+Math.random();
+		this.httpRequest('GET', url, null, false, function(result){
+			HTML5QQ.sig = encodeURIComponent(result.split('g_login_sig=encodeURIComponent("')[1].split('");')[0]);
+			if(HTML5QQ.debug){
+		  		HTML5QQ.outputDebug("sig: "+HTML5QQ.sig);
+			}
+			HTML5QQ.getVerifyCode(gAccount);
+		});
+	},
 	
 	login: function(password, status){
 		if(!this.qq)return;
@@ -268,11 +309,15 @@ var HTML5QQ = {
 		  this.outputDebug("login: password(******)");
 		}
 		this.encodePassord(password);
-		this.createJs("https://ssl.ptlogin2.qq.com/login?u="+this.qq+"&p="+this.encodedPassword+"&verifycode="+this.verifyCode.toUpperCase()+"&webqq_type=10&remember_uin=1&login2qq=1&aid=1003903&u1=http%3A%2F%2Fweb.qq.com%2Floginproxy.html%3Flogin2qq%3D1%26webqq_type%3D40&h=1&ptredirect=0&ptlang=2052&from_ui=1&pttype=1&dumy=&fp=loginerroralert&action=5-27-43286&mibao_css=m_webqq&t=1&g=1", function(code){
+		this.createJs("https://ssl.ptlogin2.qq.com/login?u="+this.qq+"&p="+this.encodedPassword+"&verifycode="+this.verifyCode.toUpperCase()+"&webqq_type=10&remember_uin=1&login2qq=1&aid=501004106&u1=http%3A%2F%2Fw.qq.com%2Fproxy.html%3Flogin2qq%3D1%26webqq_type%3D10&h=1&ptredirect=0&ptlang=2052&daid=164&from_ui=1&pttype=1&dumy=&fp=loginerroralert&action=0-42-19466&mibao_css=m_webqq&t=1&g=1&js_type=0&js_ver=10063&login_sig="+this.sig, function(code){
             if(HTML5QQ.debug){
 		 		HTML5QQ.outputDebug("login: code("+code+")");
 			}
 			if(code.indexOf("登录成功") != -1){
+				var jmp = code.split(',')[2];
+				jmp = jmp.replace(/(^\s*)|(\s*$)/g, "");
+				jmp = jmp.substr(1,jmp.length-2);
+				HTML5QQ.httpRequest('GET', jmp, null, false);
 				HTML5QQ.getCookie("http://qq.com", "skey", function(cookie){
 					HTML5QQ.skey = cookie.value;
 					if(HTML5QQ.debug){
@@ -280,7 +325,7 @@ var HTML5QQ = {
 					}
 				});
 				HTML5QQ.getCookie("http://qq.com", "ptwebqq", function(cookie){
-					HTML5QQ.getPsessionid(cookie.value, status);
+					HTML5QQ.getVfwebqq(cookie.value, status);
 					if(HTML5QQ.debug){
 		 				HTML5QQ.outputDebug("login: ptwebqq("+HTML5QQ.ptwebqq+")");
 					}
@@ -297,15 +342,28 @@ var HTML5QQ = {
 			}
 		});
 	},
+
+	getVfwebqq: function(ptwebqq, status){
+		var url = 'http://s.web2.qq.com/api/getvfwebqq?ptwebqq='+ptwebqq+'&clientid='+this.clientid+'&psessionid=&t='+this.now();
+		this.httpRequest('GET', url, null, false, function(result){
+			result = JSON.parse(result);
+			result = result.result;
+			HTML5QQ.vfwebqq = result.vfwebqq;
+			if(HTML5QQ.debug){
+		 		HTML5QQ.outputDebug("getVfwebqq: vfwebqq("+HTML5QQ.vfwebqq+")");
+			}
+			HTML5QQ.getPsessionid(ptwebqq, status);
+		});
+	},
 	
 	getPsessionid: function(ptwebqq, status){
 		this.ptwebqq = ptwebqq;
 		
-		var r = '{"status":"'+status+'","ptwebqq":"'+this.ptwebqq+'","passwd_sig":"","clientid":"'+this.clientid+'","psessionid":null}';
+		var r = '{"ptwebqq":"'+this.ptwebqq+'","clientid":'+this.clientid+',"psessionid":"","status":"'+status+'"}';
 		if(HTML5QQ.debug){
 		 	HTML5QQ.outputDebug("getPsessionid: r("+r+")");
 		}
-		this.httpRequest('POST', 'https://d.web2.qq.com/channel/login2', 'r='+r+'&clientid='+this.clientid+'&psessionid=null', true, function(result){
+		this.httpRequest('POST', 'https://d.web2.qq.com/channel/login2', 'r='+r, true, function(result){
 			if(HTML5QQ.debug){
 		 		HTML5QQ.outputDebug("getPsessionid: result("+result+")");
 			}
@@ -374,7 +432,6 @@ var HTML5QQ = {
 	},
 	
 	hash: function(uin, ptwebqq) {
-<<<<<<< HEAD
 		x = uin;
         H = ptwebqq;
         x += "";
@@ -394,74 +451,11 @@ var HTML5QQ = {
 		    V += N[U[T] & 15]
 		}
 		return V;
-=======
-		t = uin;
-		E = ptwebqq;
-        t += "";
-        D = function(t, E) {
-            this.s = t || 0;
-            this.e = E || 0
-        };
-        var I = [];
-        I[0] = t >> 24 & 255;
-        I[1] = t >> 16 & 255;
-        I[2] = t >> 8 & 255;
-        I[3] = t & 255;
-        for (var O = [], S = 0; S < E.length; ++S) O.push(E.charCodeAt(S));
-        S = [];
-        for (S.push(new D(0, O.length - 1)); S.length > 0;) {
-            var N = S.pop();
-            if (! (N.s >= N.e || N.s < 0 || N.e >= O.length)) if (N.s + 1 == N.e) {
-                if (O[N.s] > O[N.e]) {
-                    var U = O[N.s];
-                    O[N.s] = O[N.e];
-                    O[N.e] = U
-                }
-            } else {
-                U = N.s;
-                for (var T = N.e,
-                V = O[N.s]; N.s < N.e;) {
-                    for (; N.s < N.e && O[N.e] >= V;) {
-                        N.e--;
-                        I[0] = I[0] + 3 & 255
-                    }
-                    if (N.s < N.e) {
-                        O[N.s] = O[N.e];
-                        N.s++;
-                        I[1] = I[1] * 13 + 43 & 255
-                    }
-                    for (; N.s < N.e && O[N.s] <= V;) {
-                        N.s++;
-                        I[2] = I[2] - 3 & 255
-                    }
-                    if (N.s < N.e) {
-                        O[N.e] = O[N.s];
-                        N.e--;
-                        I[3] = (I[0] ^ I[1] ^ I[2] ^ I[3] + 1) & 255
-                    }
-                }
-                O[N.s] = V;
-                S.push(new D(U, N.s - 1));
-                S.push(new D(N.s + 1, T))
-            }
-        }
-        O = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F"];
-        S = "";
-        for (N = 0; N < I.length; N++) {
-            S += O[I[N] >> 4 & 15];
-            S += O[I[N] & 15]
-        }
-        return S
->>>>>>> b9c8882810683ddacb86990ee363d7d6eb564116
     },
 
 	getFriendsInfo: function(){
 		var info = 'http://s.web2.qq.com/api/get_user_friends2';
-<<<<<<< HEAD
 		var r = '{"vfwebqq":"'+this.vfwebqq+'","hash":"'+this.hash(this.qq+'',this.ptwebqq)+'"}';
-=======
-		var r = '{"hash":"'+this.hash(this.qq+'',this.ptwebqq)+'","vfwebqq":"'+this.vfwebqq+'"}';
->>>>>>> b9c8882810683ddacb86990ee363d7d6eb564116
 		this.httpRequest('POST', info, 'r='+r, true, function(result){
 			if(HTML5QQ.debug){
 		 		HTML5QQ.outputDebug("getFriendsInfo: result("+result+")");

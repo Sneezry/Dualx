@@ -1,4 +1,10 @@
-﻿var HTML5QQ;
+﻿/*********************************************************
+*  Copyright (c) 2013-2014 Donkil. All rights reserved.  *
+*                                                        *
+*           Publish under GPL License.                   *
+*********************************************************/
+
+var HTML5QQ;
 var info = location.search.substr(1).split('|');
 var type = info[0];
 var uin = info[1];

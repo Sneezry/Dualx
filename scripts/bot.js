@@ -1,4 +1,10 @@
-﻿var leftFrameWidth;
+﻿/*********************************************************
+*  Copyright (c) 2013-2014 Donkil. All rights reserved.  *
+*                                                        *
+*           Publish under GPL License.                   *
+*********************************************************/
+
+var leftFrameWidth;
 var msg_id = getMsg();
 var savedRange;
 var preSender;

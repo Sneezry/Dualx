@@ -1,3 +1,9 @@
+/*********************************************************
+*  Copyright (c) 2013-2014 Donkil. All rights reserved.  *
+*                                                        *
+*           Publish under GPL License.                   *
+*********************************************************/
+
 var tabStatus = new Array;
 var qtabStatus = new Array;
 var mainWindowId;
@@ -28,14 +34,9 @@ window.onerror = function(err, u, l){
 	errorsId++;
 }
 
-chrome.windows.create({
-	url: 'checkwindowsize.html',
-	top: 0,
-	left: 0,
-	height: 150,
-	width: 150,
-	type: 'popup'
-});
+if(!localStorage.widthoffset || !localStorage.heightoffset){
+	getWindowBorder();
+}
 
 if(!localStorage.logout && localStorage.autoLogin && localStorage.account && localStorage.password){
 	localStorage.autoShow = 'true';
@@ -92,6 +93,9 @@ chrome.extension.onMessage.addListener(function(request, sender, callback) {
 			},function(window){mainWindowId=window.id;});
 		}
 		localStorage.autoShow = '';
+	}
+	else if(request == 'updatewindowborder'){
+		getWindowBorder();
 	}
 	else if(request == 'xlogin'){
 		if(loginWindowId){
@@ -219,7 +223,7 @@ chrome.extension.onMessage.addListener(function(request, sender, callback) {
 			chrome.windows.create({
 				url: 'chat.html?'+uin,
 				width: 500+parseInt(localStorage.widthoffset),
-				height: 420+parseInt(localStorage.heightoffset),
+				height: 520+parseInt(localStorage.heightoffset),
 				left: window.screen.width/2-250,
 				top: window.screen.height/2-230,
 				focused: true,
@@ -281,7 +285,7 @@ chrome.extension.onMessage.addListener(function(request, sender, callback) {
 			chrome.windows.create({
 				url: 'bot.html?'+uin,
 				width: 500+parseInt(localStorage.widthoffset),
-				height: 420+parseInt(localStorage.heightoffset),
+				height: 520+parseInt(localStorage.heightoffset),
 				left: window.screen.width/2-250,
 				top: window.screen.height/2-230,
 				focused: true,
@@ -314,7 +318,7 @@ chrome.extension.onMessage.addListener(function(request, sender, callback) {
 			chrome.windows.create({
 				url: 'qun.html?'+uin,
 				width: 500+parseInt(localStorage.widthoffset),
-				height: 420+parseInt(localStorage.heightoffset),
+				height: 520+parseInt(localStorage.heightoffset),
 				left: window.screen.width/2-250,
 				top: window.screen.height/2-230,
 				focused: true,
@@ -419,7 +423,7 @@ chrome.extension.onMessage.addListener(function(request, sender, callback) {
 								chrome.windows.create({
 									url: 'chat.html?'+uin,
 									width: 500+parseInt(localStorage.widthoffset),
-									height: 420+parseInt(localStorage.heightoffset),
+									height: 520+parseInt(localStorage.heightoffset),
 									left: window.screen.width/2-250,
 									top: window.screen.height/2-230,
 									focused: true,
@@ -913,5 +917,16 @@ function getQunStatus(qunnum, callback){
 		}
 		callback(false);
 		return;
+	});
+}
+
+function getWindowBorder(){
+	chrome.windows.create({
+		url: 'checkwindowsize.html',
+		top: 0,
+		left: 0,
+		height: 150,
+		width: 150,
+		type: 'popup'
 	});
 }

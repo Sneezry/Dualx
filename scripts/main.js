@@ -1,3 +1,9 @@
+/*********************************************************
+*  Copyright (c) 2013-2014 Donkil. All rights reserved.  *
+*                                                        *
+*           Publish under GPL License.                   *
+*********************************************************/
+
 var catTransfer = new Array;
 var botList = new Array('youdaodic', 'weather', 'xiami');
 

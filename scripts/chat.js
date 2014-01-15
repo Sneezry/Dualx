@@ -1,4 +1,10 @@
-﻿var leftFrameWidth;
+﻿/*********************************************************
+*  Copyright (c) 2013-2014 Donkil. All rights reserved.  *
+*                                                        *
+*           Publish under GPL License.                   *
+*********************************************************/
+
+var leftFrameWidth;
 var sending = false;
 var oTimer;
 var preloaded = 0;
@@ -683,8 +689,8 @@ document.getElementById('fontUnderline').onclick = function(){
 document.getElementById('fontColor').onclick = function(){
 	chrome.windows.create({
 		url: 'colorpanel.html',
-		width: 236,
-		height: 260,
+		width: 236+parseInt(localStorage.widthoffset),
+		height: 260+parseInt(localStorage.heightoffset),
 		focused: true,
 		type: 'popup'
 	});
@@ -693,8 +699,8 @@ document.getElementById('fontColor').onclick = function(){
 document.getElementById('toolMsgRec').onclick = function(){
 	chrome.windows.create({
 		url: 'history.html?friend|'+qqnum,
-		width: 560,
-		height: 510,
+		width: 560+parseInt(localStorage.widthoffset),
+		height: 510+parseInt(localStorage.heightoffset),
 		focused: true,
 		type: 'popup'
 	});
