@@ -374,6 +374,27 @@ var HTML5QQ = {
 	},
 	
 	hash: function(uin, ptwebqq) {
+<<<<<<< HEAD
+		x = uin;
+        H = ptwebqq;
+        x += "";
+		for (var N = [], T = 0; T < H.length; T++) N[T % 4] ^= H.charCodeAt(T);
+		var U = ["EC", "OK"],
+		V = [];
+		V[0] = x >> 24 & 255 ^ U[0].charCodeAt(0);
+		V[1] = x >> 16 & 255 ^ U[0].charCodeAt(1);
+		V[2] = x >> 8 & 255 ^ U[1].charCodeAt(0);
+		V[3] = x & 255 ^ U[1].charCodeAt(1);
+		U = [];
+		for (T = 0; T < 8; T++) U[T] = T % 2 == 0 ? N[T >> 1] : V[T >> 1];
+		N = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F"];
+		V = "";
+		for (T = 0; T < U.length; T++) {
+		    V += N[U[T] >> 4 & 15];
+		    V += N[U[T] & 15]
+		}
+		return V;
+=======
 		t = uin;
 		E = ptwebqq;
         t += "";
@@ -431,11 +452,16 @@ var HTML5QQ = {
             S += O[I[N] & 15]
         }
         return S
+>>>>>>> b9c8882810683ddacb86990ee363d7d6eb564116
     },
 
 	getFriendsInfo: function(){
 		var info = 'http://s.web2.qq.com/api/get_user_friends2';
+<<<<<<< HEAD
+		var r = '{"vfwebqq":"'+this.vfwebqq+'","hash":"'+this.hash(this.qq+'',this.ptwebqq)+'"}';
+=======
 		var r = '{"hash":"'+this.hash(this.qq+'',this.ptwebqq)+'","vfwebqq":"'+this.vfwebqq+'"}';
+>>>>>>> b9c8882810683ddacb86990ee363d7d6eb564116
 		this.httpRequest('POST', info, 'r='+r, true, function(result){
 			if(HTML5QQ.debug){
 		 		HTML5QQ.outputDebug("getFriendsInfo: result("+result+")");
