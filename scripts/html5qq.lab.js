@@ -317,24 +317,25 @@ var HTML5QQ = {
 				var jmp = code.split(',')[2];
 				jmp = jmp.replace(/(^\s*)|(\s*$)/g, "");
 				jmp = jmp.substr(1,jmp.length-2);
-				HTML5QQ.httpRequest('GET', jmp, null, false);
-				HTML5QQ.getCookie("http://qq.com", "skey", function(cookie){
-					HTML5QQ.skey = cookie.value;
-					if(HTML5QQ.debug){
-		 				HTML5QQ.outputDebug("login: skey("+HTML5QQ.skey+")");
-					}
-				});
-				HTML5QQ.getCookie("http://qq.com", "ptwebqq", function(cookie){
-					HTML5QQ.getVfwebqq(cookie.value, status);
-					if(HTML5QQ.debug){
-		 				HTML5QQ.outputDebug("login: ptwebqq("+HTML5QQ.ptwebqq+")");
-					}
-				});
-				HTML5QQ.getCookie("http://qq.com", "uin", function(cookie){
-					HTML5QQ.qq = parseInt(cookie.value.substr(1));
-					if(HTML5QQ.debug){
-		 				HTML5QQ.outputDebug("login: uin("+cookie.value+")");
-					}
+				HTML5QQ.httpRequest('GET', jmp, null, false, function(result){
+					HTML5QQ.getCookie("http://qq.com", "skey", function(cookie){
+						HTML5QQ.skey = cookie.value;
+						if(HTML5QQ.debug){
+			 				HTML5QQ.outputDebug("login: skey("+HTML5QQ.skey+")");
+						}
+					});
+					HTML5QQ.getCookie("http://qq.com", "ptwebqq", function(cookie){
+						HTML5QQ.getVfwebqq(cookie.value, status);
+						if(HTML5QQ.debug){
+			 				HTML5QQ.outputDebug("login: ptwebqq("+HTML5QQ.ptwebqq+")");
+						}
+					});
+					HTML5QQ.getCookie("http://qq.com", "uin", function(cookie){
+						HTML5QQ.qq = parseInt(cookie.value.substr(1));
+						if(HTML5QQ.debug){
+			 				HTML5QQ.outputDebug("login: uin("+cookie.value+")");
+						}
+					});
 				});
 			}
 			else{
